@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Blog Index</title>
+
+  <link href="include/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+  <style>
+    html, body {
+      height: 100%;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      flex-direction: column;
+      background-color: #f8f9fa;
+    }
+    main {
+      flex: 1;
+    }
+    header {
+      background: #0d6efd;
+      color: white;
+      padding: 3rem 0;
+      text-align: center;
+    }
+
+    .card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <h1 class="display-4 fw-bold">Statistics Homework Blog </h1>
+      <p class="lead mb-0">A collection of my homework for the Statistics course</p>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="container my-5">
+    <div class="row g-4">
+      <!-- First homework  -->
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Homework 1: What is statistics, and why can be useful for cybersecurity</h5>
+            <p class="card-text">An introduction to the importance of statistics for cybersecurity.</p>
+            <a href="src/homework1.html" class="btn btn-primary">View Homework</a>
+          </div>
+        </div>
+      </div>
+      <!-- END -->
+
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Homework 2: Empty</h5>
+            <p class="card-text">Empty</p>
+            <a href="src/homework2.html" class="btn btn-primary">View Homework</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">Homework 3: Empty</h5>
+            <p class="card-text">Empty</p>
+            <a href="src/homework3.html" class="btn btn-primary">View Homework</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+
+
+  <!-- Local Bootstrap JS -->
+  <script src="include/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
