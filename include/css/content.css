@@ -1,0 +1,212 @@
+/* Content Typography and Formatting Styles */
+/* Optimized for academic and scholarly content readability */
+
+.homework-content {
+    font-family: 'Georgia', 'Cambria', 'Times New Roman', serif;
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #2c3e50;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Introduction paragraph styling */
+.intro-paragraph {
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: #34495e;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border-left: 4px solid #3498db;
+    border-radius: 4px;
+}
+
+/* Paragraph spacing and formatting */
+.homework-content p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+    hyphens: auto;
+    word-spacing: 0.05em;
+}
+
+.homework-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Headings hierarchy */
+.homework-content h3 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-top: 2.5rem;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3498db;
+}
+
+.homework-content h4 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #34495e;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* First paragraph after heading - no top margin */
+.homework-content h3 + p,
+.homework-content h4 + p {
+    margin-top: 0;
+}
+
+/* Lists styling */
+.homework-content ul,
+.homework-content ol {
+    margin-left: 2.5rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.8;
+}
+
+.homework-content li {
+    margin-bottom: 0.8rem;
+    padding-left: 0.5rem;
+}
+
+.homework-content li::marker {
+    color: #3498db;
+    font-weight: 600;
+}
+
+/* Emphasis and strong text */
+.homework-content em {
+    font-style: italic;
+    color: #2c3e50;
+}
+
+.homework-content strong {
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+/* Code and technical terms */
+.homework-content code {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #f4f4f4;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.95em;
+    color: #e74c3c;
+}
+
+/* Blockquotes if needed */
+.homework-content blockquote {
+    margin: 1.5rem 0;
+    padding: 1rem 1.5rem;
+    background-color: #ecf0f1;
+    border-left: 4px solid #95a5a6;
+    font-style: italic;
+    color: #555;
+}
+
+/* Links within content */
+.homework-content a {
+    color: #3498db;
+    text-decoration: none;
+    border-bottom: 1px dotted #3498db;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.homework-content a:hover {
+    color: #2980b9;
+    border-bottom-color: #2980b9;
+}
+
+/* Selection highlight */
+.homework-content ::selection {
+    background-color: #3498db;
+    color: white;
+}
+
+/* Improve readability with proper spacing */
+.homework-content section {
+    margin-bottom: 2rem;
+}
+
+/* Responsive typography adjustments */
+@media (max-width: 768px) {
+    .homework-content {
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+
+    .intro-paragraph {
+        font-size: 1.05rem;
+        padding: 1rem;
+    }
+
+    .homework-content h3 {
+        font-size: 1.4rem;
+        margin-top: 2rem;
+    }
+
+    .homework-content h4 {
+        font-size: 1.2rem;
+        margin-top: 1.5rem;
+    }
+
+    .homework-content p {
+        text-align: left;
+        hyphens: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .homework-content {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .intro-paragraph {
+        font-size: 1rem;
+        padding: 0.8rem;
+    }
+
+    .homework-content h3 {
+        font-size: 1.3rem;
+    }
+
+    .homework-content h4 {
+        font-size: 1.1rem;
+    }
+
+    .homework-content ul,
+    .homework-content ol {
+        margin-left: 1.5rem;
+    }
+}
+
+/* Print styles for academic content */
+@media print {
+    .homework-content {
+        font-size: 12pt;
+        line-height: 1.6;
+        color: black;
+    }
+
+    .intro-paragraph {
+        background-color: transparent;
+        border-left: 2px solid black;
+    }
+
+    .homework-content h3,
+    .homework-content h4 {
+        page-break-after: avoid;
+    }
+
+    .homework-content p {
+        orphans: 3;
+        widows: 3;
+    }
+}
