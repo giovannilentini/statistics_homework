@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework 2 - Statistics Course</title>
+    <link rel="stylesheet" href="../include/css/style.css">
+    <link rel="stylesheet" href="../include/css/content.css">
+    <link rel="stylesheet" href="../include/css/code_block.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Statistics Course</h1>
+            <p class="subtitle">University Homework Repository</p>
+            <p class="student-info">Giovanni Lentini - 1987799</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="back-navigation">
+            <a href="../index.html" class="btn-back">← Back to Home</a>
+        </div>
+
+        <article class="homework-detail">
+            <div class="homework-header">
+                <h2>Homework 2: Dataset, Distributions and Statistical Analysis</h2>
+                <div class="meta-info">
+                    <span class="date">Due: October 22, 2025</span>
+                </div>
+            </div>
+
+            <section class="homework-content">
+                <p class="intro-paragraph">This homework explores the fundamental concepts of datasets and distributions in statistics, demonstrating practical applications through univariate and bivariate analysis on a sample database of people.</p>
+
+                <h3>What is a Dataset</h3>
+                <p>A dataset is a structured collection of related data, typically organized in rows and columns, that represents information about a specific domain or category. In the context of statistics and data analysis, a dataset serves as the foundation for extracting insights, identifying patterns, and making informed decisions.</p>
+
+                <p>Each row in a dataset corresponds to an observation or record, while each column represents a variable or attribute that describes a characteristic of the data. For example, in a dataset containing information about students, each row might represent an individual student, and the columns could include attributes such as name, age, grade, and test scores.</p>
+
+                <p>Datasets can be classified into several types based on the nature of their variables. Numerical datasets contain quantitative data that can be measured and analyzed using mathematical operations, such as temperature readings or sales figures. Categorical datasets contain qualitative data representing discrete categories or groups, such as gender, city, or occupation. Time series datasets record observations over time to identify trends and patterns, while mixed datasets combine both numerical and categorical variables.</p>
+
+                <p>The importance of datasets in modern statistics cannot be overstated. They provide the raw material necessary for statistical analysis, enable the training and testing of machine learning models, support data-driven decision making across industries, and facilitate reproducibility and benchmarking in research. Well-structured datasets with clear variable definitions and consistent formatting are essential for accurate analysis and meaningful interpretation of results.</p>
+
+                <h3>Understanding Distributions</h3>
+                <p>A distribution in statistics describes how values of a variable are spread or distributed across different possible outcomes. It provides a comprehensive picture of the data by showing which values occur most frequently, how values cluster around central points, and how widely values vary from the center. Understanding distributions is fundamental to statistical analysis because they reveal underlying patterns in data and inform the selection of appropriate analytical methods.</p>
+
+                <p>Distributions can be characterized by several key properties. The central tendency indicates where the center of the distribution lies, typically measured by the mean, median, or mode. The dispersion or spread describes how scattered the values are, measured by metrics such as range, variance, and standard deviation. The shape of the distribution indicates whether it is symmetric, skewed to the left or right, or exhibits other patterns such as multiple peaks.</p>
+
+                <p>Common types of distributions include the normal distribution, which is symmetric and bell-shaped with most values clustering around the mean; the uniform distribution, where all values have equal probability; the binomial distribution, which models the number of successes in a fixed number of trials; and the exponential distribution, often used to model time between events.</p>
+
+                <p>Distributions can be analyzed at different levels depending on the number of variables considered simultaneously. Univariate distributions examine a single variable in isolation, describing its central tendency, spread, and shape. Bivariate distributions examine two variables together, exploring relationships and dependencies between them. Multivariate distributions extend this to three or more variables, revealing complex interdependencies in high-dimensional data.</p>
+
+                <h3>The People Dataset</h3>
+                <p>For this analysis, we work with a dataset containing information about ten individuals. The dataset includes seven variables: a unique identifier (id), first name, last name, age, gender, city of residence, and email address. This dataset was created using the following SQL table definition:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">SQL</span>
+                        <span class="code-title">Table Creation</span>
+                    </div>
+                    <pre><code class="language-sql">CREATE TABLE people (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    age INT,
+    gender VARCHAR(10),
+    city VARCHAR(50),
+    email VARCHAR(100)
+);</code></pre>
+                </div>
+
+                <p>The dataset contains the following records:</p>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Age</th>
+                                <th>Gender</th>
+                                <th>City</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Giovanni</td>
+                                <td>Rossi</td>
+                                <td>25</td>
+                                <td>Male</td>
+                                <td>Bologna</td>
+                                <td>giovanni.rossi@email.com</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Alessia</td>
+                                <td>Bianchi</td>
+                                <td>23</td>
+                                <td>Female</td>
+                                <td>Milano</td>
+                                <td>alessia.bianchi@email.com</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Daniele</td>
+                                <td>Verdi</td>
+                                <td>26</td>
+                                <td>Male</td>
+                                <td>Roma</td>
+                                <td>daniele.verdi@email.com</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Lucia</td>
+                                <td>Ferrari</td>
+                                <td>29</td>
+                                <td>Female</td>
+                                <td>Torino</td>
+                                <td>lucia.ferrari@email.com</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>Marco</td>
+                                <td>Neri</td>
+                                <td>30</td>
+                                <td>Male</td>
+                                <td>Napoli</td>
+                                <td>marco.neri@email.com</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>Elena</td>
+                                <td>Russo</td>
+                                <td>22</td>
+                                <td>Female</td>
+                                <td>Firenze</td>
+                                <td>elena.russo@email.com</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>Sara</td>
+                                <td>Conti</td>
+                                <td>27</td>
+                                <td>Female</td>
+                                <td>Genova</td>
+                                <td>sara.conti@email.com</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>Luca</td>
+                                <td>Mariani</td>
+                                <td>31</td>
+                                <td>Male</td>
+                                <td>Bari</td>
+                                <td>luca.mariani@email.com</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>Chiara</td>
+                                <td>Gallo</td>
+                                <td>24</td>
+                                <td>Female</td>
+                                <td>Venezia</td>
+                                <td>chiara.gallo@email.com</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>Edoardo</td>
+                                <td>Greco</td>
+                                <td>28</td>
+                                <td>Male</td>
+                                <td>Perugia</td>
+                                <td>edoardo.greco@email.com</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Univariate Distribution Analysis</h3>
+                <p>Univariate analysis examines a single variable at a time, focusing on describing its distribution without considering relationships with other variables. This type of analysis is fundamental for understanding the basic characteristics of each variable in the dataset, including measures of central tendency, dispersion, and the overall shape of the distribution.</p>
+
+                <h4>Analysis 1: Age Distribution</h4>
+                <p>The age variable is a numerical continuous variable that represents the age of each person in years. We can analyze its distribution using descriptive statistics and visualization techniques. The following SQL query retrieves basic statistical measures for the age variable:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">SQL</span>
+                        <span class="code-title">Age Statistics</span>
+                    </div>
+                    <pre><code class="language-sql">SELECT 
+    COUNT(age) AS count,
+    AVG(age) AS mean_age,
+    MIN(age) AS min_age,
+    MAX(age) AS max_age,
+    STDDEV(age) AS std_deviation
+FROM people;</code></pre>
+                </div>
+
+                <p>This query calculates the count of records (10), the mean age (26.5 years), the minimum age (22 years), the maximum age (31 years), and the standard deviation (approximately 2.87 years). The relatively small standard deviation indicates that ages are clustered fairly closely around the mean, suggesting a homogeneous age distribution within this sample.</p>
+
+                <h4>Analysis 2: Gender Distribution</h4>
+                <p>The gender variable is a categorical variable with two distinct values: Male and Female. Analyzing the distribution of a categorical variable involves counting the frequency of each category and calculating the proportion each category represents in the dataset.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">SQL</span>
+                        <span class="code-title">Gender Distribution</span>
+                    </div>
+                    <pre><code class="language-sql">SELECT 
+    gender,
+    COUNT(*) AS frequency,
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM people), 2) AS percentage
+FROM people
+GROUP BY gender
+ORDER BY frequency DESC;</code></pre>
+                </div>
+
+                <p>This query reveals that the dataset contains 5 males (50%) and 5 females (50%), indicating a perfectly balanced gender distribution. Such balance is important in statistical analysis as it prevents gender bias in any conclusions drawn from the data.</p>
+
+                <h4>Analysis 3: City Distribution</h4>
+                <p>The city variable is another categorical variable that indicates the city of residence for each person. Understanding the geographical distribution of the sample can provide insights into the diversity and representativeness of the dataset.</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">SQL</span>
+                        <span class="code-title">City Distribution</span>
+                    </div>
+                    <pre><code class="language-sql">SELECT 
+    city,
+    COUNT(*) AS frequency,
+    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM people), 2) AS percentage
+FROM people
+GROUP BY city
+ORDER BY frequency DESC;</code></pre>
+                </div>
+
+                <p>The results show that each person in the dataset resides in a different city, with each city appearing exactly once (10% frequency each). This indicates maximum geographical diversity within the sample, with representation from ten different Italian cities: Bologna, Milano, Roma, Torino, Napoli, Firenze, Genova, Bari, Venezia, and Perugia.</p>
+
+                <h3>Bivariate Distribution Analysis</h3>
+                <p>Bivariate analysis examines the relationship between two variables simultaneously. This type of analysis is crucial for understanding how variables interact with each other, identifying correlations, and discovering patterns that would not be apparent when examining variables in isolation. Bivariate analysis can involve two numerical variables, two categorical variables, or one of each type.</p>
+
+                <h4>Age and Gender Relationship</h4>
+                <p>Analyzing the relationship between age and gender allows us to determine whether there are systematic differences in age distribution between males and females in our dataset. This type of analysis combines a numerical variable (age) with a categorical variable (gender).</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">SQL</span>
+                        <span class="code-title">Age by Gender Analysis</span>
+                    </div>
+                    <pre><code class="language-sql">SELECT 
+    gender,
+    COUNT(*) AS count,
+    ROUND(AVG(age), 2) AS mean_age,
+    MIN(age) AS min_age,
+    MAX(age) AS max_age,
+    ROUND(STDDEV(age), 2) AS std_deviation
+FROM people
+GROUP BY gender
+ORDER BY gender;</code></pre>
+                </div>
+
+                <p>This query groups the data by gender and calculates descriptive statistics for age within each gender group. The results reveal that females have a mean age of approximately 25 years (ranging from 22 to 29), while males have a mean age of approximately 28 years (ranging from 25 to 31). This suggests that males in the dataset tend to be slightly older than females on average, though the small sample size means this difference should be interpreted cautiously.</p>
+
+                <p>We can also examine the distribution more granularly by creating age groups and analyzing their composition by gender:</p>
+
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">SQL</span>
+                        <span class="code-title">Age Groups by Gender</span>
+                    </div>
+                    <pre><code class="language-sql">SELECT 
+    CASE 
+        WHEN age BETWEEN 22 AND 25 THEN '22-25'
+        WHEN age BETWEEN 26 AND 29 THEN '26-29'
+        ELSE '30+'
+    END AS age_group,
+    gender,
+    COUNT(*) AS frequency
+FROM people
+GROUP BY age_group, gender
+ORDER BY age_group, gender;</code></pre>
+                </div>
+
+                <p>This analysis provides insights into how age and gender are jointly distributed across the dataset, revealing patterns such as the concentration of younger individuals and the gender composition within each age bracket.</p>
+            </section>
+        </article>
+    </main>
+
+    <script src="../include/js/main.js"></script>
+</body>
+</html>

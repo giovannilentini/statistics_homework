@@ -1,0 +1,254 @@
+/* Code Block Styling for SQL and Programming Languages */
+
+.code-block {
+    margin: 1.5rem 0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background-color: #1e1e1e;
+}
+
+.code-header {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #3498db;
+}
+
+.code-language {
+    color: #3498db;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.code-title {
+    color: #ecf0f1;
+    font-size: 0.9rem;
+    font-weight: 500;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.code-block pre {
+    margin: 0;
+    padding: 1.5rem 1.25rem;
+    overflow-x: auto;
+    background-color: #1e1e1e;
+}
+
+.code-block code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #d4d4d4;
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    display: block;
+    white-space: pre;
+}
+
+/* SQL Syntax Highlighting */
+.language-sql {
+    color: #d4d4d4;
+}
+
+/* SQL Keywords */
+.code-block code .keyword {
+    color: #569cd6;
+    font-weight: 600;
+}
+
+/* SQL Strings */
+.code-block code .string {
+    color: #ce9178;
+}
+
+/* SQL Numbers */
+.code-block code .number {
+    color: #b5cea8;
+}
+
+/* SQL Comments */
+.code-block code .comment {
+    color: #6a9955;
+    font-style: italic;
+}
+
+/* SQL Functions */
+.code-block code .function {
+    color: #dcdcaa;
+}
+
+/* Scrollbar styling for code blocks */
+.code-block pre::-webkit-scrollbar {
+    height: 8px;
+}
+
+.code-block pre::-webkit-scrollbar-track {
+    background: #2d2d2d;
+}
+
+.code-block pre::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.code-block pre::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* Table Container */
+.table-container {
+    margin: 2rem 0;
+    overflow-x: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Data Table Styling */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    font-size: 0.9rem;
+}
+
+.data-table thead {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+}
+
+.data-table thead th {
+    padding: 1rem 0.75rem;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #3498db;
+}
+
+.data-table tbody tr {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.2s;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.data-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.data-table tbody td {
+    padding: 0.875rem 0.75rem;
+    color: #2c3e50;
+}
+
+.data-table tbody td:first-child {
+    font-weight: 600;
+    color: #3498db;
+}
+
+/* Alternating row colors */
+.data-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.data-table tbody tr:nth-child(even):hover {
+    background-color: #ecf0f1;
+}
+
+/* Responsive Code Blocks */
+@media (max-width: 768px) {
+    .code-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+    }
+
+    .code-block pre {
+        padding: 1rem;
+    }
+
+    .code-block code {
+        font-size: 0.85rem;
+    }
+
+    .data-table {
+        font-size: 0.85rem;
+    }
+
+    .data-table thead th,
+    .data-table tbody td {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .code-block code {
+        font-size: 0.8rem;
+        line-height: 1.5;
+    }
+
+    .data-table {
+        font-size: 0.8rem;
+    }
+
+    .data-table thead th,
+    .data-table tbody td {
+        padding: 0.6rem 0.4rem;
+    }
+
+    .code-header {
+        padding: 0.6rem 0.8rem;
+    }
+
+    .code-language,
+    .code-title {
+        font-size: 0.8rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .code-block {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+
+    .code-header {
+        background: #f4f4f4;
+        color: black;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .code-language,
+    .code-title {
+        color: black;
+    }
+
+    .code-block pre {
+        background-color: white;
+    }
+
+    .code-block code {
+        color: black;
+    }
+
+    .data-table thead {
+        background: #f4f4f4;
+        color: black;
+    }
+
+    .data-table tbody tr:nth-child(even) {
+        background-color: #fafafa;
+    }
+}
