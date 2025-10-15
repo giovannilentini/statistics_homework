@@ -55,14 +55,14 @@
                 <p>Distributions can be analyzed at different levels depending on the number of variables considered simultaneously. Univariate distributions examine a single variable in isolation, describing its central tendency, spread, and shape. Bivariate distributions examine two variables together, exploring relationships and dependencies between them. Multivariate distributions extend this to three or more variables, revealing complex interdependencies in high-dimensional data.</p>
 
                 <h3>The People Dataset</h3>
-                <p>For this analysis, we work with a dataset containing information about ten individuals. The dataset includes seven variables: a unique identifier (id), first name, last name, age, gender, city of residence, and email address. This dataset was created using the following SQL table definition:</p>
+<p>For this analysis, we work with a dataset containing information about eighteen individuals. The dataset includes seven variables: a unique identifier (id), first name, last name, age, gender, city of residence, and email address. This dataset was created using the following SQL table definition:</p>
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-language">SQL</span>
-                        <span class="code-title">Table Creation</span>
-                    </div>
-                    <pre><code class="language-sql">CREATE TABLE people (
+<div class="code-block">
+    <div class="code-header">
+        <span class="code-language">SQL</span>
+        <span class="code-title">Table Creation</span>
+    </div>
+    <pre><code class="language-sql">CREATE TABLE people (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
@@ -71,307 +71,376 @@
     city VARCHAR(50),
     email VARCHAR(100)
 );</code></pre>
-                </div>
+</div>
 
-                <p>The dataset contains the following records:</p>
+<p>The dataset contains the following records:</p>
 
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Age</th>
-                                <th>Gender</th>
-                                <th>City</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Giovanni</td>
-                                <td>Rossi</td>
-                                <td>25</td>
-                                <td>Male</td>
-                                <td>Bologna</td>
-                                <td>giovanni.rossi@email.com</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Alessia</td>
-                                <td>Bianchi</td>
-                                <td>23</td>
-                                <td>Female</td>
-                                <td>Milano</td>
-                                <td>alessia.bianchi@email.com</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Daniele</td>
-                                <td>Verdi</td>
-                                <td>26</td>
-                                <td>Male</td>
-                                <td>Roma</td>
-                                <td>daniele.verdi@email.com</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Lucia</td>
-                                <td>Ferrari</td>
-                                <td>29</td>
-                                <td>Female</td>
-                                <td>Torino</td>
-                                <td>lucia.ferrari@email.com</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>Marco</td>
-                                <td>Neri</td>
-                                <td>30</td>
-                                <td>Male</td>
-                                <td>Napoli</td>
-                                <td>marco.neri@email.com</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>Elena</td>
-                                <td>Russo</td>
-                                <td>22</td>
-                                <td>Female</td>
-                                <td>Firenze</td>
-                                <td>elena.russo@email.com</td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>Sara</td>
-                                <td>Conti</td>
-                                <td>27</td>
-                                <td>Female</td>
-                                <td>Genova</td>
-                                <td>sara.conti@email.com</td>
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>Luca</td>
-                                <td>Mariani</td>
-                                <td>31</td>
-                                <td>Male</td>
-                                <td>Bari</td>
-                                <td>luca.mariani@email.com</td>
-                            </tr>
-                            <tr>
-                                <td>9</td>
-                                <td>Chiara</td>
-                                <td>Gallo</td>
-                                <td>24</td>
-                                <td>Female</td>
-                                <td>Venezia</td>
-                                <td>chiara.gallo@email.com</td>
-                            </tr>
-                            <tr>
-                                <td>10</td>
-                                <td>Edoardo</td>
-                                <td>Greco</td>
-                                <td>28</td>
-                                <td>Male</td>
-                                <td>Perugia</td>
-                                <td>edoardo.greco@email.com</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>City</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>Giovanni</td>
+                <td>Rossi</td>
+                <td>28</td>
+                <td>Male</td>
+                <td>Bologna</td>
+                <td>giovanni.rossi@email.com</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Alessia</td>
+                <td>Bianchi</td>
+                <td>22</td>
+                <td>Female</td>
+                <td>Milano</td>
+                <td>alessia.bianchi@email.com</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Daniele</td>
+                <td>Verdi</td>
+                <td>35</td>
+                <td>Male</td>
+                <td>Roma</td>
+                <td>daniele.verdi@email.com</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>Lucia</td>
+                <td>Ferrari</td>
+                <td>29</td>
+                <td>Female</td>
+                <td>Milano</td>
+                <td>lucia.ferrari@email.com</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>Marco</td>
+                <td>Neri</td>
+                <td>42</td>
+                <td>Male</td>
+                <td>Bologna</td>
+                <td>marco.neri@email.com</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>Elena</td>
+                <td>Russo</td>
+                <td>24</td>
+                <td>Female</td>
+                <td>Roma</td>
+                <td>elena.russo@email.com</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>Sara</td>
+                <td>Conti</td>
+                <td>31</td>
+                <td>Female</td>
+                <td>Torino</td>
+                <td>sara.conti@email.com</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>Luca</td>
+                <td>Mariani</td>
+                <td>38</td>
+                <td>Male</td>
+                <td>Milano</td>
+                <td>luca.mariani@email.com</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>Chiara</td>
+                <td>Gallo</td>
+                <td>26</td>
+                <td>Female</td>
+                <td>Bologna</td>
+                <td>chiara.gallo@email.com</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>Edoardo</td>
+                <td>Greco</td>
+                <td>33</td>
+                <td>Male</td>
+                <td>Roma</td>
+                <td>edoardo.greco@email.com</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>Francesca</td>
+                <td>Romano</td>
+                <td>27</td>
+                <td>Female</td>
+                <td>Milano</td>
+                <td>francesca.romano@email.com</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>Andrea</td>
+                <td>Ricci</td>
+                <td>45</td>
+                <td>Male</td>
+                <td>Torino</td>
+                <td>andrea.ricci@email.com</td>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td>Martina</td>
+                <td>Colombo</td>
+                <td>23</td>
+                <td>Female</td>
+                <td>Napoli</td>
+                <td>martina.colombo@email.com</td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>Alessandro</td>
+                <td>Esposito</td>
+                <td>36</td>
+                <td>Male</td>
+                <td>Roma</td>
+                <td>alessandro.esposito@email.com</td>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>Giulia</td>
+                <td>De Luca</td>
+                <td>25</td>
+                <td>Female</td>
+                <td>Milano</td>
+                <td>giulia.deluca@email.com</td>
+            </tr>
+            <tr>
+                <td>16</td>
+                <td>Matteo</td>
+                <td>Bruno</td>
+                <td>40</td>
+                <td>Male</td>
+                <td>Bologna</td>
+                <td>matteo.bruno@email.com</td>
+            </tr>
+            <tr>
+                <td>17</td>
+                <td>Valentina</td>
+                <td>Moretti</td>
+                <td>30</td>
+                <td>Female</td>
+                <td>Torino</td>
+                <td>valentina.moretti@email.com</td>
+            </tr>
+            <tr>
+                <td>18</td>
+                <td>Simone</td>
+                <td>Barbieri</td>
+                <td>34</td>
+                <td>Male</td>
+                <td>Napoli</td>
+                <td>simone.barbieri@email.com</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-                                <h3>Univariate Distribution Analysis</h3>
-                <p>Univariate analysis examines a single variable at a time, focusing on describing its distribution without considering relationships with other variables. This type of analysis is fundamental for understanding the basic characteristics of each variable in the dataset, including measures of central tendency, dispersion, and the overall shape of the distribution.</p>
 
-                <h4>Analysis 1: Age Distribution</h4>
-                <p>The age variable is a numerical continuous variable that represents the age of each person in years. We can analyze its distribution using descriptive statistics and visualization techniques. The following SQL query retrieves basic statistical measures for the age variable:</p>
+                <h3>Univariate Distribution Analysis</h3>
+<p>Univariate analysis examines a single variable at a time, focusing on describing its distribution without considering relationships with other variables. This type of analysis is fundamental for understanding the basic characteristics of each variable in the dataset, including measures of central tendency, dispersion, and the overall shape of the distribution.</p>
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-language">SQL</span>
-                        <span class="code-title">Age Statistics</span>
-                    </div>
-                    <pre><code class="language-sql">SELECT 
+<h4>Analysis 1: Age Distribution</h4>
+<p>The age variable is a numerical continuous variable that represents the age of each person in years. We can analyze its distribution using descriptive statistics and visualization techniques. The following SQL query retrieves basic statistical measures for the age variable:</p>
+
+<div class="code-block">
+    <div class="code-header">
+        <span class="code-language">SQL</span>
+        <span class="code-title">Age Statistics</span>
+    </div>
+    <pre><code class="language-sql">SELECT 
     COUNT(age) AS count,
     AVG(age) AS mean_age,
     MIN(age) AS min_age,
     MAX(age) AS max_age,
     STDDEV(age) AS std_deviation
 FROM people;</code></pre>
-                </div>
+</div>
 
-                <p>The query produces the following results:</p>
+<p>The query produces the following results:</p>
 
-                <div class="table-container">
-                    <table class="data-table result-table">
-                        <thead>
-                            <tr>
-                                <th>count</th>
-                                <th>mean_age</th>
-                                <th>min_age</th>
-                                <th>max_age</th>
-                                <th>std_deviation</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>10</td>
-                                <td>26.50</td>
-                                <td>22</td>
-                                <td>31</td>
-                                <td>3.03</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+<div class="table-container">
+    <table class="data-table result-table">
+        <thead>
+            <tr>
+                <th>count</th>
+                <th>mean_age</th>
+                <th>min_age</th>
+                <th>max_age</th>
+                <th>std_deviation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>18</td>
+                <td>31.56</td>
+                <td>22</td>
+                <td>45</td>
+                <td>6.58</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-                <p>This result shows that the dataset contains 10 records with a mean age of 26.5 years, a minimum age of 22 years, and a maximum age of 31 years. The standard deviation of approximately 3.03 years indicates that ages are clustered fairly closely around the mean, suggesting a homogeneous age distribution within this sample.</p>
+<p>This result shows that the dataset contains 18 records with a mean age of 31.56 years, a minimum age of 22 years, and a maximum age of 45 years. The standard deviation of approximately 6.58 years indicates a wider age range compared to a more homogeneous sample, suggesting diverse age representation within this dataset.</p>
 
-                <h4>Analysis 2: Gender Distribution</h4>
-                <p>The gender variable is a categorical variable with two distinct values: Male and Female. Analyzing the distribution of a categorical variable involves counting the frequency of each category and calculating the proportion each category represents in the dataset.</p>
+<div class="visualization-container">
+    <h5>Age Distribution Visualization</h5>
+    <div class="chart-placeholder">
+        <canvas id="ageDistributionChart"></canvas>
+    </div>
+</div>
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-language">SQL</span>
-                        <span class="code-title">Gender Distribution</span>
-                    </div>
-                    <pre><code class="language-sql">SELECT 
+<h4>Analysis 2: Gender Distribution</h4>
+<p>The gender variable is a categorical variable with two distinct values: Male and Female. Analyzing the distribution of a categorical variable involves counting the frequency of each category and calculating the proportion each category represents in the dataset.</p>
+
+<div class="code-block">
+    <div class="code-header">
+        <span class="code-language">SQL</span>
+        <span class="code-title">Gender Distribution</span>
+    </div>
+    <pre><code class="language-sql">SELECT 
     gender,
     COUNT(*) AS frequency,
     ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM people), 2) AS percentage
 FROM people
 GROUP BY gender
 ORDER BY frequency DESC;</code></pre>
-                </div>
+</div>
 
-                <p>The query produces the following results:</p>
+<p>The query produces the following results:</p>
 
-                <div class="table-container">
-                    <table class="data-table result-table">
-                        <thead>
-                            <tr>
-                                <th>gender</th>
-                                <th>frequency</th>
-                                <th>percentage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Male</td>
-                                <td>5</td>
-                                <td>50.00</td>
-                            </tr>
-                            <tr>
-                                <td>Female</td>
-                                <td>5</td>
-                                <td>50.00</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+<div class="table-container">
+    <table class="data-table result-table">
+        <thead>
+            <tr>
+                <th>gender</th>
+                <th>frequency</th>
+                <th>percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Male</td>
+                <td>9</td>
+                <td>50.00</td>
+            </tr>
+            <tr>
+                <td>Female</td>
+                <td>9</td>
+                <td>50.00</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-                <p>This result reveals that the dataset contains 5 males (50%) and 5 females (50%), indicating a perfectly balanced gender distribution. Such balance is important in statistical analysis as it prevents gender bias in any conclusions drawn from the data.</p>
+<p>This result reveals that the dataset contains 9 males (50%) and 9 females (50%), indicating a perfectly balanced gender distribution. Such balance is important in statistical analysis as it prevents gender bias in any conclusions drawn from the data.</p>
 
-                <h4>Analysis 3: City Distribution</h4>
-                <p>The city variable is another categorical variable that indicates the city of residence for each person. Understanding the geographical distribution of the sample can provide insights into the diversity and representativeness of the dataset.</p>
+<div class="visualization-container">
+    <h5>Gender Distribution Visualization</h5>
+    <div class="chart-placeholder">
+        <canvas id="genderDistributionChart"></canvas>
+    </div>
+</div>
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-language">SQL</span>
-                        <span class="code-title">City Distribution</span>
-                    </div>
-                    <pre><code class="language-sql">SELECT 
+<h4>Analysis 3: City Distribution</h4>
+<p>The city variable is another categorical variable that indicates the city of residence for each person. Understanding the geographical distribution of the sample can provide insights into the diversity and representativeness of the dataset.</p>
+
+<div class="code-block">
+    <div class="code-header">
+        <span class="code-language">SQL</span>
+        <span class="code-title">City Distribution</span>
+    </div>
+    <pre><code class="language-sql">SELECT 
     city,
     COUNT(*) AS frequency,
     ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM people), 2) AS percentage
 FROM people
 GROUP BY city
 ORDER BY frequency DESC;</code></pre>
-                </div>
+</div>
 
-                <p>The query produces the following results:</p>
+<p>The query produces the following results:</p>
 
-                <div class="table-container">
-                    <table class="data-table result-table">
-                        <thead>
-                            <tr>
-                                <th>city</th>
-                                <th>frequency</th>
-                                <th>percentage</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Bologna</td>
-                                <td>1</td>
-                                <td>10.00</td>
-                            </tr>
-                            <tr>
-                                <td>Milano</td>
-                                <td>1</td>
-                                <td>10.00</td>
-                            </tr>
-                            <tr>
-                                <td>Roma</td>
-                                <td>1</td>
-                                <td>10.00</td>
-                            </tr>
-                            <tr>
-                                <td>Torino</td>
-                                <td>1</td>
-                                <td>10.00</td>
-                            </tr>
-                            <tr>
-                                <td>Napoli</td>
-                                <td>1</td>
-                                <td>10.00</td>
-                            </tr>
-                            <tr>
-                                <td>Firenze</td>
-                                <td>1</td>
-                                <td>10.00</td>
-                            </tr>
-                            <tr>
-                                <td>Genova</td>
-                                <td>1</td>
-                                <td>10.00</td>
-                            </tr>
-                            <tr>
-                                <td>Bari</td>
-                                <td>1</td>
-                                <td>10.00</td>
-                            </tr>
-                            <tr>
-                                <td>Venezia</td>
-                                <td>1</td>
-                                <td>10.00</td>
-                            </tr>
-                            <tr>
-                                <td>Perugia</td>
-                                <td>1</td>
-                                <td>10.00</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+<div class="table-container">
+    <table class="data-table result-table">
+        <thead>
+            <tr>
+                <th>city</th>
+                <th>frequency</th>
+                <th>percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Milano</td>
+                <td>5</td>
+                <td>27.78</td>
+            </tr>
+            <tr>
+                <td>Bologna</td>
+                <td>4</td>
+                <td>22.22</td>
+            </tr>
+            <tr>
+                <td>Roma</td>
+                <td>4</td>
+                <td>22.22</td>
+            </tr>
+            <tr>
+                <td>Torino</td>
+                <td>3</td>
+                <td>16.67</td>
+            </tr>
+            <tr>
+                <td>Napoli</td>
+                <td>2</td>
+                <td>11.11</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-                <p>The results show that each person in the dataset resides in a different city, with each city appearing exactly once (10% frequency each). This indicates maximum geographical diversity within the sample, with representation from ten different Italian cities.</p>
+<p>The results show a non-uniform geographical distribution with Milano being the most represented city (5 people, 27.78%), followed by Bologna and Roma (4 people each, 22.22%), Torino (3 people, 16.67%), and Napoli (2 people, 11.11%). This pattern reveals a concentration in major northern and central Italian cities, with Milano as the dominant location in the sample.</p>
 
-                <h3>Bivariate Distribution Analysis</h3>
-                <p>Bivariate analysis examines the relationship between two variables simultaneously. This type of analysis is crucial for understanding how variables interact with each other, identifying correlations, and discovering patterns that would not be apparent when examining variables in isolation. Bivariate analysis can involve two numerical variables, two categorical variables, or one of each type.</p>
+<div class="visualization-container">
+    <h5>City Distribution Visualization</h5>
+    <div class="chart-placeholder">
+        <canvas id="cityDistributionChart"></canvas>
+    </div>
+</div>
 
-                <h4>Age and Gender Relationship</h4>
-                <p>Analyzing the relationship between age and gender allows us to determine whether there are systematic differences in age distribution between males and females in our dataset. This type of analysis combines a numerical variable (age) with a categorical variable (gender).</p>
+<h3>Bivariate Distribution Analysis</h3>
+<p>Bivariate analysis examines the relationship between two variables simultaneously. This type of analysis is crucial for understanding how variables interact with each other, identifying correlations, and discovering patterns that would not be apparent when examining variables in isolation. Bivariate analysis can involve two numerical variables, two categorical variables, or one of each type.</p>
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-language">SQL</span>
-                        <span class="code-title">Age by Gender Analysis</span>
-                    </div>
-                    <pre><code class="language-sql">SELECT 
+<h4>Age and Gender Relationship</h4>
+<p>Analyzing the relationship between age and gender allows us to determine whether there are systematic differences in age distribution between males and females in our dataset. This type of analysis combines a numerical variable (age) with a categorical variable (gender).</p>
+
+<div class="code-block">
+    <div class="code-header">
+        <span class="code-language">SQL</span>
+        <span class="code-title">Age by Gender Analysis</span>
+    </div>
+    <pre><code class="language-sql">SELECT 
     gender,
     COUNT(*) AS count,
     ROUND(AVG(age), 2) AS mean_age,
@@ -381,111 +450,136 @@ ORDER BY frequency DESC;</code></pre>
 FROM people
 GROUP BY gender
 ORDER BY gender;</code></pre>
-                </div>
+</div>
 
-                <p>The query produces the following results:</p>
+<p>The query produces the following results:</p>
 
-                <div class="table-container">
-                    <table class="data-table result-table">
-                        <thead>
-                            <tr>
-                                <th>gender</th>
-                                <th>count</th>
-                                <th>mean_age</th>
-                                <th>min_age</th>
-                                <th>max_age</th>
-                                <th>std_deviation</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Female</td>
-                                <td>5</td>
-                                <td>25.00</td>
-                                <td>22</td>
-                                <td>29</td>
-                                <td>2.92</td>
-                            </tr>
-                            <tr>
-                                <td>Male</td>
-                                <td>5</td>
-                                <td>28.00</td>
-                                <td>25</td>
-                                <td>31</td>
-                                <td>2.55</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+<div class="table-container">
+    <table class="data-table result-table">
+        <thead>
+            <tr>
+                <th>gender</th>
+                <th>count</th>
+                <th>mean_age</th>
+                <th>min_age</th>
+                <th>max_age</th>
+                <th>std_deviation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Female</td>
+                <td>9</td>
+                <td>26.33</td>
+                <td>22</td>
+                <td>31</td>
+                <td>2.98</td>
+            </tr>
+            <tr>
+                <td>Male</td>
+                <td>9</td>
+                <td>36.78</td>
+                <td>28</td>
+                <td>45</td>
+                <td>4.83</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-                <p>This result reveals that females have a mean age of 25 years (ranging from 22 to 29), while males have a mean age of 28 years (ranging from 25 to 31). This suggests that males in the dataset tend to be slightly older than females on average, though the small sample size means this difference should be interpreted cautiously. Both groups show similar variability, with standard deviations of approximately 2.92 and 2.55 years respectively.</p>
+<p>This result reveals a striking difference between genders: females have a mean age of 26.33 years (ranging from 22 to 31), while males have a mean age of 36.78 years (ranging from 28 to 45). This represents a difference of over 10 years in average age, with males being significantly older. Males also show greater age variability with a standard deviation of 4.83 years compared to 2.98 years for females, indicating a more diverse age range among men in this sample.</p>
 
-                <p>We can also examine the distribution more granularly by creating age groups and analyzing their composition by gender:</p>
+<div class="visualization-container">
+    <h5>Mean Age by Gender Visualization</h5>
+    <div class="chart-placeholder">
+        <canvas id="ageGenderChart"></canvas>
+    </div>
+</div>
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-language">SQL</span>
-                        <span class="code-title">Age Groups by Gender</span>
-                    </div>
-                    <pre><code class="language-sql">SELECT 
+<p>We can also examine the distribution more granularly by creating age groups and analyzing their composition by gender:</p>
+
+<div class="code-block">
+    <div class="code-header">
+        <span class="code-language">SQL</span>
+        <span class="code-title">Age Groups by Gender</span>
+    </div>
+    <pre><code class="language-sql">SELECT 
     CASE 
         WHEN age BETWEEN 22 AND 25 THEN '22-25'
-        WHEN age BETWEEN 26 AND 29 THEN '26-29'
-        ELSE '30+'
+        WHEN age BETWEEN 26 AND 30 THEN '26-30'
+        WHEN age BETWEEN 31 AND 35 THEN '31-35'
+        WHEN age BETWEEN 36 AND 40 THEN '36-40'
+        ELSE '41+'
     END AS age_group,
     gender,
     COUNT(*) AS frequency
 FROM people
 GROUP BY age_group, gender
 ORDER BY age_group, gender;</code></pre>
-                </div>
+</div>
 
-                <p>The query produces the following results:</p>
 
-                <div class="table-container">
-                    <table class="data-table result-table">
-                        <thead>
-                            <tr>
-                                <th>age_group</th>
-                                <th>gender</th>
-                                <th>frequency</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>22-25</td>
-                                <td>Female</td>
-                                <td>3</td>
-                            </tr>
-                            <tr>
-                                <td>22-25</td>
-                                <td>Male</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <td>26-29</td>
-                                <td>Female</td>
-                                <td>2</td>
-                            </tr>
-                            <tr>
-                                <td>26-29</td>
-                                <td>Male</td>
-                                <td>2</td>
-                            </tr>
-                            <tr>
-                                <td>30+</td>
-                                <td>Male</td>
-                                <td>2</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+<p>The query produces the following results:</p>
 
-                <p>This analysis provides insights into how age and gender are jointly distributed across the dataset. The results show that the youngest age group (22-25 years) is predominantly female (3 females vs 1 male), the middle age group (26-29 years) is equally balanced (2 females and 2 males), and the oldest age group (30+ years) contains only males (2 individuals). This granular view reveals patterns such as the concentration of younger females and the presence of older males in the sample.</p>
-                                <h3>Cryptographic Analysis: Caesar Cipher and Frequency Attack</h3>
-                <p>In this section, we explore classical cryptography by applying the Caesar cipher to the first canto of Dante's Divine Comedy and then attempting to decrypt it using frequency analysis. This demonstrates how statistical methods can be used to break simple substitution ciphers, a technique that has been fundamental in cryptanalysis for centuries.</p>
+<div class="table-container">
+    <table class="data-table result-table">
+        <thead>
+            <tr>
+                <th>age_group</th>
+                <th>gender</th>
+                <th>frequency</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>22-25</td>
+                <td>Female</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>26-30</td>
+                <td>Female</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>26-30</td>
+                <td>Male</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>31-35</td>
+                <td>Female</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>31-35</td>
+                <td>Male</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>36-40</td>
+                <td>Male</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>41+</td>
+                <td>Male</td>
+                <td>2</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
-                <h4>The Caesar Cipher</h4>
+<p>This analysis provides clear insights into the age-gender distribution. The youngest groups (22-25 and 26-30) are dominated by females (8 out of 9 total), with only one male in the 26-30 range. The middle age group (31-35) shows mixed representation with 3 males and 1 female. The older groups (36-40 and 41+) contain exclusively males (5 total). This demonstrates a clear age stratification by gender, with younger individuals being predominantly female and older individuals being exclusively male in this sample.</p>
+
+<div class="visualization-container">
+    <h5>Age Groups by Gender Visualization</h5>
+    <div class="chart-placeholder">
+        <canvas id="ageGroupsGenderChart"></canvas>
+    </div>
+</div>
+
+                <h3>The Caesar Cipher</h3>
                 <p>The Caesar cipher is one of the oldest and simplest encryption techniques, named after Julius Caesar who used it to protect military communications. It is a type of substitution cipher where each letter in the plaintext is shifted a fixed number of positions down the alphabet. For example, with a shift of 3, A becomes D, B becomes E, and so on. While extremely simple, the Caesar cipher provides an excellent introduction to cryptographic concepts and vulnerabilities.</p>
 
                 <h4>Step 1: Text Extraction and Preparation</h4>
@@ -742,155 +836,6 @@ print(f"\nDecryption successful: {decrypted_text == clean_text}")</code></pre>
                     </div>
                 </div>
 
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-language">JavaScript</span>
-                        <span class="code-title">Frequency Visualization Script</span>
-                    </div>
-                    <pre><code class="language-javascript">// Frequency data for visualization
-const originalFreq = {
-    'E': 11.79, 'A': 13.42, 'I': 11.25, 'O': 8.93,
-    'N': 6.24, 'R': 7.89, 'L': 6.71, 'T': 5.83,
-    'S': 4.85, 'C': 3.21, 'D': 3.45, 'V': 3.12
-};
-
-const encryptedFreq = {
-    'L': 11.79, 'H': 13.42, 'P': 11.25, 'V': 8.93,
-    'U': 6.24, 'Y': 7.89, 'S': 6.71, 'A': 5.83,
-    'Z': 4.85, 'J': 3.21, 'K': 3.45, 'C': 3.12
-};
-
-const italianStandard = {
-    'E': 11.49, 'A': 10.85, 'I': 10.18, 'O': 9.97,
-    'N': 7.02, 'T': 6.97, 'R': 6.19, 'L': 5.70,
-    'S': 5.48, 'C': 4.30, 'D': 3.39, 'U': 3.16
-};
-
-// Create bar chart comparison
-function createFrequencyChart() {
-    const ctx = document.getElementById('freqCanvas').getContext('2d');
-    
-    const letters = Object.keys(originalFreq);
-    
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: letters,
-            datasets: [
-                {
-                    label: 'Original Text (Dante)',
-                    data: Object.values(originalFreq),
-                    backgroundColor: 'rgba(52, 152, 219, 0.7)',
-                    borderColor: 'rgba(52, 152, 219, 1)',
-                    borderWidth: 2
-                },
-                {
-                    label: 'Standard Italian',
-                    data: letters.map(l => italianStandard[l] || 0),
-                    backgroundColor: 'rgba(46, 204, 113, 0.7)',
-                    borderColor: 'rgba(46, 204, 113, 1)',
-                    borderWidth: 2
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Letter Frequency: Original vs Standard Italian',
-                    font: { size: 16 }
-                },
-                legend: {
-                    position: 'top'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Frequency (%)'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Letters'
-                    }
-                }
-            }
-        }
-    });
-}
-
-// Create distribution comparison chart
-function createDistributionChart() {
-    const ctx = document.getElementById('distCanvas').getContext('2d');
-    
-    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-    
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: alphabet,
-            datasets: [
-                {
-                    label: 'Original Text',
-                    data: alphabet.map(l => originalFreq[l] || 0),
-                    borderColor: 'rgba(52, 152, 219, 1)',
-                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                    fill: true,
-                    tension: 0.4
-                },
-                {
-                    label: 'Encrypted Text (Shift +7)',
-                    data: alphabet.map(l => encryptedFreq[l] || 0),
-                    borderColor: 'rgba(231, 76, 60, 1)',
-                    backgroundColor: 'rgba(231, 76, 60, 0.2)',
-                    fill: true,
-                    tension: 0.4
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Frequency Distribution: Original vs Encrypted',
-                    font: { size: 16 }
-                },
-                legend: {
-                    position: 'top'
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: 'Frequency (%)'
-                    }
-                },
-                x: {
-                    title: {
-                        display: true,
-                        text: 'Alphabet'
-                    }
-                }
-            }
-        }
-    });
-}
-
-// Initialize charts when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    createFrequencyChart();
-    createDistributionChart();
-});</code></pre>
-                </div>
-
                 <h4>Results and Analysis</h4>
                 <p>The frequency analysis attacks successfully recovered the original shift value of 7. Both approaches—using standard Italian letter frequencies and using the ciphertext's own frequency distribution—were able to decrypt the text. This demonstrates a fundamental weakness of the Caesar cipher: it preserves the statistical properties of the plaintext, making it vulnerable to frequency analysis.</p>
 
@@ -914,6 +859,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </main>
 
     <script src="../include/js/main.js"></script>
+    <script src="../include/js/distribution-viz.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 </body>

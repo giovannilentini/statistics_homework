@@ -315,3 +315,168 @@
         max-height: 300px;
     }
 }
+/* ============================================
+   VISUALIZATION CONTAINER - RESPONSIVE CHARTS
+   ============================================ */
+
+.visualization-container {
+    margin: 2.5rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.visualization-container h5 {
+    color: #2c3e50;
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-align: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3498db;
+}
+
+.visualization-container h5:first-child {
+    margin-top: 0;
+}
+
+/* Chart wrapper with responsive aspect ratio */
+.chart-placeholder {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-bottom: 2rem;
+    position: relative;
+    width: 100%;
+}
+
+.chart-placeholder:last-child {
+    margin-bottom: 0;
+}
+
+/* Responsive canvas container */
+.chart-placeholder canvas {
+    max-width: 100%;
+    height: auto !important;
+    display: block;
+}
+
+/* Desktop - optimal viewing */
+@media (min-width: 1024px) {
+    .chart-placeholder canvas {
+        min-height: 400px;
+        max-height: 500px;
+    }
+}
+
+/* Tablet - medium screens */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .visualization-container {
+        padding: 1.5rem;
+    }
+
+    .visualization-container h5 {
+        font-size: 1.2rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .chart-placeholder {
+        padding: 1.25rem;
+    }
+
+    .chart-placeholder canvas {
+        min-height: 350px;
+        max-height: 450px;
+    }
+}
+
+/* Mobile landscape - small tablets */
+@media (min-width: 576px) and (max-width: 767px) {
+    .visualization-container {
+        padding: 1.25rem;
+        margin: 2rem 0;
+    }
+
+    .visualization-container h5 {
+        font-size: 1.1rem;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .chart-placeholder {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .chart-placeholder canvas {
+        min-height: 300px;
+        max-height: 400px;
+    }
+}
+
+/* Mobile portrait - phones */
+@media (max-width: 575px) {
+    .visualization-container {
+        padding: 1rem;
+        margin: 1.5rem -10px;
+        border-radius: 8px;
+    }
+
+    .visualization-container h5 {
+        font-size: 1rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.8rem;
+        padding-bottom: 0.4rem;
+    }
+
+    .chart-placeholder {
+        padding: 0.75rem;
+        margin-bottom: 1.5rem;
+        border-radius: 6px;
+    }
+
+    .chart-placeholder canvas {
+        min-height: 250px;
+        max-height: 350px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 375px) {
+    .visualization-container {
+        padding: 0.75rem;
+        margin: 1rem -5px;
+    }
+
+    .visualization-container h5 {
+        font-size: 0.95rem;
+    }
+
+    .chart-placeholder {
+        padding: 0.6rem;
+    }
+
+    .chart-placeholder canvas {
+        min-height: 220px;
+        max-height: 300px;
+    }
+}
+
+/* Landscape orientation on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .chart-placeholder canvas {
+        min-height: 200px;
+        max-height: 280px;
+    }
+}
+
+/* High DPI displays - ensure crisp rendering */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .chart-placeholder canvas {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
