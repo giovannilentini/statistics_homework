@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homework 4</title>
+    <link rel="stylesheet" href="../include/css/style.css">
+    <link rel="stylesheet" href="../include/css/content.css">
+    <link rel="stylesheet" href="../include/css/code.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        /* Interactive controls styling */
+        .simulation-controls {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .control-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.4rem;
+        }
+
+        .control-group input {
+            padding: 0.5rem;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            background: white;
+            color: #2c3e50;
+        }
+
+        .control-group input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .sim-btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sim-btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .sim-btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .sim-btn-success {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .sim-btn-success:hover {
+            background: #27ae60;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+        }
+
+        .sim-btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .sim-btn-warning:hover {
+            background: #e67e22;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(243, 156, 18, 0.3);
+        }
+
+        .sim-btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .sim-btn-danger:hover {
+            background: #c0392b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+        }
+
+        .status-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        .status-info strong {
+            font-weight: 700;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .chart-wrapper {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .chart-wrapper:first-child {
+            min-height: 550px;  /* Line chart - taller */
+        }
+
+        .chart-wrapper:last-child {
+            min-height: 450px;  /* Histogram - shorter */
+        }
+
+        .chart-wrapper h4 {
+            color: #2c3e50;
+            margin: 0 0 1rem 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .chart-canvas-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+
+        .chart-info {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        @media (max-width: 1024px) {
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .sim-btn {
+                width: 100%;
+            }
+
+            .chart-canvas-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Statistics Course Blog</h1>
+            <p class="subtitle">Law of Large Numbers Simulation</p>
+            <p class="student-info">Giovanni Lentini - 1987799</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="back-navigation">
+            <a href="../index.html" class="btn-back">← Back to Home</a>
+        </div>
+
+        <article class="homework-detail">
+            <div class="homework-header">
+                <h2>Homework 3: Law of Large Numbers Simulation</h2>
+                <div class="meta-info">
+                    <span class="date">Due: November 5, 2025</span>
+                </div>
+            </div>
+
+            <section class="homework-content">
+                <p class="intro-paragraph">This interactive simulation demonstrates the Law of Large Numbers by plotting multiple trajectories of relative frequency f(n) and observing their convergence to the theoretical probability p. Through Bernoulli trials, we can visualize how empirical frequencies approach expected values as the number of trials increases.</p>
+
+                <h3>Understanding the Law of Large Numbers</h3>
+                <p>The Law of Large Numbers is a fundamental theorem in probability theory that describes the result of performing the same experiment many times. It states that as the number of trials or observations increases, the average of the observed results will converge to the expected or theoretical average. This principle underlies much of statistical inference and is crucial for understanding how sample statistics relate to population parameters.</p>
+
+                <p>In mathematical terms, if we have independent and identically distributed random variables X₁, X₂, ..., Xₙ with expected value μ, then the sample mean converges to μ as n approaches infinity. This convergence can be expressed as the probability that the absolute difference between the sample mean and the expected value exceeds any positive threshold ε approaches zero as n increases.</p>
+
+                <h3>Interactive Simulation</h3>
+                <p>Use the controls below to configure and run the simulation. You can adjust the number of trajectories, trials per trajectory, probability of success, and visualization parameters. The simulation generates multiple independent sequences of Bernoulli trials and displays their relative frequencies over time.</p>
+
+                <div class="simulation-controls">
+                    <div class="status-info">
+                        Interactive simulation — change parameters and press <strong>Simulate</strong> to generate new data or <strong>Play</strong> to animate the convergence process
+                    </div>
+
+                    <div class="controls-grid">
+                        <div class="control-group">
+                            <label for="mInput">Number of trajectories (m)</label>
+                            <input id="mInput" type="number" min="1" max="2000" value="200" />
+                        </div>
+                        <div class="control-group">
+                            <label for="nInput">Trials per trajectory (n)</label>
+                            <input id="nInput" type="number" min="10" max="5000" value="500" />
+                        </div>
+                        <div class="control-group">
+                            <label for="pInput">Probability of success (p)</label>
+                            <input id="pInput" type="number" step="0.01" min="0" max="1" value="0.6" />
+                        </div>
+                        <div class="control-group">
+                            <label for="binsInput">Histogram bins</label>
+                            <input id="binsInput" type="number" min="5" max="100" value="20" />
+                        </div>
+                        <div class="control-group">
+                            <label for="sampleInput">Show sample trajectories</label>
+                            <input id="sampleInput" type="number" min="1" max="200" value="50" />
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="sim-btn sim-btn-primary" id="simulateBtn">Simulate</button>
+                        <button class="sim-btn sim-btn-success" id="playBtn">Play</button>
+                        <button class="sim-btn sim-btn-warning" id="stepBtn">Step</button>
+                        <button class="sim-btn sim-btn-danger" id="resetBtn">Reset</button>
+                    </div>
+
+                    <div class="chart-info">
+                        <strong>Current trial:</strong> <span id="currentN">0</span> / <span id="totalN">0</span> | 
+                        <strong>p =</strong> <span id="displayP">0.6</span> | 
+                        <strong>Bins:</strong> <span id="displayBins">20</span>
+                    </div>
+                </div>
+
+                <div class="charts-container">
+                    <div class="chart-wrapper">
+                        <h4>Relative Frequency Trajectories f(n)</h4>
+                        <div class="chart-canvas-container">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                        <div class="chart-info">
+                            Each gray line represents one trajectory of Bernoulli trials. The blue line shows the theoretical probability p. As n increases, trajectories converge to p.
+                        </div>
+                    </div>
+
+                    <div class="chart-wrapper">
+                        <h4>Histogram of f(n) Across Trajectories</h4>
+                        <div class="chart-canvas-container">
+                            <canvas id="histChart"></canvas>
+                        </div>
+                        <div class="chart-info">
+                            Distribution of relative frequencies at the current trial n. As n increases, this distribution becomes more concentrated around p.
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Key Observations</h3>
+                <p>As you run the simulation, observe how the relative frequencies behave:</p>
+                <ul>
+                    <li>Initially, the trajectories show high variability and may deviate significantly from the theoretical probability p</li>
+                    <li>As the number of trials increases, the trajectories converge toward p, though they never reach it exactly</li>
+                    <li>The histogram becomes increasingly concentrated around p, showing reduced variance in the relative frequencies</li>
+                    <li>Individual trajectories may temporarily deviate from p, but the overall trend is toward convergence</li>
+                    <li>Increasing the number of trajectories m provides more samples of the convergence behavior without affecting individual trajectory properties</li>
+                </ul>
+
+                <h3>Mathematical Foundation</h3>
+                <p>The simulation is based on Bernoulli trials, where each trial has exactly two possible outcomes: success (with probability p) or failure (with probability 1-p). For each trajectory, we compute the cumulative relative frequency after n trials as the ratio of successes to total trials. According to the Law of Large Numbers, this relative frequency converges in probability to p as n approaches infinity.</p>
+
+                <p>The convergence can be understood through Chebyshev's inequality, which provides bounds on how quickly the sample mean approaches the expected value. Specifically, for any ε > 0, the probability that the sample mean deviates from the expected value by more than ε is bounded by the variance divided by nε². This explains why larger n leads to tighter concentration around p.</p>
+
+                <h3>Applications and Significance</h3>
+                <p>The Law of Large Numbers has profound implications across statistics, science, and practical applications. In statistical inference, it justifies using sample means to estimate population parameters. In insurance and finance, it explains how pooling risk across many independent policies or investments reduces overall uncertainty. In quality control, it underlies acceptance sampling procedures. In Monte Carlo simulations, it guarantees that averaging many random samples produces accurate approximations of expected values.</p>
+
+                <p>Understanding this law is essential for interpreting statistical results correctly. It explains why larger samples generally provide more reliable estimates and why individual outcomes can deviate from expectations even when the overall average is predictable. However, it's important to note that convergence is asymptotic—no finite sample guarantees exact agreement with the expected value, and the rate of convergence depends on the underlying variance.</p>
+            </section>
+        </article>
+    </main>
+
+    <script>
+    // Utility: create Bernoulli simulations and cumulative relative frequencies
+    function simulateBernoulli(m, n, p) {
+        const trajectories = new Array(m);
+        for (let i = 0; i < m; i++) {
+            const traj = new Array(n);
+            let cum = 0;
+            for (let j = 0; j < n; j++) {
+                const outcome = Math.random() < p ? 1 : 0;
+                cum += outcome;
+                traj[j] = cum / (j + 1);
+            }
+            trajectories[i] = traj;
+        }
+        return trajectories;
+    }
+
+    // Histogram binning
+    function computeHistogram(values, bins) {
+        const min = 0, max = 1;
+        const counts = new Array(bins).fill(0);
+        const binWidth = (max - min) / bins;
+        values.forEach(v => {
+            let x = Math.max(min, Math.min(max, v));
+            let idx = Math.floor((x - min) / binWidth);
+            if (idx === bins) idx = bins - 1;
+            counts[idx]++;
+        });
+        const labels = new Array(bins).fill(0).map((_, i) => (min + i * binWidth + binWidth / 2).toFixed(2));
+        return { counts, labels, binWidth };
+    }
+
+    // Set up charts
+    let lineChart, histChart;
+    function createCharts() {
+        const ctxLine = document.getElementById('lineChart').getContext('2d');
+        const ctxHist = document.getElementById('histChart').getContext('2d');
+
+        lineChart = new Chart(ctxLine, {
+            type: 'line',
+            data: { labels: [], datasets: [] },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                scales: {
+                    x: { 
+                        title: { display: true, text: 'Trial n', color: '#2c3e50', font: {size: 12, weight: 'bold'} },
+                        ticks: { color: '#2c3e50' },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    },
+                    y: { 
+                        min: 0, 
+                        max: 1, 
+                        title: { display: true, text: 'Relative frequency f(n)', color: '#2c3e50', font: {size: 12, weight: 'bold'} },
+                        ticks: { color: '#2c3e50' },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true }
+                }
+            }
+        });
+
+        histChart = new Chart(ctxHist, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Frequency',
+                    data: [],
+                    backgroundColor: 'rgba(52, 152, 219, 0.8)',
+                    borderColor: 'rgba(52, 152, 219, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: false,
+                scales: {
+                    x: { 
+                        title: { display: true, text: 'f(n) bins', color: '#2c3e50', font: {size: 12, weight: 'bold'} },
+                        ticks: { color: '#2c3e50', maxRotation: 45, minRotation: 45 },
+                        grid: { display: false }
+                    },
+                    y: { 
+                        title: { display: true, text: 'Count', color: '#2c3e50', font: {size: 12, weight: 'bold'} },
+                        ticks: { color: '#2c3e50' },
+                        grid: { color: 'rgba(0,0,0,0.05)' }
+                    }
+                },
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: { enabled: true }
+                }
+            }
+        });
+    }
+
+    // Simulation state
+    let trajectories = [];
+    let m = 200, n = 500, p = 0.6, bins = 20, sample = 50;
+    let currentN = 0;
+    let playing = false;
+    let playInterval = null;
+
+    function updateDisplay() {
+        document.getElementById('currentN').textContent = currentN;
+        document.getElementById('totalN').textContent = n;
+        document.getElementById('displayP').textContent = p.toFixed(2);
+        document.getElementById('displayBins').textContent = bins;
+    }
+
+    function drawLineChart() {
+        const labels = new Array(currentN).fill(0).map((_, i) => i + 1);
+        const datasets = [];
+
+        const maxToShow = Math.min(sample, trajectories.length);
+        const step = Math.floor(Math.max(1, trajectories.length / maxToShow));
+        for (let i = 0, shown = 0; i < trajectories.length && shown < maxToShow; i += step, shown++) {
+            const full = trajectories[i];
+            const data = full.slice(0, currentN);
+            datasets.push({
+                label: 'traj' + i,
+                data,
+                borderWidth: 1,
+                pointRadius: 0,
+                fill: false,
+                tension: 0.15,
+                borderColor: 'rgba(149, 165, 166, 0.3)'
+            });
+        }
+
+        datasets.push({
+            label: 'Theoretical p',
+            data: new Array(currentN).fill(p),
+            borderWidth: 3,
+            pointRadius: 0,
+            borderColor: 'rgba(52, 152, 219, 0.95)',
+            borderDash: [5, 5]
+        });
+
+        lineChart.data.labels = labels;
+        lineChart.data.datasets = datasets;
+        lineChart.update('none');
+    }
+
+    function drawHistChart() {
+        if (currentN === 0) {
+            histChart.data.labels = [];
+            histChart.data.datasets[0].data = [];
+            histChart.update('none');
+            return;
+        }
+        const values = trajectories.map(traj => traj[currentN - 1]);
+        const { counts, labels } = computeHistogram(values, bins);
+        histChart.data.labels = labels;
+        histChart.data.datasets[0].data = counts;
+        histChart.update('none');
+    }
+
+    function simulateAndDraw() {
+        m = Math.max(1, Math.floor(Number(document.getElementById('mInput').value)));
+        n = Math.max(1, Math.floor(Number(document.getElementById('nInput').value)));
+        p = Math.max(0, Math.min(1, Number(document.getElementById('pInput').value)));
+        bins = Math.max(1, Math.floor(Number(document.getElementById('binsInput').value)));
+        sample = Math.max(1, Math.floor(Number(document.getElementById('sampleInput').value)));
+
+        trajectories = simulateBernoulli(m, n, p);
+        currentN = 1;
+        updateDisplay();
+        drawLineChart();
+        drawHistChart();
+    }
+
+    function resetSimulation() {
+        if (playInterval) {
+            clearInterval(playInterval);
+            playInterval = null;
+            playing = false;
+            document.getElementById('playBtn').textContent = 'Play';
+        }
+        currentN = 0;
+        trajectories = [];
+        updateDisplay();
+        lineChart.data.labels = [];
+        lineChart.data.datasets = [];
+        lineChart.update('none');
+        histChart.data.labels = [];
+        histChart.data.datasets[0].data = [];
+        histChart.update('none');
+    }
+
+    function stepSimulation() {
+        if (trajectories.length === 0) {
+            simulateAndDraw();
+            return;
+        }
+        if (currentN < n) currentN++;
+        updateDisplay();
+        drawLineChart();
+        drawHistChart();
+        if (currentN >= n) {
+            if (playInterval) {
+                clearInterval(playInterval);
+                playInterval = null;
+                playing = false;
+                document.getElementById('playBtn').textContent = 'Play';
+            }
+        }
+    }
+
+    function playSimulation() {
+        if (!trajectories.length) simulateAndDraw();
+        playing = !playing;
+        const btn = document.getElementById('playBtn');
+        btn.textContent = playing ? 'Pause' : 'Play';
+        if (playing) {
+            playInterval = setInterval(() => {
+                stepSimulation();
+            }, 40);
+        } else {
+            if (playInterval) {
+                clearInterval(playInterval);
+                playInterval = null;
+            }
+        }
+    }
+
+    // Initialize
+    window.addEventListener('load', () => {
+        createCharts();
+        updateDisplay();
+        document.getElementById('simulateBtn').addEventListener('click', () => { simulateAndDraw(); });
+        document.getElementById('resetBtn').addEventListener('click', () => { resetSimulation(); });
+        document.getElementById('stepBtn').addEventListener('click', () => { stepSimulation(); });
+        document.getElementById('playBtn').addEventListener('click', () => { playSimulation(); });
+
+        // Run initial simulation
+        simulateAndDraw();
+    });
+    </script>
+</body>
+</html>
