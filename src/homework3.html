@@ -39,7 +39,7 @@
             </div>
 
             <section class="homework-content">
-                <p class="intro-paragraph">This page demonstrates — for educational purposes only — how to encrypt a text (excerpt from <a href="https://it.wikisource.org/wiki/Il_treno_ha_fischiato" target="_blank" rel="noopener">Il treno ha fischiato</a> by Luigi Pirandello) using a per-letter RSA implementation and how one can recover a good portion of the text using a frequency-based attack. The goal is to illustrate why encrypting single characters with RSA is insecure and how statistical properties can reveal information about the plaintext.</p>
+                <p class="intro-paragraph">This page demonstrates how to encrypt a text (excerpt from <a href="https://it.wikisource.org/wiki/Il_treno_ha_fischiato" target="_blank" rel="noopener">Il treno ha fischiato</a> by Luigi Pirandello) using a per-letter RSA implementation and how one can recover a good portion of the text using a frequency-based attack. The goal is to illustrate why encrypting single characters with RSA is insecure and how statistical properties can reveal information about the plaintext.</p>
 
                 <h3>1) The text (excerpt)</h3>
                 <p>The text used here is taken from Wikisource (public domain). For simplicity, we use a normalized version (only uppercase letters and spaces).</p>
@@ -60,7 +60,7 @@ E si mise a gridare, a ridere, a piangere.
 Fischiato! Fischiato! Il treno! Il treno!</code></pre>
                 </div>
 
-                <h3>2) Encryption method (educational)</h3>
+                <h3>2) Encryption method</h3>
                 <p>Method: normalize the text (uppercase, letters A–Z, keep spaces) and encode each letter into a number 0–25 (A=0, B=1, ...). Then apply RSA to each symbol individually: <code>c = m^e mod n</code>. This method is insecure because it is deterministic and preserves statistical structure.</p>
 
                 <h4>Interactive JavaScript demo</h4>
@@ -115,7 +115,7 @@ def normalize(text):
     text = re.sub(r'[^A-Z ]', '', text)
     return text
 
-# --- RSA per-symbol (educational)
+# --- RSA per-symbol
 def rsa_encrypt_symbol(m, e, n):
     return pow(m, e, n)
 
