@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Homework 6</title>
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="../include/css/style.css" />
+  <link rel="stylesheet" href="../include/css/content.css" />
+  <link rel="stylesheet" href="../include/css/code_block.css" />
+
+  <!-- Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- KaTeX (auto-render for \( \) and \[ \]) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js"
+          crossorigin="anonymous"
+          onload="renderMathInElement(document.body,{
+            delimiters:[
+              {left:'\\(', right:'\\)', display:false},
+              {left:'\\[', right:'\\]', display:true}
+            ]
+          });">
+  </script>
+
+  <style>
+    .stat-card{ background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:1rem 1.25rem; }
+    .stat-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:0.75rem; }
+    @media (max-width: 900px){ .stat-grid{ grid-template-columns:repeat(2,1fr); } }
+    .stat{ background:#f8f9fa; border-radius:6px; padding:0.75rem; text-align:center; }
+    .stat .label{ font-size:0.8rem; color:#7f8c8d; }
+    .stat .value{ font-weight:700; color:#2c3e50; font-size:1.05rem; }
+
+    .controls { display:grid; grid-template-columns:repeat(6,minmax(120px,1fr)); gap:0.75rem; margin-bottom:0.75rem; }
+    @media (max-width:1100px){ .controls{ grid-template-columns:repeat(3,1fr); } }
+    @media (max-width:600px){ .controls{ grid-template-columns:repeat(2,1fr); } }
+    .control{ display:flex; flex-direction:column; gap:0.25rem; }
+    .control label{ font-size:0.9rem; color:#34495e; font-weight:600; }
+    .control input, .control select, .control textarea{ border:1px solid #bdc3c7; border-radius:4px; padding:0.5rem 0.6rem; font-size:0.95rem; color:#2c3e50; background:#fff; }
+    .buttons{ display:flex; gap:0.5rem; flex-wrap:wrap; }
+    .btn{ padding:0.55rem 0.9rem; border:none; border-radius:6px; font-weight:600; cursor:pointer; }
+    .btn-primary{ background:#3498db; color:#fff; } .btn-success{ background:#2ecc71; color:#fff; } .btn-danger{ background:#e74c3c; color:#fff; }
+
+    .chart-box{ background:#fff; padding:1rem; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+    .chart-box h4{ color:#2c3e50; margin:0 0 0.5rem 0; padding-bottom:0.25rem; border-bottom:2px solid #3498db; font-size:1.05rem; font-weight:700; }
+    .chart-container{ position:relative; width:100%; height:360px; }
+    @media (max-width:600px){ .chart-container{ height:300px; } }
+
+    .hidden { display:none !important; }
+    .nav-links{ display:flex; gap:0.75rem; flex-wrap:wrap; margin-top:1rem; }
+    .btn-link{ display:inline-block; padding:0.55rem 0.9rem; border-radius:6px; text-decoration:none; font-weight:600; }
+    .btn-secondary{ background:#95a5a6; color:#fff; }
+    .btn-primary-link{ background:#3498db; color:#fff; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Statistics Homework Blog</h1>
+      <p class="subtitle">Recurrences & Online Algorithms — Interactive Lab</p>
+      <p class="student-info">Giovanni Lentini - 1987799</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="back-navigation">
+      <a href="../index.html" class="btn-back">← Back to Home</a>
+    </div>
+
+    <article class="homework-detail">
+      <div class="homework-header">
+        <h2>Homework 6: Recurrences & Streaming Lab</h2>
+        <div class="meta-info"><span class="date">Due: November 5, 2025</span></div>
+      </div>
+
+      <section class="homework-content">
+        <p class="intro-paragraph">
+          This page derives the simplest recurrences for the arithmetic mean and variance and provides numerically stable streaming implementations with live visualizations.
+        </p>
+
+        <h3>Recursive Form of the Mean</h3>
+        <p>
+          Starting from \( \bar{x}_n=\frac{1}{n}\sum_{i=1}^{n}x_i \), the first \( n-1 \) terms average to \( \bar{x}_{n-1} \), hence
+          \( \bar{x}_n=\frac{(n-1)\bar{x}_{n-1}+x_n}{n}=\bar{x}_{n-1}+\frac{x_n-\bar{x}_{n-1}}{n} \), enabling \(O(1)\) updates.
+        </p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-language">Math</span>
+            <span class="code-title">Mean Recurrence (Derivation)</span>
+          </div>
+<pre><code>\[
+\bar{x}_n
+=\frac{(n-1)\bar{x}_{n-1}+x_n}{n}
+=\bar{x}_{n-1}+\frac{x_n-\bar{x}_{n-1}}{n}.
+\]
+</code></pre>
+        </div>
+
+        <h3>Recursive Variance (Stable: Welford)</h3>
+        <p>
+          Maintain \( (n,\mu,M_2) \) with \( \mu \) the running mean and \( M_2=\sum_{i=1}^{n}(x_i-\mu)^2 \):
+          \( \delta=x-\mu,\ \mu\leftarrow\mu+\delta/n,\ \delta_2=x-\mu,\ M_2\leftarrow M_2+\delta\delta_2 \), then sample variance \( s^2=M_2/(n-1) \).
+        </p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-language">Math</span>
+            <span class="code-title">Variance Recurrence (Stable)</span>
+          </div>
+<pre><code>\[
+\delta=x_n-\mu_{n-1},\quad
+\mu_n=\mu_{n-1}+\frac{\delta}{n},\quad
+\delta_2=x_n-\mu_n,\quad
+M_{2,n}=M_{2,n-1}+\delta\,\delta_2,\quad
+s_n^2=\frac{M_{2,n}}{n-1}.
+\]
+</code></pre>
+        </div>
+
+                <h3>Numerical and Computational Discussion</h3>
+        <p>
+          Traditional <em>batch algorithms</em> for computing mean and variance require storing all \(n\) data points
+          and performing two passes — one to compute the mean, another to compute the squared deviations:
+        </p>
+<div class="code-block">
+          <div class="code-header">
+            <span class="code-language">Math</span>
+            <span class="code-title">Variance Recurrence (Stable)</span>
+          </div>
+<pre><code>\[
+\bar{x}=\frac{1}{n}\sum_{i=1}^{n}x_i,\quad
+s^2=\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})^2.
+\]
+</code></pre>
+        </div>
+        <p>
+          Although simple, this formulation is <strong>numerically unstable</strong> when \(x_i\) are large and their variance is small,
+          because subtraction of nearly equal numbers (\(x_i-\bar{x}\)) leads to <em>catastrophic cancellation</em>.
+          Furthermore, batch algorithms must keep all data in memory or recompute partial sums, resulting in
+          \(O(n)\) space and time complexity for updates.
+        </p>
+
+        <h4>Advantages of Online (Recursive) Algorithms</h4>
+        <ul>
+          <li>
+            <strong>Numerical Stability:</strong>
+            Welford’s recurrence avoids catastrophic cancellation by updating both mean and variance incrementally
+            using only differences between consecutive values and the current mean. The accumulation of squared deviations
+            \(M_2\) is performed on small, centered quantities.
+          </li>
+          <li>
+            <strong>Reduced Error Propagation:</strong>
+            Each step depends only on the current aggregate state \((n, \mu, M_2)\) and the new observation \(x_n\),
+            so rounding errors do not accumulate from large sums as in the batch method.
+          </li>
+          <li>
+            <strong>Memory Efficiency:</strong>
+            The algorithm stores only three numbers — the count, the mean, and the running second moment — regardless of stream length.
+            This makes it suitable for real-time and embedded systems where memory is limited.
+          </li>
+          <li>
+            <strong>Computational Efficiency:</strong>
+            Each new datum requires constant time \(O(1)\) to update both mean and variance,
+            enabling streaming or high-throughput data processing without recomputation.
+          </li>
+          <li>
+            <strong>Overflow Management:</strong>
+            Since no term grows quadratically with \(x_i\) or \(n\), online formulas are less prone to overflow or underflow
+            when processing large sequences or high-magnitude data.
+          </li>
+          <li>
+            <strong>Scalability and Robustness:</strong>
+            Online estimators can be extended to distributed or parallel settings — partial statistics from different
+            nodes can be combined using pairwise update rules:
+<div class="code-block">
+          <div class="code-header">
+            <span class="code-language">Math</span>
+            <span class="code-title"></span>
+          </div>
+<pre><code>\[
+\[
+\mu_{AB} = \frac{n_A \mu_A + n_B \mu_B}{n_A+n_B},\quad
+M_{2,AB} = M_{2,A} + M_{2,B} +
+\frac{n_A n_B}{n_A+n_B}(\mu_A - \mu_B)^2.
+\]
+</code></pre>
+        </div>
+            This property allows incremental learning and real-time analytics over massive data streams.
+          </li>
+        </ul>
+
+        <p>
+          In summary, online algorithms like Welford’s method are preferred in modern computational statistics
+          for their superior stability, efficiency, and scalability — especially when data arrive sequentially or
+          are too large to fit in memory.
+        </p>
+
+
+        <h3>Interactive Lab: Streaming Mean & Variance</h3>
+        <p>
+          Choose a data source; only the relevant parameters are shown. Stream data and observe the running mean and sample variance converge using stable online updates.
+        </p>
+
+        <!-- Controls -->
+        <div class="stat-card">
+          <div class="controls">
+            <div class="control">
+              <label for="srcSelect">Source</label>
+              <select id="srcSelect">
+                <option value="uniform">Uniform [a, b]</option>
+                <option value="normal">Normal (μ, σ)</option>
+                <option value="manual">Manual (numbers)</option>
+              </select>
+            </div>
+
+            <!-- Uniform group -->
+            <div class="control src-group" id="groupUniform">
+              <label for="aInput">a (Uniform)</label>
+              <input type="number" id="aInput" value="0" step="0.1" />
+            </div>
+            <div class="control src-group" id="groupUniformB">
+              <label for="bInput">b (Uniform)</label>
+              <input type="number" id="bInput" value="1" step="0.1" />
+            </div>
+
+            <!-- Normal group -->
+            <div class="control src-group hidden" id="groupNormal">
+              <label for="muInput">μ (Normal)</label>
+              <input type="number" id="muInput" value="0" step="0.1" disabled />
+            </div>
+            <div class="control src-group hidden" id="groupNormalSigma">
+              <label for="sigmaInput">σ (Normal)</label>
+              <input type="number" id="sigmaInput" value="1" step="0.1" disabled />
+            </div>
+
+            <!-- Batch size always visible -->
+            <div class="control">
+              <label for="nBatchInput">Batch size</label>
+              <input type="number" id="nBatchInput" value="100" min="1" />
+            </div>
+          </div>
+
+          <!-- Manual group (full width) -->
+          <div class="control src-group hidden" id="groupManual" style="grid-column: 1/-1;">
+            <label for="manualInput">Manual input (comma/space/newline separated)</label>
+            <textarea id="manualInput" rows="3" placeholder="e.g. 1, 2, 2.5, 3 4
+5" disabled></textarea>
+          </div>
+
+          <div class="buttons" style="margin-top:0.5rem">
+            <button class="btn btn-primary" id="btnStream">Stream batch</button>
+            <button class="btn btn-success" id="btnStep">Step one</button>
+            <button class="btn btn-danger" id="btnReset">Reset</button>
+          </div>
+
+          <div class="stat-grid" style="margin-top:0.75rem">
+            <div class="stat"><div class="label">n</div><div class="value" id="statN">0</div></div>
+            <div class="stat"><div class="label">Mean</div><div class="value" id="statMean">—</div></div>
+            <div class="stat"><div class="label">Variance (sample)</div><div class="value" id="statVar">—</div></div>
+            <div class="stat"><div class="label">Std. Dev.</div><div class="value" id="statStd">—</div></div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="visualization-container">
+          <h5>Running Mean</h5>
+          <div class="chart-placeholder chart-box">
+            <div class="chart-container"><canvas id="meanChart"></canvas></div>
+          </div>
+
+          <h5>Running Variance (Sample)</h5>
+          <div class="chart-placeholder chart-box">
+            <div class="chart-container"><canvas id="varChart"></canvas></div>
+          </div>
+        </div>
+
+      </section>
+    </article>
+  </main>
+
+  <script>
+    // ===== Random generators =====
+    function randUniform(a, b) { return a + (b - a) * Math.random(); }
+    function randNormal(mu, sigma) {
+      // Box–Muller
+      let u = 0, v = 0;
+      while (u === 0) u = Math.random();
+      while (v === 0) v = Math.random();
+      const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+      return mu + sigma * z;
+    }
+    function parseManual(text) {
+      return text.split(/[\s,;]+/g)
+        .map(s => s.trim()).filter(Boolean)
+        .map(Number).filter(Number.isFinite);
+    }
+
+    // ===== Welford online stats =====
+    class Welford {
+      constructor(){ this.n=0; this.mean=0; this.M2=0; }
+      add(x){
+        this.n += 1;
+        const d = x - this.mean;
+        this.mean += d / this.n;
+        const d2 = x - this.mean;
+        this.M2 += d * d2;
+      }
+      count(){ return this.n; }
+      sampleVariance(){ return this.n > 1 ? this.M2 / (this.n - 1) : NaN; }
+      std(){ const v = this.sampleVariance(); return Number.isFinite(v) ? Math.sqrt(v) : NaN; }
+      reset(){ this.n=0; this.mean=0; this.M2=0; }
+    }
+
+    // ===== UI elements =====
+    const srcSelect = document.getElementById('srcSelect');
+    const aInput = document.getElementById('aInput');
+    const bInput = document.getElementById('bInput');
+    const muInput = document.getElementById('muInput');
+    const sigmaInput = document.getElementById('sigmaInput');
+    const nBatchInput = document.getElementById('nBatchInput');
+    const manualInput = document.getElementById('manualInput');
+
+    const groupUniform = document.getElementById('groupUniform');
+    const groupUniformB = document.getElementById('groupUniformB');
+    const groupNormal = document.getElementById('groupNormal');
+    const groupNormalSigma = document.getElementById('groupNormalSigma');
+    const groupManual = document.getElementById('groupManual');
+
+    const statN = document.getElementById('statN');
+    const statMean = document.getElementById('statMean');
+    const statVar = document.getElementById('statVar');
+    const statStd = document.getElementById('statStd');
+
+    const btnStream = document.getElementById('btnStream');
+    const btnStep = document.getElementById('btnStep');
+    const btnReset = document.getElementById('btnReset');
+
+    // Toggle groups based on source
+    function updateSourceUI(){
+      const src = srcSelect.value;
+
+      // Reset visibility
+      [groupUniform, groupUniformB, groupNormal, groupNormalSigma, groupManual]
+        .forEach(el => el.classList.add('hidden'));
+
+      // Disable all source inputs by default
+      [aInput,bInput,muInput,sigmaInput,manualInput].forEach(el => el.disabled = true);
+
+      if (src === 'uniform') {
+        groupUniform.classList.remove('hidden');
+        groupUniformB.classList.remove('hidden');
+        aInput.disabled = false; bInput.disabled = false;
+      } else if (src === 'normal') {
+        groupNormal.classList.remove('hidden');
+        groupNormalSigma.classList.remove('hidden');
+        muInput.disabled = false; sigmaInput.disabled = false;
+      } else if (src === 'manual') {
+        groupManual.classList.remove('hidden');
+        manualInput.disabled = false;
+      }
+    }
+    srcSelect.addEventListener('change', updateSourceUI);
+
+    // ===== Charts =====
+    const idxs = [], runningMean = [], runningVar = [];
+    const meanChart = new Chart(document.getElementById('meanChart').getContext('2d'), {
+      type: 'line',
+      data: { labels: idxs, datasets: [{ label:'Running mean', data:runningMean,
+        borderColor:'rgba(52,152,219,1)', backgroundColor:'rgba(52,152,219,0.15)',
+        borderWidth:2, pointRadius:0, tension:0.15, fill:true }] },
+      options: { responsive:true, maintainAspectRatio:false,
+        scales:{ x:{ title:{display:true, text:'n', color:'#2c3e50'}, ticks:{color:'#2c3e50'}, grid:{color:'rgba(0,0,0,0.06)'} },
+                 y:{ title:{display:true, text:'mean', color:'#2c3e50'}, ticks:{color:'#2c3e50'}, grid:{color:'rgba(0,0,0,0.06)'} } },
+        plugins:{ legend:{display:false} } }
+    });
+    const varChart = new Chart(document.getElementById('varChart').getContext('2d'), {
+      type: 'line',
+      data: { labels: idxs, datasets: [{ label:'Running variance (sample)', data:runningVar,
+        borderColor:'rgba(231,76,60,1)', backgroundColor:'rgba(231,76,60,0.15)',
+        borderWidth:2, pointRadius:0, tension:0.15, fill:true }] },
+      options: { responsive:true, maintainAspectRatio:false,
+        scales:{ x:{ title:{display:true, text:'n', color:'#2c3e50'}, ticks:{color:'#2c3e50'}, grid:{color:'rgba(0,0,0,0.06)'} },
+                 y:{ title:{display:true, text:'variance', color:'#2c3e50'}, ticks:{color:'#2c3e50'}, grid:{color:'rgba(0,0,0,0.06)'} } },
+        plugins:{ legend:{display:false} } }
+    });
+
+    const wf = new Welford();
+
+    function updateStatsPanel(){
+      statN.textContent = wf.count();
+      statMean.textContent = Number.isFinite(wf.mean) ? wf.mean.toFixed(6) : '—';
+      const v = wf.sampleVariance();
+      statVar.textContent = Number.isFinite(v) ? v.toFixed(6) : '—';
+      const s = wf.std();
+      statStd.textContent = Number.isFinite(s) ? s.toFixed(6) : '—';
+    }
+
+    function pushPoint(x){
+      wf.add(x);
+      const n = wf.count();
+      if (idxs.length === 0 || idxs[idxs.length-1] !== n) idxs.push(n);
+      runningMean.push(wf.mean);
+      runningVar.push(wf.sampleVariance());
+      meanChart.update('none'); varChart.update('none');
+      updateStatsPanel();
+    }
+
+    function streamBatch(){
+      const src = srcSelect.value;
+      const batch = Math.max(1, Math.floor(Number(nBatchInput.value)));
+      if (src === 'uniform') {
+        const a = Number(aInput.value), b = Number(bInput.value);
+        for (let i=0;i<batch;i++) pushPoint(randUniform(a,b));
+      } else if (src === 'normal') {
+        const mu = Number(muInput.value), sigma = Number(sigmaInput.value);
+        for (let i=0;i<batch;i++) pushPoint(randNormal(mu,sigma));
+      } else {
+        const nums = parseManual(manualInput.value);
+        const take = Math.min(batch, nums.length);
+        for (let i=0;i<take;i++) pushPoint(nums[i]);
+      }
+    }
+
+    function stepOne(){
+      const src = srcSelect.value;
+      if (src === 'uniform') {
+        pushPoint(randUniform(Number(aInput.value), Number(bInput.value)));
+      } else if (src === 'normal') {
+        pushPoint(randNormal(Number(muInput.value), Number(sigmaInput.value)));
+      } else {
+        const nums = parseManual(manualInput.value);
+        if (nums.length){ pushPoint(nums[0]); manualInput.value = nums.slice(1).join(', '); }
+      }
+    }
+
+    function resetAll(){
+      wf.reset();
+      idxs.length = 0; runningMean.length = 0; runningVar.length = 0;
+      meanChart.update('none'); varChart.update('none');
+      updateStatsPanel();
+    }
+
+    btnStream.addEventListener('click', streamBatch);
+    btnStep.addEventListener('click', stepOne);
+    btnReset.addEventListener('click', resetAll);
+
+    // Initialize UI state and stats
+    updateSourceUI(); updateStatsPanel();
+  </script>
+</body>
+</html>

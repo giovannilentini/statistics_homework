@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Homework 5</title>
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="../include/css/style.css" />
+  <link rel="stylesheet" href="../include/css/content.css" />
+  <link rel="stylesheet" href="../include/css/code_block.css" />
+
+  <!-- KaTeX (auto-render for \( \) and \[ \]) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js"
+          crossorigin="anonymous"
+          onload="renderMathInElement(document.body,{
+            delimiters:[
+              {left:'\\(', right:'\\)', display:false},
+              {left:'\\[', right:'\\]', display:true}
+            ]
+          });">
+  </script>
+
+  <style>
+    .tag{ display:inline-block; padding:0.25rem 0.6rem; border:1px solid #3498db; color:#3498db; border-radius:999px; font-size:0.8rem; background:#f0f7fd; margin:0 0.4rem 0.4rem 0; }
+    .stat-card{ background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:1rem 1.25rem; }
+    .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+    @media (max-width: 900px){ .grid-2{ grid-template-columns:1fr; } }
+    .pros, .cons{ background:#f8f9fa; border-radius:6px; padding:0.75rem; }
+    .nav-links{ display:flex; gap:0.75rem; flex-wrap:wrap; margin-top:1rem; }
+    .btn-link{ display:inline-block; padding:0.55rem 0.9rem; border-radius:6px; text-decoration:none; font-weight:600; }
+    .btn-primary{ background:#3498db; color:#fff; }
+    .btn-secondary{ background:#95a5a6; color:#fff; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Statistics Homework Blog</h1>
+      <p class="subtitle">Measures of Location & Dispersion — Research</p>
+      <p class="student-info">Giovanni Lentini - 1987799</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="back-navigation">
+      <a href="../index.html" class="btn-back">← Back to Home</a>
+    </div>
+
+    <article class="homework-detail">
+      <div class="homework-header">
+        <h2>Homework 5: Research - Location & Dispersion</h2>
+        <div class="meta-info"><span class="date">Due: November 4, 2025</span></div>
+      </div>
+      <section class="homework-content">
+  <p class="intro-paragraph">
+    This page summarizes common measures of location and dispersion, discussing their mathematical foundations, use cases, advantages, and limitations in practical and statistical applications.
+  </p>
+
+  <h3>Measures of Location (Central Tendency)</h3>
+  <p>
+    Measures of location describe where the center of a dataset lies. They provide a single representative value summarizing an entire distribution, allowing comparisons between groups, trends over time, or evaluation of model performance. Choosing the right measure depends on the scale of measurement, data symmetry, and presence of outliers.
+  </p>
+
+  <div class="stat-card">
+    <div class="tag">Arithmetic Mean</div>
+    <p>
+      The arithmetic mean \( \bar{x}=\frac{1}{n}\sum_{i=1}^{n}x_i \) is the most common measure of central tendency. It represents the balance point of the data and assumes all observations contribute equally. It is the foundation for many inferential statistics, including confidence intervals and regression coefficients.
+    </p>
+    <div class="grid-2">
+      <div class="pros">
+        <strong>Advantages</strong>
+        <ul>
+          <li>Efficient estimator under normality and additive across samples</li>
+          <li>Supports online (streaming) computation with \(O(1)\) memory</li>
+          <li>Mathematically tractable and widely used in statistical modeling</li>
+          <li>Useful in economics, quality control, and performance analysis</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <strong>Limitations</strong>
+        <ul>
+          <li>Highly sensitive to outliers and non-normal distributions</li>
+          <li>May not represent the true “center” in skewed data (e.g., income, prices)</li>
+          <li>Cannot be used for ordinal or nominal data</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="tag">Median</div>
+    <p>
+      The median is the value separating the higher half from the lower half of a dataset. It minimizes the sum of absolute deviations, making it robust to extreme observations. In practice, the median provides a better sense of “typical” values when data are skewed or contain outliers, such as housing prices or income levels.
+    </p>
+    <div class="grid-2">
+      <div class="pros">
+        <strong>Advantages</strong>
+        <ul>
+          <li>Unaffected by extreme values and non-Gaussian tails</li>
+          <li>Suitable for ordinal and continuous but not necessarily symmetric data</li>
+          <li>Reflects the central point in skewed distributions</li>
+          <li>Common in non-parametric methods (e.g., Wilcoxon test)</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <strong>Limitations</strong>
+        <ul>
+          <li>Less efficient than mean when data are normally distributed</li>
+          <li>Cannot be easily aggregated or algebraically manipulated</li>
+          <li>Harder to compute incrementally in large datasets</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="tag">Mode</div>
+    <p>
+      The mode identifies the most frequent observation in a dataset. It is especially useful for categorical or discrete variables (e.g., the most common color, product, or diagnosis). In continuous data, kernel density estimation or histogram binning is required to approximate modes, which can reveal multimodal structures or clusters.
+    </p>
+    <div class="grid-2">
+      <div class="pros">
+        <strong>Advantages</strong>
+        <ul>
+          <li>Applicable to nominal data where mean and median are undefined</li>
+          <li>Helps identify dominant categories or repeated behaviors</li>
+          <li>Useful in pattern recognition and clustering analysis</li>
+        </ul>
+      </div>
+      <div class="cons">
+        <strong>Limitations</strong>
+        <ul>
+          <li>May be unstable in small samples or continuous data without binning</li>
+          <li>Not always unique (multimodal data)</li>
+          <li>Lacks mathematical properties for analytical modeling</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <h3>Measures of Dispersion (Variability)</h3>
+  <p>
+    While measures of location indicate where the data are centered, measures of dispersion describe how spread out the data are around that center. Understanding variability is crucial for assessing reliability, uncertainty, and risk in both natural and social sciences.
+  </p>
+  <ul>
+    <li><strong>Variance</strong>: \( s^2=\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})^2 \). It quantifies average squared deviations from the mean, enabling decomposition in analysis of variance (ANOVA). However, it exaggerates the influence of outliers and has squared units.</li>
+    <li><strong>Standard deviation</strong>: \( s=\sqrt{s^2} \). Expressed in the same units as the data, it is the most interpretable measure of spread and is central in normal distribution theory, control charts, and risk modeling.</li>
+    <li><strong>Interquartile range (IQR)</strong>: \( \mathrm{IQR}=Q_3-Q_1 \). It measures the spread of the central 50% of data, effectively ignoring extreme tails. It’s robust and ideal for boxplot representation and non-parametric summaries.</li>
+    <li><strong>Range</strong>: \( \max-\min \). It provides an intuitive sense of total spread but depends strongly on sample size and outliers. Often used in manufacturing or meteorology for quick comparisons.</li>
+    <li><strong>Mean absolute deviation (MAD)</strong>: \( \mathrm{MAD}=\frac{1}{n}\sum |x_i-m| \). Provides an intuitive average distance from the mean or median and is more robust than variance in the presence of outliers.</li>
+    <li><strong>Coefficient of variation (CV)</strong>: \( \mathrm{CV}=\frac{s}{|\bar{x}|} \). Enables comparison of relative variability between datasets measured in different units, such as comparing risk-to-return ratios across investments.</li>
+  </ul>
+
+  <h3>Practical Guidance</h3>
+  <p>
+    Choosing appropriate measures depends on the data’s characteristics and analytical goals. Robust statistics (median, IQR) are preferred in non-normal or contaminated datasets, while parametric measures (mean, standard deviation) dominate when data are approximately Gaussian.
+  </p>
+  <ul>
+    <li>Use <strong>mean and standard deviation</strong> for symmetric, light-tailed data or when parametric inference (e.g., t-tests, regression) is required.</li>
+    <li>Use <strong>median and IQR</strong> for skewed, heavy-tailed, or contaminated samples where robustness is crucial.</li>
+    <li>Use <strong>mode</strong> to identify the most frequent categories or modes in multimodal distributions.</li>
+    <li>Use <strong>CV</strong> to compare relative variability across different units, provided the mean is positive and meaningful.</li>
+    <li>Always visualize data distributions (e.g., with boxplots or histograms) before relying on numerical summaries.</li>
+  </ul>
+
+  <p>
+    In conclusion, measures of location and dispersion form the backbone of descriptive statistics. Together, they provide a concise yet powerful summary of data, supporting sound interpretation, informed decision-making, and the design of predictive models.
+  </p>
+</section>
+
+    </article>
+  </main>
+</body>
+</html>
