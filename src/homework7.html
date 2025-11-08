@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Homework 7</title>
+
+  <link rel="stylesheet" href="../include/css/style.css">
+  <link rel="stylesheet" href="../include/css/content.css">
+  <link rel="stylesheet" href="../include/css/code.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <style>
+    body { background-color: #fefefe; }
+    header .subtitle { color: #555; }
+
+    .simulation-controls {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin: 2rem 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .status-info {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: #fff;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(160px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    @media (max-width: 1100px) { .controls-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 600px)  { .controls-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .control-group { display: flex; flex-direction: column; }
+    .control-group label { font-size: 0.9rem; font-weight: 600; color: #2c3e50; margin-bottom: 0.25rem; }
+    .control-group input {
+      background: #fff; border: 1px solid #bdc3c7; border-radius: 6px;
+      padding: 0.5rem 0.6rem; color: #2c3e50; font-size: 0.95rem;
+    }
+    .control-group input:focus {
+      outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52,152,219,0.12);
+    }
+
+    .button-group {
+      display: flex; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.25rem;
+    }
+    .sim-btn {
+      padding: 0.6rem 1.1rem; border: none; border-radius: 8px; font-weight: 700;
+      cursor: pointer; transition: transform 0.1s ease, box-shadow 0.2s ease;
+      color: #fff;
+    }
+    .sim-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.12); }
+    .sim-btn-primary { background: #3498db; }
+    .sim-btn-success { background: #2ecc71; }
+    .sim-btn-warning { background: #f39c12; }
+    .sim-btn-danger  { background: #e74c3c; }
+
+    .chart-info {
+      font-size: 0.9rem; color: #555; background: #f8f9fa; border-radius: 6px;
+      padding: 0.75rem; margin-top: 0.75rem;
+    }
+
+    .charts-container {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    .chart-wrapper {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .chart-wrapper h4 {
+      color: #2c3e50;
+      margin: 0 0 0.75rem 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid #3498db;
+    }
+
+    .chart-canvas-container {
+      position: relative;
+      width: 100%;
+      height: 420px;
+    }
+    @media (max-width: 768px) { .chart-canvas-container { height: 340px; } }
+    @media (max-width: 480px) { .chart-canvas-container { height: 300px; } }
+
+    .simulation-controls {
+  background: #f8f9fa;
+  border-radius: 10px;
+  padding: 2rem;
+  margin: 2rem 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Make controls breathe and align better */
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem 1.25rem;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.control-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.control-group input {
+  background: #fff;
+  border: 1px solid #bdc3c7;
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  color: #2c3e50;
+  font-size: 0.95rem;
+  transition: all 0.15s ease-in-out;
+}
+
+.control-group input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52,152,219,0.15);
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Statistics Homework Blog</h1>
+      <p class="subtitle">Server Security Random Walk Simulation</p>
+      <p class="student-info">Giovanni Lentini - 1987799</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="back-navigation">
+      <a href="../index.html" class="btn-back">← Back to Home</a>
+    </div>
+
+    <article class="homework-detail">
+      <div class="homework-header">
+        <h2>Homework 7: Random Walk and Binomial Convergence</h2>
+        <div class="meta-info">
+          <span class="date">Due: November 8, 2025</span>
+        </div>
+      </div>
+
+      <section class="homework-content">
+        <p class="intro-paragraph">
+          In this assignment, we simulate the security performance of a server that receives weekly updates over several weeks; each week yields +1 (secure) with probability 1−p or −1 (breach) with probability p, producing random-walk trajectories of cumulative score over n weeks. 
+        </p>
+
+        <h3>Understanding the Simulation</h3>
+        <p>
+          The process is a biased random walk: steps are +1 or −1, and after n weeks the total score follows a shifted binomial structure determined by (n, 1−p), with expected value (1−2p)·n and variance proportional to n. 
+        </p>
+
+        <h3>Interactive Simulation</h3>
+        <p>
+          Adjust parameters below and simulate or animate; observe trajectories and the evolving histogram of scores converging toward the binomial form as m and n increase. 
+        </p>
+
+        <div class="simulation-controls">
+          <div class="status-info">
+            Interactive simulation — adjust parameters and click <strong>Simulate</strong> or <strong>Play</strong> to animate the random walk evolution.
+          </div>
+
+          <div class="controls-grid">
+            <div class="control-group">
+              <label for="mInput">Number of servers (m)</label>
+              <input id="mInput" type="number" min="1" max="2000" value="200">
+            </div>
+            <div class="control-group">
+              <label for="nInput">Weeks (n)</label>
+              <input id="nInput" type="number" min="10" max="5000" value="300">
+            </div>
+            <div class="control-group">
+              <label for="pInput">Breach probability (p)</label>
+              <input id="pInput" type="number" step="0.01" min="0" max="1" value="0.4">
+            </div>
+            <div class="control-group">
+              <label for="binsInput">Histogram bins</label>
+              <input id="binsInput" type="number" min="5" max="100" value="40">
+            </div>
+            <div class="control-group">
+              <label for="sampleInput">Shown trajectories</label>
+              <input id="sampleInput" type="number" min="1" max="200" value="50">
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button class="sim-btn sim-btn-primary" id="simulateBtn">Simulate</button>
+            <button class="sim-btn sim-btn-success" id="playBtn">Play</button>
+            <button class="sim-btn sim-btn-warning" id="stepBtn">Step</button>
+            <button class="sim-btn sim-btn-danger" id="resetBtn">Reset</button>
+          </div>
+
+          <div class="chart-info">
+            <strong>Current week:</strong> <span id="currentN">0</span> / <span id="totalN">0</span> |
+            <strong>p =</strong> <span id="displayP">0.40</span> |
+            <strong>Bins:</strong> <span id="displayBins">40</span>
+          </div>
+        </div>
+
+        <div class="charts-container">
+          <div class="chart-wrapper">
+            <h4>Cumulative Security Score (Random Walk Trajectories)</h4>
+            <div class="chart-canvas-container">
+              <canvas id="lineChart"></canvas>
+            </div>
+            <div class="chart-info">
+              Gray lines show individual servers; the blue dashed line is the expected mean trajectory E[S_k] = (1−2p)·k. 
+            </div>
+          </div>
+
+          <div class="chart-wrapper">
+            <h4>Distribution of Scores at Week k</h4>
+            <div class="chart-canvas-container">
+              <canvas id="histChart"></canvas>
+            </div>
+            <div class="chart-info">
+              The histogram counts how many servers reach each total score at the current week k; as n grows, the shape smooths and resembles a shifted binomial. 
+            </div>
+          </div>
+        </div>
+
+        <h3>Key Insights</h3>
+        <ul>
+          <li>The expected cumulative score after n weeks is (1−2p)·n.</li>
+          <li>For p=0.5 the walk is symmetric and centered at 0.</li>
+          <li>As m grows, the histogram becomes smoother and binomial-like.</li>
+          <li>The variance increases linearly with n, illustrating diffusion-like spread.</li>
+        </ul>
+
+        <h3>Applications</h3>
+        <p>
+          This model supports long-term reliability analysis and risk planning; it links probabilistic security models with random walks and diffusion concepts used across statistics and physics. 
+        </p>
+      </section>
+    </article>
+  </main>
+
+  <script>
+    // Simulate m random-walk trajectories of length n with bias p (breach = -1, secure = +1)
+    function simulateServers(m, n, p) {
+      const trajectories = new Array(m);
+      for (let i = 0; i < m; i++) {
+        const traj = new Array(n);
+        let score = 0;
+        for (let j = 0; j < n; j++) {
+          const step = Math.random() < p ? -1 : 1;
+          score += step;
+          traj[j] = score;
+        }
+        trajectories[i] = traj;
+      }
+      return trajectories;
+    }
+
+    // Histogram with guard for degenerate cases (all values equal)
+    function computeHistogram(values, bins) {
+      const vmin = Math.min(...values);
+      const vmax = Math.max(...values);
+      if (vmin === vmax) {
+        return { counts: [values.length], labels: [vmin.toFixed(1)] };
+      }
+      const width = (vmax - vmin) / bins;
+      const counts = new Array(bins).fill(0);
+      values.forEach(v => {
+        let idx = Math.floor((v - vmin) / width);
+        if (idx >= bins) idx = bins - 1;
+        counts[idx]++;
+      });
+      const labels = Array.from({ length: bins }, (_, i) =>
+        (vmin + i * width + width / 2).toFixed(1)
+      );
+      return { counts, labels };
+    }
+
+    // Charts
+    let lineChart, histChart;
+    function createCharts() {
+      const ctxLine = document.getElementById('lineChart').getContext('2d');
+      const ctxHist = document.getElementById('histChart').getContext('2d');
+
+      lineChart = new Chart(ctxLine, {
+        type: 'line',
+        data: { labels: [], datasets: [] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false, /* fill container height */ /* see docs */
+          animation: false,
+          scales: {
+            x: { title: { display: true, text: 'Week', color: '#2c3e50' },
+                 ticks: { color: '#2c3e50' },
+                 grid: { color: 'rgba(0,0,0,0.06)' } },
+            y: { title: { display: true, text: 'Cumulative score', color: '#2c3e50' },
+                 ticks: { color: '#2c3e50' },
+                 grid: { color: 'rgba(0,0,0,0.06)' } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+
+      histChart = new Chart(ctxHist, {
+        type: 'bar',
+        data: { labels: [], datasets: [{
+          label: 'Count',
+          data: [],
+          backgroundColor: 'rgba(52, 152, 219, 0.85)',
+          borderColor: 'rgba(41, 128, 185, 1)',
+          borderWidth: 1
+        }] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          scales: {
+            x: { title: { display: true, text: 'Score', color: '#2c3e50' },
+                 ticks: { color: '#2c3e50' },
+                 grid: { display: false } },
+            y: { title: { display: true, text: 'Count', color: '#2c3e50' },
+                 ticks: { color: '#2c3e50' },
+                 grid: { color: 'rgba(0,0,0,0.06)' } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    // State
+    let trajectories = [], m = 200, n = 300, p = 0.4, bins = 40, sample = 50;
+    let currentN = 0, playing = false, playInterval = null;
+
+    function updateDisplay() {
+      document.getElementById('currentN').textContent = currentN;
+      document.getElementById('totalN').textContent = n;
+      document.getElementById('displayP').textContent = p.toFixed(2);
+      document.getElementById('displayBins').textContent = bins;
+    }
+
+    function drawLineChart() {
+      const labels = Array.from({ length: currentN }, (_, i) => i + 1);
+
+      const datasets = [];
+      const maxToShow = Math.min(sample, trajectories.length);
+      const stepSel = Math.floor(Math.max(1, trajectories.length / maxToShow));
+
+      for (let i = 0, shown = 0; i < trajectories.length && shown < maxToShow; i += stepSel, shown++) {
+        datasets.push({
+          data: trajectories[i].slice(0, currentN),
+          borderWidth: 1,
+          pointRadius: 0,
+          borderColor: 'rgba(149,165,166,0.35)',
+          fill: false,
+          tension: 0.15
+        });
+      }
+
+      // Expected mean line: E[S_k] = (1 - 2p) * k for k = 1..currentN
+      const expected = labels.map(k => (1 - 2 * p) * k);
+      datasets.push({
+        label: 'Expected mean',
+        data: expected,
+        borderColor: 'rgba(52,152,219,0.95)',
+        borderDash: [6, 6],
+        borderWidth: 3,
+        pointRadius: 0
+      });
+
+      lineChart.data.labels = labels;
+      lineChart.data.datasets = datasets;
+      lineChart.update('none');
+    }
+
+    function drawHistChart() {
+      if (currentN === 0) {
+        histChart.data.labels = [];
+        histChart.data.datasets[0].data = [];
+        histChart.update('none');
+        return;
+      }
+      const values = trajectories.map(traj => traj[currentN - 1]);
+      const { counts, labels } = computeHistogram(values, bins);
+      histChart.data.labels = labels;
+      histChart.data.datasets[0].data = counts;
+      histChart.update('none');
+    }
+
+    function simulateAndDraw() {
+      m = +document.getElementById('mInput').value;
+      n = +document.getElementById('nInput').value;
+      p = +document.getElementById('pInput').value;
+      bins = +document.getElementById('binsInput').value;
+      sample = +document.getElementById('sampleInput').value;
+
+      trajectories = simulateServers(m, n, p);
+      currentN = 1;
+      updateDisplay();
+      drawLineChart();
+      drawHistChart();
+    }
+
+    function resetSimulation() {
+      if (playInterval) clearInterval(playInterval);
+      playInterval = null;
+      playing = false;
+      document.getElementById('playBtn').textContent = 'Play';
+
+      currentN = 0;
+      trajectories = [];
+      updateDisplay();
+
+      lineChart.data.labels = [];
+      lineChart.data.datasets = [];
+      lineChart.update('none');
+
+      histChart.data.labels = [];
+      histChart.data.datasets[0].data = [];
+      histChart.update('none');
+    }
+
+    function stepSimulation() {
+      if (!trajectories.length) simulateAndDraw();
+      if (currentN < n) currentN++;
+      updateDisplay();
+      drawLineChart();
+      drawHistChart();
+      if (currentN >= n && playInterval) {
+        clearInterval(playInterval);
+        playInterval = null;
+        playing = false;
+        document.getElementById('playBtn').textContent = 'Play';
+      }
+    }
+
+    function playSimulation() {
+      if (!trajectories.length) simulateAndDraw();
+      playing = !playing;
+      const btn = document.getElementById('playBtn');
+      btn.textContent = playing ? 'Pause' : 'Play';
+      if (playing) {
+        playInterval = setInterval(stepSimulation, 40);
+      } else if (playInterval) {
+        clearInterval(playInterval);
+        playInterval = null;
+      }
+    }
+
+    window.addEventListener('load', () => {
+      createCharts();
+      updateDisplay();
+      document.getElementById('simulateBtn').addEventListener('click', simulateAndDraw);
+      document.getElementById('resetBtn').addEventListener('click', resetSimulation);
+      document.getElementById('stepBtn').addEventListener('click', stepSimulation);
+      document.getElementById('playBtn').addEventListener('click', playSimulation);
+      simulateAndDraw();
+    });
+  </script>
+</body>
+</html>
