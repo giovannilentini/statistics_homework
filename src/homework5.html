@@ -5,12 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Homework 5</title>
 
-  <!-- Shared styles -->
   <link rel="stylesheet" href="../include/css/style.css" />
   <link rel="stylesheet" href="../include/css/content.css" />
-  <link rel="stylesheet" href="../include/css/code_block.css" />
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
 
-  <!-- KaTeX (auto-render for \( \) and \[ \]) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.css" crossorigin="anonymous">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/katex.min.js" crossorigin="anonymous"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.25/dist/contrib/auto-render.min.js"
@@ -24,15 +23,255 @@
   </script>
 
   <style>
-    .tag{ display:inline-block; padding:0.25rem 0.6rem; border:1px solid #3498db; color:#3498db; border-radius:999px; font-size:0.8rem; background:#f0f7fd; margin:0 0.4rem 0.4rem 0; }
-    .stat-card{ background:#fff; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:1rem 1.25rem; }
-    .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
-    @media (max-width: 900px){ .grid-2{ grid-template-columns:1fr; } }
-    .pros, .cons{ background:#f8f9fa; border-radius:6px; padding:0.75rem; }
-    .nav-links{ display:flex; gap:0.75rem; flex-wrap:wrap; margin-top:1rem; }
-    .btn-link{ display:inline-block; padding:0.55rem 0.9rem; border-radius:6px; text-decoration:none; font-weight:600; }
-    .btn-primary{ background:#3498db; color:#fff; }
-    .btn-secondary{ background:#95a5a6; color:#fff; }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    .tag {
+        display: inline-block;
+        padding: 0.25rem 0.6rem;
+        border: 1px solid #3498db;
+        color: #3498db;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        background: #f0f7fd;
+        margin: 0 0.4rem 0.4rem 0;
+    }
+
+    .stat-card {
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    @media (max-width: 900px) {
+        .grid-2 {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .pros, 
+    .cons {
+        border-radius: 6px;
+        padding: 0.75rem;
+        font-size: 0.95rem;
+    }
+
+    .pros {
+        background: #e8f5e9;
+        border-left: 4px solid #2ecc71;
+    }
+
+    .cons {
+        background: #ffebee;
+        border-left: 4px solid #e74c3c;
+    }
+
+    .sticky-nav {
+        position: sticky;
+        top: 10px;
+        background: #fff;
+        padding: 10px 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        margin-bottom: 2rem;
+        z-index: 100;
+        border: 1px solid #eee;
+        font-size: 0.9rem;
+    }
+
+    .sticky-nav a {
+        margin-right: 15px;
+        text-decoration: none;
+        color: #3498db;
+        font-weight: bold;
+    }
+
+    .sticky-nav a:hover {
+        text-decoration: underline;
+    }
+
+    .spotlight {
+        background: #fff8e1;
+        border: 1px solid #ffe0b2;
+        padding: 1rem;
+        border-radius: 6px;
+        margin: 1rem 0;
+    }
+
+    .spotlight h4 {
+        margin-top: 0;
+        color: #f57c00;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 0.9rem;
+    }
+
+    .data-table th, 
+    .data-table td {
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .data-table th {
+        background-color: #f9f9f9;
+    }
+
+    .row-highlight {
+        background-color: rgba(231, 76, 60, 0.1);
+    }
+
+    .code-block {
+        background: #2d2d2d;
+        border-radius: 8px;
+        overflow: hidden;
+        margin: 1.5rem 0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .code-header {
+        background: #444;
+        color: #fff;
+        padding: 8px 15px;
+        font-size: 0.85rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #555;
+    }
+
+    .code-language {
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #61dafb;
+    }
+
+    .code-title {
+        color: #aaa;
+        font-style: italic;
+    }
+
+    pre[class*="language-"] {
+        margin: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .interactive-demo {
+        border: 2px solid #3498db;
+    }
+
+    .input-group {
+        margin-bottom: 1rem;
+    }
+
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0,0,0,0);
+        border: 0;
+    }
+
+    input#dataInput {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 1rem;
+        border: 2px solid #dfe6e9;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+
+    .chart-container {
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        height: 200px;
+        background: #fdfdfd;
+        border-bottom: 2px solid #333;
+        gap: 5px;
+        padding-top: 20px;
+        overflow-x: auto;
+    }
+
+    .bar {
+        background: #3498db;
+        width: 40px;
+        text-align: center;
+        color: white;
+        font-size: 10px;
+        transition: height 0.3s ease;
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .bar:hover {
+        background: #2980b9;
+    }
+
+    .bar-value {
+        position: absolute;
+        top: -20px;
+        width: 100%;
+        text-align: center;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .ref-line {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        z-index: 5;
+        pointer-events: none;
+        transition: bottom 0.3s ease;
+    }
+
+    .ref-label {
+        position: absolute;
+        right: 5px;
+        bottom: 2px;
+        font-size: 10px;
+        color: white;
+        padding: 2px 5px;
+        border-radius: 3px;
+    }
+
+    .result-box {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .res-item {
+        background: #ecf0f1;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-weight: bold;
+        color: #2c3e50;
+    }
   </style>
 </head>
 <body>
@@ -49,129 +288,323 @@
       <a href="../index.html" class="btn-back">← Back to Home</a>
     </div>
 
+    <nav class="sticky-nav">
+      <span>Jump to:</span> 
+      <a href="#location">Location</a>
+      <a href="#dispersion">Dispersion</a>
+      <a href="#code">Python Code</a>
+      <a href="#lab">Interactive Lab</a>
+    </nav>
+
     <article class="homework-detail">
       <div class="homework-header">
         <h2>Homework 5: Research - Location & Dispersion</h2>
         <div class="meta-info"><span class="date">Due: November 4, 2025</span></div>
       </div>
+      
       <section class="homework-content">
-  <p class="intro-paragraph">
-    This page summarizes common measures of location and dispersion, discussing their mathematical foundations, use cases, advantages, and limitations in practical and statistical applications.
-  </p>
+        <p class="intro-paragraph">
+          This page summarizes common measures of location and dispersion. It explores their mathematical foundations, use cases, and includes computational implementation.
+        </p>
 
-  <h3>Measures of Location (Central Tendency)</h3>
-  <p>
-    Measures of location describe where the center of a dataset lies. They provide a single representative value summarizing an entire distribution, allowing comparisons between groups, trends over time, or evaluation of model performance. Choosing the right measure depends on the scale of measurement, data symmetry, and presence of outliers.
-  </p>
+        <h3 id="location">Measures of Location (Central Tendency)</h3>
+        <p>
+          Measures of location describe where the center of a dataset lies. However, the "center" shifts depending on the shape of the data.
+        </p>
+        
+        <div class="stat-card" style="text-align: center;">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-around; gap: 10px;">
+            
+            <div style="flex: 1; min-width: 200px;">
+              <h5 style="margin: 0 0 10px 0; color: #555;">Negative (Left) Skew</h5>
+              <svg viewBox="0 0 200 120" style="width: 100%; height: auto; border-bottom: 2px solid #333;">
+                <title>Negative Skew Distribution Graph</title>
+                <path d="M0,100 C100,100 120,0 200,100" fill="rgba(52, 152, 219, 0.1)" stroke="#3498db" stroke-width="2"/>
+                <line x1="160" y1="20" x2="160" y2="100" stroke="#e74c3c" stroke-dasharray="4"/>
+                <text x="160" y="115" font-size="10" text-anchor="middle" fill="#e74c3c">Mode</text>
+                <line x1="140" y1="45" x2="140" y2="100" stroke="#2ecc71" stroke-dasharray="4"/>
+                <text x="140" y="15" font-size="10" text-anchor="middle" fill="#2ecc71">Median</text>
+                <line x1="110" y1="80" x2="110" y2="100" stroke="#9b59b6" stroke-dasharray="4"/>
+                <text x="110" y="115" font-size="10" text-anchor="middle" fill="#9b59b6">Mean</text>
+              </svg>
+            </div>
 
-  <div class="stat-card">
-    <div class="tag">Arithmetic Mean</div>
-    <p>
-      The arithmetic mean \( \bar{x}=\frac{1}{n}\sum_{i=1}^{n}x_i \) is the most common measure of central tendency. It represents the balance point of the data and assumes all observations contribute equally. It is the foundation for many inferential statistics, including confidence intervals and regression coefficients.
-    </p>
-    <div class="grid-2">
-      <div class="pros">
-        <strong>Advantages</strong>
+            <div style="flex: 1; min-width: 200px;">
+              <h5 style="margin: 0 0 10px 0; color: #555;">Normal (Symmetric)</h5>
+              <svg viewBox="0 0 200 120" style="width: 100%; height: auto; border-bottom: 2px solid #333;">
+                <title>Normal Distribution Graph</title>
+                <path d="M0,100 C50,100 50,0 100,0 S150,100 200,100" fill="rgba(52, 152, 219, 0.1)" stroke="#3498db" stroke-width="2"/>
+                <line x1="100" y1="0" x2="100" y2="100" stroke="#333" stroke-dasharray="4"/>
+                <text x="100" y="115" font-size="10" text-anchor="middle" fill="#333">Mean = Median = Mode</text>
+              </svg>
+            </div>
+
+            <div style="flex: 1; min-width: 200px;">
+              <h5 style="margin: 0 0 10px 0; color: #555;">Positive (Right) Skew</h5>
+              <svg viewBox="0 0 200 120" style="width: 100%; height: auto; border-bottom: 2px solid #333;">
+                <title>Positive Skew Distribution Graph</title>
+                <path d="M0,100 C80,0 100,100 200,100" fill="rgba(52, 152, 219, 0.1)" stroke="#3498db" stroke-width="2"/>
+                <line x1="40" y1="20" x2="40" y2="100" stroke="#e74c3c" stroke-dasharray="4"/>
+                <text x="40" y="115" font-size="10" text-anchor="middle" fill="#e74c3c">Mode</text>
+                <line x1="65" y1="45" x2="65" y2="100" stroke="#2ecc71" stroke-dasharray="4"/>
+                <text x="65" y="15" font-size="10" text-anchor="middle" fill="#2ecc71">Median</text>
+                <line x1="95" y1="80" x2="95" y2="100" stroke="#9b59b6" stroke-dasharray="4"/>
+                <text x="95" y="115" font-size="10" text-anchor="middle" fill="#9b59b6">Mean</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <p><em>Figure 1: How Mean, Median, and Mode shift in skewed distributions.</em></p>
+
+        <div class="stat-card">
+          <div class="tag">Arithmetic Mean</div>
+          <p>
+            The arithmetic mean \( \bar{x}=\frac{1}{n}\sum_{i=1}^{n}x_i \) is the balance point of the data. It assumes all observations contribute equally and is the foundation for inferential statistics.
+          </p>
+          <div class="grid-2">
+            <div class="pros">
+              <strong>Advantages</strong>
+              <ul>
+                <li>Efficient estimator under normality</li>
+                <li>Mathematically tractable for algebra</li>
+                <li>Uses every data point</li>
+              </ul>
+            </div>
+            <div class="cons">
+              <strong>Limitations</strong>
+              <ul>
+                <li>Highly sensitive to outliers</li>
+                <li>Can be misleading in skewed data (e.g., salaries)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="tag">Median</div>
+          <p>
+            The median is the value separating the higher half from the lower half. It minimizes the sum of absolute deviations.
+          </p>
+          
+          <div class="spotlight">
+            <h4>💡 Concept Spotlight: Robustness</h4>
+            <p>Why use the Median? Consider 5 salaries in a bar:</p>
+            <table class="data-table">
+              <tr>
+                <th>Scenario</th>
+                <th>Data Points</th>
+                <th>Mean</th>
+                <th>Median</th>
+              </tr>
+              <tr>
+                <td>Normal Night</td>
+                <td>30k, 40k, 50k, 60k, 70k</td>
+                <td><strong>$50k</strong></td>
+                <td>$50k</td>
+              </tr>
+              <tr class="row-highlight">
+                <td>Bill Gates Enters</td>
+                <td>30k, 40k, 50k, 60k, <strong>$100M</strong></td>
+                <td><strong>$20M</strong> (Misleading)</td>
+                <td><strong>$50k</strong> (Robust)</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="grid-2">
+            <div class="pros">
+              <strong>Advantages</strong>
+              <ul>
+                <li>Robust to extreme outliers</li>
+                <li>Better "center" for skewed data</li>
+              </ul>
+            </div>
+            <div class="cons">
+              <strong>Limitations</strong>
+              <ul>
+                <li>Harder to manipulate algebraically</li>
+                <li>Less efficient for Normal distributions</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="tag">Geometric & Harmonic Means</div>
+          <p>
+            <strong>Geometric Mean:</strong> \( \sqrt[n]{x_1 \dots x_n} \). Used for growth rates and compounding. <br>
+            <strong>Harmonic Mean:</strong> \( \frac{n}{\sum \frac{1}{x_i}} \). Used for rates and ratios (e.g., average speed).
+          </p>
+        </div>
+
+        <h3 id="dispersion">Measures of Dispersion (Variability)</h3>
+        <p>
+          Dispersion describes how spread out the data are. A mean of 50 is less useful if the data ranges from 0 to 100 versus 48 to 52.
+        </p>     
+
+        <div class="stat-card">
+          <h4 style="margin-top:0; color:#2c3e50;">Anatomy of a Boxplot</h4>
+          <svg viewBox="0 0 600 180" style="width: 100%; height: auto; font-family: sans-serif;">
+            <title>Boxplot diagram explaining quartiles</title>
+            <line x1="50" y1="100" x2="550" y2="100" stroke="#bdc3c7" stroke-width="2" />
+            <line x1="100" y1="80" x2="100" y2="120" stroke="#333" stroke-width="2" />
+            <line x1="100" y1="100" x2="200" y2="100" stroke="#333" stroke-width="2" /> <text x="100" y="140" font-size="12" text-anchor="middle" fill="#555">Min</text>
+            <rect x="200" y="60" width="200" height="80" fill="rgba(52, 152, 219, 0.2)" stroke="#2980b9" stroke-width="2" />
+            <text x="200" y="50" font-size="12" text-anchor="middle" fill="#2980b9" font-weight="bold">Q1 (25%)</text>
+            <line x1="280" y1="60" x2="280" y2="140" stroke="#c0392b" stroke-width="3" />
+            <text x="280" y="40" font-size="14" text-anchor="middle" fill="#c0392b" font-weight="bold">Median</text>
+            <text x="400" y="50" font-size="12" text-anchor="middle" fill="#2980b9" font-weight="bold">Q3 (75%)</text>
+            <line x1="400" y1="100" x2="480" y2="100" stroke="#333" stroke-width="2" /> <line x1="480" y1="80" x2="480" y2="120" stroke="#333" stroke-width="2" />
+            <text x="480" y="140" font-size="12" text-anchor="middle" fill="#555">Max</text>
+            <circle cx="530" cy="100" r="4" fill="#e67e22" stroke="#d35400" />
+            <text x="530" y="85" font-size="12" text-anchor="middle" fill="#d35400">Outlier</text>
+            <path d="M 210,150 Q 300,170 390,150" fill="none" stroke="#7f8c8d" stroke-dasharray="4" />
+            <text x="300" y="175" font-size="12" text-anchor="middle" fill="#7f8c8d">IQR (Interquartile Range)</text>
+          </svg>
+        </div>
+
         <ul>
-          <li>Efficient estimator under normality and additive across samples</li>
-          <li>Supports online (streaming) computation with \(O(1)\) memory</li>
-          <li>Mathematically tractable and widely used in statistical modeling</li>
-          <li>Useful in economics, quality control, and performance analysis</li>
+          <li><strong>Range:</strong> \( Max - Min \). The simplest measure, but very sensitive to outliers and ignores how data is distributed in the middle.</li>
+          <li><strong>Variance (\(s^2\))</strong>: \( s^2=\frac{1}{n-1}\sum (x_i-\bar{x})^2 \). 
+            <br><em>Why squared?</em> Squaring eliminates negative differences and penalizes large deviations (outliers) more heavily than small ones.</li>
+          <li><strong>Standard Deviation (\(s\))</strong>: \( s=\sqrt{s^2} \). Expressed in the original units of the data.
+            <br><em>Empirical Rule:</em> For Normal distributions, ~68% of data falls within \( \pm 1s \).</li>
+          <li><strong>IQR</strong>: \( Q_3 - Q_1 \). The range of the middle 50% of data (Boxplot width).</li>
+          <li><strong>CV (Coefficient of Variation)</strong>: \( \frac{s}{\bar{x}} \). Useful for comparing volatility of assets with different prices.</li>
         </ul>
-      </div>
-      <div class="cons">
-        <strong>Limitations</strong>
-        <ul>
-          <li>Highly sensitive to outliers and non-normal distributions</li>
-          <li>May not represent the true “center” in skewed data (e.g., income, prices)</li>
-          <li>Cannot be used for ordinal or nominal data</li>
-        </ul>
-      </div>
-    </div>
-  </div>
 
-  <div class="stat-card">
-    <div class="tag">Median</div>
-    <p>
-      The median is the value separating the higher half from the lower half of a dataset. It minimizes the sum of absolute deviations, making it robust to extreme observations. In practice, the median provides a better sense of “typical” values when data are skewed or contain outliers, such as housing prices or income levels.
-    </p>
-    <div class="grid-2">
-      <div class="pros">
-        <strong>Advantages</strong>
-        <ul>
-          <li>Unaffected by extreme values and non-Gaussian tails</li>
-          <li>Suitable for ordinal and continuous but not necessarily symmetric data</li>
-          <li>Reflects the central point in skewed distributions</li>
-          <li>Common in non-parametric methods (e.g., Wilcoxon test)</li>
-        </ul>
-      </div>
-      <div class="cons">
-        <strong>Limitations</strong>
-        <ul>
-          <li>Less efficient than mean when data are normally distributed</li>
-          <li>Cannot be easily aggregated or algebraically manipulated</li>
-          <li>Harder to compute incrementally in large datasets</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+        <h3 id="code">Computational Implementation</h3>
+        <p>Modern statistics relies on computation. Below is a Python implementation using NumPy/SciPy.</p>
+        
+        <div class="code-block">
+            <div class="code-header">
+                <span class="code-language">Python</span>
+                <span class="code-title">NumPy & SciPy Implementation</span>
+            </div>
+            <pre><code class="language-python">import numpy as np
+from scipy.stats import gmean
 
-  <div class="stat-card">
-    <div class="tag">Mode</div>
-    <p>
-      The mode identifies the most frequent observation in a dataset. It is especially useful for categorical or discrete variables (e.g., the most common color, product, or diagnosis). In continuous data, kernel density estimation or histogram binning is required to approximate modes, which can reveal multimodal structures or clusters.
-    </p>
-    <div class="grid-2">
-      <div class="pros">
-        <strong>Advantages</strong>
-        <ul>
-          <li>Applicable to nominal data where mean and median are undefined</li>
-          <li>Helps identify dominant categories or repeated behaviors</li>
-          <li>Useful in pattern recognition and clustering analysis</li>
-        </ul>
-      </div>
-      <div class="cons">
-        <strong>Limitations</strong>
-        <ul>
-          <li>May be unstable in small samples or continuous data without binning</li>
-          <li>Not always unique (multimodal data)</li>
-          <li>Lacks mathematical properties for analytical modeling</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+# Sample Data: Annual Incomes (in thousands)
+data = [35, 45, 50, 50, 55, 60, 250] # Note the outlier '250'
 
-  <h3>Measures of Dispersion (Variability)</h3>
-  <p>
-    While measures of location indicate where the data are centered, measures of dispersion describe how spread out the data are around that center. Understanding variability is crucial for assessing reliability, uncertainty, and risk in both natural and social sciences.
-  </p>
-  <ul>
-    <li><strong>Variance</strong>: \( s^2=\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\bar{x})^2 \). It quantifies average squared deviations from the mean, enabling decomposition in analysis of variance (ANOVA). However, it exaggerates the influence of outliers and has squared units.</li>
-    <li><strong>Standard deviation</strong>: \( s=\sqrt{s^2} \). Expressed in the same units as the data, it is the most interpretable measure of spread and is central in normal distribution theory, control charts, and risk modeling.</li>
-    <li><strong>Interquartile range (IQR)</strong>: \( \mathrm{IQR}=Q_3-Q_1 \). It measures the spread of the central 50% of data, effectively ignoring extreme tails. It’s robust and ideal for boxplot representation and non-parametric summaries.</li>
-    <li><strong>Range</strong>: \( \max-\min \). It provides an intuitive sense of total spread but depends strongly on sample size and outliers. Often used in manufacturing or meteorology for quick comparisons.</li>
-    <li><strong>Mean absolute deviation (MAD)</strong>: \( \mathrm{MAD}=\frac{1}{n}\sum |x_i-m| \). Provides an intuitive average distance from the mean or median and is more robust than variance in the presence of outliers.</li>
-    <li><strong>Coefficient of variation (CV)</strong>: \( \mathrm{CV}=\frac{s}{|\bar{x}|} \). Enables comparison of relative variability between datasets measured in different units, such as comparing risk-to-return ratios across investments.</li>
-  </ul>
+# 1. Measures of Location
+mean_val = np.mean(data)
+median_val = np.median(data)
+geo_mean = gmean(data)
 
-  <h3>Practical Guidance</h3>
-  <p>
-    Choosing appropriate measures depends on the data’s characteristics and analytical goals. Robust statistics (median, IQR) are preferred in non-normal or contaminated datasets, while parametric measures (mean, standard deviation) dominate when data are approximately Gaussian.
-  </p>
-  <ul>
-    <li>Use <strong>mean and standard deviation</strong> for symmetric, light-tailed data or when parametric inference (e.g., t-tests, regression) is required.</li>
-    <li>Use <strong>median and IQR</strong> for skewed, heavy-tailed, or contaminated samples where robustness is crucial.</li>
-    <li>Use <strong>mode</strong> to identify the most frequent categories or modes in multimodal distributions.</li>
-    <li>Use <strong>CV</strong> to compare relative variability across different units, provided the mean is positive and meaningful.</li>
-    <li>Always visualize data distributions (e.g., with boxplots or histograms) before relying on numerical summaries.</li>
-  </ul>
+# 2. Measures of Dispersion
+# ddof=1 is CRITICAL. It divides by (n-1) instead of n.
+# This corrects the bias because we are using a Sample, not a Population.
+std_dev = np.std(data, ddof=1) 
 
-  <p>
-    In conclusion, measures of location and dispersion form the backbone of descriptive statistics. Together, they provide a concise yet powerful summary of data, supporting sound interpretation, informed decision-making, and the design of predictive models.
-  </p>
-</section>
+print(f"Mean: {mean_val:.2f}")    # Output: 77.86 (Skewed by outlier)
+print(f"Median: {median_val:.2f}") # Output: 50.00 (Robust)
+print(f"Std Dev: {std_dev:.2f}")   # Output: 76.53</code></pre>
+        </div>
 
+        <br>
+        <h3 id="lab">Interactive Lab</h3>
+        <div class="stat-card interactive-demo">
+          <p><strong>Experiment:</strong> Enter numbers below (separated by commas) to see the histogram. Notice how the <span style="color:#9b59b6; font-weight:bold;">Mean</span> line shifts more than the <span style="color:#2ecc71; font-weight:bold;">Median</span> line when you add outliers.</p>
+          
+          <div class="input-group">
+            <label for="dataInput" class="sr-only">Enter comma separated numbers:</label>
+            <input type="text" id="dataInput" placeholder="Try: 10, 20, 80, 20, 15" value="10, 15, 20, 80, 15">
+          </div>
+
+          <div class="chart-container" id="chartContainer">
+            </div>
+
+          <div class="result-box">
+            <div class="res-item" id="resMean">Mean: -</div>
+            <div class="res-item" id="resMedian">Median: -</div>
+            <div class="res-item" id="resSD">SD: -</div>
+          </div>
+        </div>
+
+      </section>
     </article>
   </main>
+
+  <script>
+    const input = document.getElementById('dataInput');
+    const chartContainer = document.getElementById('chartContainer');
+    const resMean = document.getElementById('resMean');
+    const resMedian = document.getElementById('resMedian');
+    const resSD = document.getElementById('resSD');
+
+    function calculateAndDraw() {t
+      const raw = input.value.split(',');
+      const numbers = raw.map(n => parseFloat(n.trim())).filter(n => !isNaN(n));
+
+      if (numbers.length === 0) return;
+
+      const sum = numbers.reduce((a, b) => a + b, 0);
+      const mean = sum / numbers.length;
+
+      const sorted = [...numbers].sort((a, b) => a - b);
+      const mid = Math.floor(sorted.length / 2);
+      const median = sorted.length % 2 !== 0 
+        ? sorted[mid] 
+        : (sorted[mid - 1] + sorted[mid]) / 2;
+
+      const variance = numbers.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / (numbers.length - 1);
+      const sd = Math.sqrt(variance || 0);
+
+      resMean.innerText = `Mean: ${mean.toFixed(2)}`;
+      resMedian.innerText = `Median: ${median.toFixed(2)}`;
+      resSD.innerText = `SD: ${sd.toFixed(2)}`;
+
+      chartContainer.innerHTML = '';
+      const maxVal = Math.max(...numbers);
+      
+      numbers.forEach(num => {
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        const heightPct = Math.max((num / maxVal) * 100, 5); 
+        
+        bar.style.height = `${heightPct}%`;
+        bar.style.width = `${100/numbers.length}%`;
+        
+        const label = document.createElement('span');
+        label.className = 'bar-value';
+        label.innerText = num;
+        bar.appendChild(label);
+
+        chartContainer.appendChild(bar);
+      });
+
+      function createRefLine(val, color, text) {
+        if (val > maxVal) return; 
+        
+        const line = document.createElement('div');
+        line.className = 'ref-line';
+        const pct = Math.max((val / maxVal) * 100, 0);
+        
+        line.style.bottom = `${pct}%`;
+        line.style.backgroundColor = color;
+        line.style.boxShadow = `0 0 5px ${color}`;
+
+        const label = document.createElement('span');
+        label.className = 'ref-label';
+        label.style.backgroundColor = color;
+        label.innerText = text;
+        
+        line.appendChild(label);
+        chartContainer.appendChild(line);
+      }
+
+      createRefLine(mean, '#9b59b6', `Mean: ${mean.toFixed(1)}`);
+      createRefLine(median, '#2ecc71', `Med: ${median.toFixed(1)}`);
+    }
+
+    input.addEventListener('input', calculateAndDraw);
+    
+    calculateAndDraw();
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 </body>
 </html>

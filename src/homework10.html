@@ -3,13 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Homework 10</title>
+  <title>Homework 10 - Poisson Process</title>
 
   <link rel="stylesheet" href="../include/css/style.css">
   <link rel="stylesheet" href="../include/css/content.css">
   <link rel="stylesheet" href="../include/css/code.css">
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
   <style>
     body { background-color: #fefefe; }
@@ -27,12 +30,24 @@
     }
 
     .status-info {
-      background: linear-gradient(135deg, #3498db 0%, #3498db 100%);
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
       color: #fff;
       padding: 1rem;
       border-radius: 6px;
       margin-bottom: 1rem;
       font-size: 0.95rem;
+    }
+
+    /* New Dynamic Analysis Box Style */
+    .dynamic-analysis {
+      background: #e8f6f3;
+      border-left: 5px solid #27ae60;
+      color: #2c3e50;
+      padding: 1rem;
+      border-radius: 4px;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      display: none; /* Hidden until simulation runs */
     }
 
     .controls-grid {
@@ -93,8 +108,6 @@
     }
     
     .sim-btn-primary { background: #3498db; }
-    .sim-btn-success { background: #27ae60; }
-    .sim-btn-warning { background: #e67e22; }
     .sim-btn-danger  { background: #c0392b; }
 
     .chart-info {
@@ -138,10 +151,6 @@
     @media (max-width: 768px) { 
       .chart-canvas-container { height: 340px; } 
     }
-    
-    @media (max-width: 480px) { 
-      .chart-canvas-container { height: 300px; } 
-    }
 
     .theory-box {
       background: linear-gradient(135deg, #ecf0f1 0%, #bdc3c7 100%);
@@ -157,14 +166,15 @@
       margin-bottom: 0.75rem;
     }
 
-    .formula {
+    /* Generic container for centered equations */
+    .formula-container {
       background: #fff;
-      padding: 1rem;
+      padding: 0.5rem;
       border-radius: 4px;
       margin: 0.75rem 0;
-      font-family: 'Courier New', monospace;
-      color: #2c3e50;
       border: 1px solid #bdc3c7;
+      text-align: center;
+      overflow-x: auto;
     }
 
     .stats-grid {
@@ -175,7 +185,7 @@
     }
 
     .stat-card {
-      background: linear-gradient(135deg, #3498db 0%, #3498db 100%);
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
       color: #fff;
       padding: 1rem;
       border-radius: 8px;
@@ -218,61 +228,67 @@
 
       <section class="homework-content">
         <p class="intro-paragraph">
-          In this assignment, we simulate a counting process over a time interval T where events occur independently and uniformly in time at a constant average rate λ. By dividing the interval into n small subintervals and generating events with probability λ/n in each, we approximate a Poisson process and analyze its theoretical properties.
+          In this assignment, we simulate a counting process over a time interval \(T\) where events occur independently and uniformly in time at a constant average rate \(\lambda\). By dividing the interval into \(n\) small subintervals and generating events with probability \(p = \lambda/n\) in each (Bernoulli trials), we approximate a Poisson process.
         </p>
 
         <h3>Understanding the Counting Process</h3>
         <p>
-          A <strong>counting process</strong> {N(t), t ≥ 0} counts the number of events that occur up to time t. When events occur independently at a constant rate, this process converges to a <strong>Poisson process</strong> as the discretization becomes finer.
+          A <strong>counting process</strong> \(\{N(t), t \geq 0\}\) tracks the cumulative number of events up to time \(t\). 
         </p>
 
         <div class="theory-box">
           <h4>Theoretical Foundation</h4>
-          <p><strong>Poisson Process Properties:</strong></p>
-          <ul>
-            <li><strong>Independent increments:</strong> Events in disjoint time intervals are independent</li>
-            <li><strong>Stationary increments:</strong> The distribution depends only on interval length</li>
-            <li><strong>Rate parameter λ:</strong> Expected number of events per unit time</li>
-          </ul>
-          <div class="formula">
-            P(N(t) = k) = (λt)^k · e^(-λt) / k!
+          <p><strong>Bernoulli to Poisson Convergence:</strong></p>
+          <p>We model time as discrete steps. If \(n\) is large and \(p\) is small such that \(np = \lambda\) is constant, the Binomial distribution converges to the Poisson distribution:</p>
+          <div class="formula-container">
+            $$ \lim_{n \to \infty} \binom{n}{k} \left(\frac{\lambda}{n}\right)^k \left(1-\frac{\lambda}{n}\right)^{n-k} = \frac{\lambda^k e^{-\lambda}}{k!} $$
           </div>
-          <p>where N(t) is the number of events by time t.</p>
-          <div class="formula">
-            E[N(t)] = λt    and    Var[N(t)] = λt
+
+          <p><strong>Poisson Properties:</strong></p>
+          <ul>
+            <li><strong>PMF:</strong> Probability of observing \(k\) events in time \(t\):</li>
+          </ul>
+          <div class="formula-container">
+             $$ P(N(t) = k) = \frac{(\lambda t)^k e^{-\lambda t}}{k!} $$
+          </div>
+          <ul>
+            <li><strong>Moments:</strong> The mean and variance are equal.</li>
+          </ul>
+          <div class="formula-container">
+            $$ E[N(t)] = \lambda t \quad \text{and} \quad Var[N(t)] = \lambda t $$
           </div>
         </div>
 
         <h3>Interactive Simulation</h3>
         <p>
-          Adjust the parameters below to explore how the discretized process approximates a Poisson process. The rate λ controls the expected number of events, while n controls the fineness of discretization.
+          Adjust the parameters below. Ensure that \(n\) is large enough so that the probability of an event in a single subinterval (\(\lambda T / n\)) is far less than 1.
         </p>
 
         <div class="simulation-controls">
           <div class="status-info">
-            Interactive simulation — adjust λ, T, and n, then click <strong>Simulate</strong> to generate multiple realizations of the counting process.
+            Interactive simulation — adjust \(\lambda\), \(T\), and \(n\), then click <strong>Simulate</strong>.
           </div>
 
           <div class="controls-grid">
             <div class="control-group">
-              <label for="lambdaInput">Rate λ (events per unit time)</label>
+              <label for="lambdaInput">Rate \(\lambda\) (events/unit time)</label>
               <input id="lambdaInput" type="number" step="0.5" min="0.5" max="50" value="10">
             </div>
             <div class="control-group">
-              <label for="TInput">Time interval T</label>
+              <label for="TInput">Time interval \(T\)</label>
               <input id="TInput" type="number" step="0.1" min="0.1" max="10" value="1">
             </div>
             <div class="control-group">
-              <label for="nInput">Subintervals n</label>
-              <input id="nInput" type="number" min="100" max="10000" step="100" value="5000">
+              <label for="nInput">Subintervals \(n\)</label>
+              <input id="nInput" type="number" min="100" max="20000" step="100" value="5000">
             </div>
             <div class="control-group">
-              <label for="mInput">Number of realizations</label>
-              <input id="mInput" type="number" min="1" max="500" value="100">
+              <label for="mInput">Realizations \(m\)</label>
+              <input id="mInput" type="number" min="1" max="1000" value="200">
             </div>
             <div class="control-group">
               <label for="showInput">Trajectories to display</label>
-              <input id="showInput" type="number" min="1" max="100" value="20">
+              <input id="showInput" type="number" min="1" max="50" value="20">
             </div>
             <div class="control-group">
               <label for="binsInput">Histogram bins</label>
@@ -287,7 +303,7 @@
 
           <div class="stats-grid" id="statsGrid">
             <div class="stat-card">
-              <div class="stat-label">Expected N(T)</div>
+              <div class="stat-label">Theoretical \(E[N(T)]\)</div>
               <div class="stat-value" id="expectedValue">0.00</div>
             </div>
             <div class="stat-card">
@@ -303,26 +319,28 @@
               <div class="stat-value" id="totalEvents">0</div>
             </div>
           </div>
+          
+          <div id="dynamicAnalysis" class="dynamic-analysis"></div>
         </div>
 
         <div class="charts-container">
           <div class="chart-wrapper">
-            <h4>Counting Process Trajectories N(t)</h4>
+            <h4>Counting Process Trajectories \(N(t)\)</h4>
             <div class="chart-canvas-container">
               <canvas id="trajectoryChart"></canvas>
             </div>
             <div class="chart-info">
-              Each line shows one realization of the counting process. The dashed red line shows the expected trajectory E[N(t)] = λt. Notice the step-like nature as events accumulate.
+              The dashed red line represents the theoretical expectation \(E[N(t)] = \lambda t\). The grey lines are individual random realizations.
             </div>
           </div>
 
           <div class="chart-wrapper">
-            <h4>Distribution of N(T) vs Theoretical Poisson</h4>
+            <h4>Distribution of \(N(T)\) vs Theoretical Poisson</h4>
             <div class="chart-canvas-container">
               <canvas id="distributionChart"></canvas>
             </div>
             <div class="chart-info">
-              Blue bars show the observed distribution of final counts N(T) across all realizations. Orange line shows the theoretical Poisson(λT) distribution. As n increases, the approximation improves.
+              Blue bars: Empirical distribution of final counts. Orange line: Theoretical Poisson PMF.
             </div>
           </div>
 
@@ -332,49 +350,21 @@
               <canvas id="interEventChart"></canvas>
             </div>
             <div class="chart-info">
-              Distribution of waiting times between consecutive events. In a true Poisson process, these follow an Exponential(λ) distribution with mean 1/λ.
+              Waiting times between events. This should approximate an Exponential distribution with mean \(1/\lambda\).
             </div>
           </div>
         </div>
 
-        <h3>Key Properties and Analysis</h3>
-        
-        <div class="theory-box">
-          <h4>Rate Parameter λ Interpretation</h4>
-          <p>The rate parameter λ represents:</p>
-          <ul>
-            <li><strong>Intensity:</strong> Average number of events per unit time</li>
-            <li><strong>Mean and Variance:</strong> Both E[N(t)] and Var[N(t)] equal λt</li>
-            <li><strong>Inter-event times:</strong> Exponentially distributed with mean 1/λ</li>
-          </ul>
-          <p>For example, λ = 10 means we expect 10 events per unit time on average.</p>
-        </div>
-
-        <h3>Approximation Quality</h3>
-        <p>
-          As n → ∞ (finer discretization), our discrete process converges to a true Poisson process. The approximation requires:
-        </p>
-        <ul>
-          <li>n sufficiently large so that λ/n ≪ 1 (each subinterval has low event probability)</li>
-          <li>Independence: events in different subintervals occur independently</li>
-          <li>Stationarity: probability λ/n is constant across all subintervals</li>
-        </ul>
-
         <h3>Applications in Cybersecurity</h3>
         <p>
-          Poisson processes model numerous phenomena:
+          Poisson processes are vital for modeling discrete events in continuous time:
         </p>
         <ul>
-          <li><strong>Network traffic:</strong> Packet arrivals at a router</li>
-          <li><strong>Intrusion attempts:</strong> Attack events on a server</li>
-          <li><strong>System failures:</strong> Hardware or software faults over time</li>
-          <li><strong>Queue theory:</strong> Customer/request arrivals in service systems</li>
+          <li><strong>DDoS Attacks:</strong> Modeling the arrival rate of malicious packets to a server. If the rate \(\lambda\) exceeds the server's processing capacity, the system queues overflow.</li>
+          <li><strong>Brute Force:</strong> Analyzing the frequency of login attempts over time.</li>
+          <li><strong>Failure Rates:</strong> Predicting hardware component failures in a large data center.</li>
         </ul>
 
-        <h3>Conclusion</h3>
-        <p>
-          By discretizing time and generating events with probability λ/n in each subinterval, we successfully approximate a Poisson process. The simulation demonstrates convergence of the empirical distribution to the theoretical Poisson distribution, validates the mean and variance properties, and illustrates the memoryless nature of exponential inter-event times. This foundational stochastic process underpins much of modern queuing theory, reliability analysis, and cybersecurity modeling.
-        </p>
       </section>
     </article>
   </main>
@@ -383,7 +373,6 @@
     // Poisson probability mass function
     function poissonPMF(k, lambda) {
       if (lambda <= 0 || k < 0) return 0;
-      // Use log to avoid overflow for large lambda
       const logProb = k * Math.log(lambda) - lambda - logFactorial(k);
       return Math.exp(logProb);
     }
@@ -398,13 +387,15 @@
     // Simulate one realization of counting process
     function simulateCountingProcess(lambda, T, n) {
       const dt = T / n;
-      const p = lambda * dt;
+      const p = lambda * dt; // Bernoulli probability
       const times = [0];
       const counts = [0];
       let count = 0;
       
       for (let i = 1; i <= n; i++) {
         if (Math.random() < p) count++;
+        // Optimization: Only push data points periodically or when count changes
+        // to save memory, but for homework visuals, we push steps.
         times.push(i * dt);
         counts.push(count);
       }
@@ -412,9 +403,9 @@
       return { times, counts };
     }
 
-    // Get all inter-event times from a realization
     function getInterEventTimes(times, counts) {
       const eventTimes = [];
+      // Identify exact times when count incremented
       for (let i = 1; i < counts.length; i++) {
         if (counts[i] > counts[i - 1]) {
           eventTimes.push(times[i]);
@@ -425,20 +416,14 @@
       for (let i = 1; i < eventTimes.length; i++) {
         interEventTimes.push(eventTimes[i] - eventTimes[i - 1]);
       }
-      
       return interEventTimes;
     }
 
-    // Compute histogram
     function computeHistogram(values, bins) {
       if (values.length === 0) return { counts: [], labels: [] };
-      
       const vmin = Math.min(...values);
       const vmax = Math.max(...values);
-      
-      if (vmin === vmax) {
-        return { counts: [values.length], labels: [vmin.toFixed(1)] };
-      }
+      if (vmin === vmax) return { counts: [values.length], labels: [vmin.toFixed(1)] };
       
       const width = (vmax - vmin) / bins;
       const counts = new Array(bins).fill(0);
@@ -452,128 +437,66 @@
       const labels = Array.from({ length: bins }, (_, i) =>
         (vmin + i * width + width / 2).toFixed(2)
       );
-      
       return { counts, labels };
     }
 
-    // Charts
+    // Charts Global Variables
     let trajectoryChart, distributionChart, interEventChart;
     
     function createCharts() {
-      const ctxTraj = document.getElementById('trajectoryChart').getContext('2d');
-      const ctxDist = document.getElementById('distributionChart').getContext('2d');
-      const ctxInter = document.getElementById('interEventChart').getContext('2d');
+      // Common chart options
+      const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: false,
+        plugins: { legend: { display: false } }
+      };
 
+      // 1. Trajectory Chart
+      const ctxTraj = document.getElementById('trajectoryChart').getContext('2d');
       trajectoryChart = new Chart(ctxTraj, {
         type: 'line',
         data: { datasets: [] },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: false,
+          ...commonOptions,
           scales: {
-            x: { 
-              type: 'linear',
-              title: { display: true, text: 'Time t', color: '#2c3e50' },
-              ticks: { color: '#2c3e50' },
-              grid: { color: 'rgba(0,0,0,0.06)' }
-            },
-            y: { 
-              title: { display: true, text: 'Count N(t)', color: '#2c3e50' },
-              ticks: { color: '#2c3e50', precision: 0 },
-              grid: { color: 'rgba(0,0,0,0.06)' }
-            }
-          },
-          plugins: { 
-            legend: { display: false },
-            tooltip: { enabled: false }
+            x: { type: 'linear', title: { display: true, text: 'Time t' } },
+            y: { title: { display: true, text: 'Count N(t)' } }
           }
         }
       });
 
+      // 2. Distribution Chart
+      const ctxDist = document.getElementById('distributionChart').getContext('2d');
       distributionChart = new Chart(ctxDist, {
         type: 'bar',
-        data: { 
-          labels: [], 
-          datasets: [
-            {
-              label: 'Observed',
-              data: [],
-              backgroundColor: 'rgba(52, 152, 219, 0.7)',
-              borderColor: 'rgba(41, 128, 185, 1)',
-              borderWidth: 1
-            },
-            {
-              label: 'Theoretical Poisson',
-              data: [],
-              type: 'line',
-              borderColor: 'rgba(230, 126, 34, 1)',
-              borderWidth: 3,
-              pointRadius: 4,
-              pointBackgroundColor: 'rgba(230, 126, 34, 1)',
-              fill: false
-            }
-          ]
-        },
+        data: { labels: [], datasets: [] },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: false,
+          ...commonOptions,
+          plugins: { legend: { display: true } },
           scales: {
-            x: { 
-              title: { display: true, text: 'Count k', color: '#2c3e50' },
-              ticks: { color: '#2c3e50' },
-              grid: { display: false }
-            },
-            y: { 
-              title: { display: true, text: 'Probability', color: '#2c3e50' },
-              ticks: { color: '#2c3e50' },
-              grid: { color: 'rgba(0,0,0,0.06)' }
-            }
-          },
-          plugins: { 
-            legend: { 
-              display: true,
-              position: 'top'
-            }
+            x: { title: { display: true, text: 'Count k' } },
+            y: { title: { display: true, text: 'Probability' } }
           }
         }
       });
 
+      // 3. Inter-Event Chart
+      const ctxInter = document.getElementById('interEventChart').getContext('2d');
       interEventChart = new Chart(ctxInter, {
         type: 'bar',
-        data: { 
-          labels: [], 
-          datasets: [{
-            label: 'Frequency',
-            data: [],
-            backgroundColor: 'rgba(155, 89, 182, 0.7)',
-            borderColor: 'rgba(142, 68, 173, 1)',
-            borderWidth: 1
-          }]
-        },
+        data: { labels: [], datasets: [] },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: false,
+          ...commonOptions,
           scales: {
-            x: { 
-              title: { display: true, text: 'Inter-event time', color: '#2c3e50' },
-              ticks: { color: '#2c3e50' },
-              grid: { display: false }
-            },
-            y: { 
-              title: { display: true, text: 'Frequency', color: '#2c3e50' },
-              ticks: { color: '#2c3e50' },
-              grid: { color: 'rgba(0,0,0,0.06)' }
-            }
-          },
-          plugins: { legend: { display: false } }
+            x: { title: { display: true, text: 'Inter-arrival Time' } },
+            y: { title: { display: true, text: 'Frequency' } }
+          }
         }
       });
     }
 
-    // State
+    // Variables
     let realizations = [];
     let lambda = 10, T = 1, n = 5000, m = 100, show = 20, bins = 20;
 
@@ -587,16 +510,46 @@
       document.getElementById('observedMean').textContent = mean.toFixed(2);
       document.getElementById('observedVar').textContent = variance.toFixed(2);
       document.getElementById('totalEvents').textContent = total;
+
+      // Dynamic Analysis Logic
+      const analysisDiv = document.getElementById('dynamicAnalysis');
+      analysisDiv.style.display = 'block';
+      
+      const diffMean = Math.abs(mean - expected);
+      const diffVar = Math.abs(variance - mean);
+      
+      let analysisHTML = `<strong>Analysis of this run:</strong><br>`;
+      analysisHTML += `The empirical mean (<strong>${mean.toFixed(2)}</strong>) deviates from the theoretical expectation by ${diffMean.toFixed(3)}. `;
+      
+      if (diffVar < 1.0) {
+        analysisHTML += `The variance (<strong>${variance.toFixed(2)}</strong>) is very close to the mean, which <em>strongly supports</em> the Poisson property ($Mean \\approx Variance$).`;
+      } else {
+        analysisHTML += `The variance (<strong>${variance.toFixed(2)}</strong>) deviates slightly from the mean (${diffVar.toFixed(2)}), which can happen with smaller sample sizes ($m$) or discrete approximations.`;
+      }
+      
+      analysisDiv.innerHTML = analysisHTML;
+      // Re-render math in the new HTML content
+      if (window.MathJax) MathJax.typesetPromise([analysisDiv]);
     }
 
     function drawTrajectories() {
       const datasets = [];
       const step = Math.max(1, Math.floor(realizations.length / show));
       
+      // Plot subset of realizations
       for (let i = 0; i < realizations.length && datasets.length < show; i += step) {
         const { times, counts } = realizations[i];
+        // Downsample for performance if n is huge
+        const stride = Math.ceil(times.length / 500); 
+        const dataPoints = [];
+        for(let j=0; j<times.length; j+=stride) {
+            dataPoints.push({ x: times[j], y: counts[j] });
+        }
+        // Ensure last point is included
+        dataPoints.push({ x: times[times.length-1], y: counts[counts.length-1] });
+
         datasets.push({
-          data: times.map((t, idx) => ({ x: t, y: counts[idx] })),
+          data: dataPoints,
           borderColor: 'rgba(149, 165, 166, 0.4)',
           borderWidth: 1,
           pointRadius: 0,
@@ -605,18 +558,15 @@
         });
       }
 
-      // Expected trajectory
-      const expectedLine = [
-        { x: 0, y: 0 },
-        { x: T, y: lambda * T }
-      ];
+      // Add Expected Trajectory LAST so it appears on top
       datasets.push({
-        data: expectedLine,
+        data: [{ x: 0, y: 0 }, { x: T, y: lambda * T }],
         borderColor: 'rgba(231, 76, 60, 0.9)',
         borderWidth: 3,
         borderDash: [8, 4],
         pointRadius: 0,
-        fill: false
+        fill: false,
+        label: 'Theory'
       });
 
       trajectoryChart.data.datasets = datasets;
@@ -628,7 +578,6 @@
       const minCount = Math.min(...finalCounts);
       const maxCount = Math.max(...finalCounts);
       
-      // Observed frequencies
       const freq = {};
       finalCounts.forEach(c => freq[c] = (freq[c] || 0) + 1);
       
@@ -636,15 +585,32 @@
       const observed = [];
       const theoretical = [];
       
-      for (let k = minCount; k <= maxCount; k++) {
+      // Expand range slightly for visual aesthetics
+      for (let k = Math.max(0, minCount - 2); k <= maxCount + 2; k++) {
         labels.push(k.toString());
         observed.push((freq[k] || 0) / finalCounts.length);
         theoretical.push(poissonPMF(k, lambda * T));
       }
 
       distributionChart.data.labels = labels;
-      distributionChart.data.datasets[0].data = observed;
-      distributionChart.data.datasets[1].data = theoretical;
+      distributionChart.data.datasets = [
+        {
+          label: 'Observed',
+          data: observed,
+          backgroundColor: 'rgba(52, 152, 219, 0.7)',
+          order: 2
+        },
+        {
+          label: 'Theoretical Poisson',
+          data: theoretical,
+          type: 'line',
+          borderColor: 'rgba(230, 126, 34, 1)',
+          borderWidth: 2,
+          pointRadius: 3,
+          tension: 0.3,
+          order: 1
+        }
+      ];
       distributionChart.update('none');
 
       updateStats(finalCounts);
@@ -653,14 +619,13 @@
     function drawInterEventTimes() {
       const allInterEventTimes = [];
       realizations.forEach(r => {
-        const times = getInterEventTimes(r.times, r.counts);
-        allInterEventTimes.push(...times);
+        allInterEventTimes.push(...getInterEventTimes(r.times, r.counts));
       });
 
       if (allInterEventTimes.length === 0) {
         interEventChart.data.labels = [];
-        interEventChart.data.datasets[0].data = [];
-        interEventChart.update('none');
+        interEventChart.data.datasets = [];
+        interEventChart.update();
         return;
       }
 
@@ -669,11 +634,16 @@
       const normalized = counts.map(c => c / total);
 
       interEventChart.data.labels = labels;
-      interEventChart.data.datasets[0].data = normalized;
+      interEventChart.data.datasets = [{
+        label: 'Frequency',
+        data: normalized,
+        backgroundColor: 'rgba(155, 89, 182, 0.7)'
+      }];
       interEventChart.update('none');
     }
 
     function simulate() {
+      // 1. Get Values
       lambda = parseFloat(document.getElementById('lambdaInput').value);
       T = parseFloat(document.getElementById('TInput').value);
       n = parseInt(document.getElementById('nInput').value);
@@ -681,11 +651,26 @@
       show = parseInt(document.getElementById('showInput').value);
       bins = parseInt(document.getElementById('binsInput').value);
 
+      // 2. Input Validation (New)
+      if (lambda <= 0 || T <= 0 || n <= 0 || m <= 0) {
+        alert("Please enter positive values for all parameters.");
+        return;
+      }
+      
+      // Check Probability Constraint for Poisson Approximation
+      const p = lambda * (T / n);
+      if (p >= 1) {
+        alert(`Error: The probability per subinterval (λ * T / n) is ${p.toFixed(2)}. It must be < 1 (ideally < 0.01). Please increase n.`);
+        return;
+      }
+
+      // 3. Run Simulation
       realizations = [];
       for (let i = 0; i < m; i++) {
         realizations.push(simulateCountingProcess(lambda, T, n));
       }
 
+      // 4. Update UI
       drawTrajectories();
       drawDistribution();
       drawInterEventTimes();
@@ -693,29 +678,30 @@
 
     function reset() {
       realizations = [];
-      
       trajectoryChart.data.datasets = [];
-      trajectoryChart.update('none');
-      
+      trajectoryChart.update();
       distributionChart.data.labels = [];
-      distributionChart.data.datasets[0].data = [];
-      distributionChart.data.datasets[1].data = [];
-      distributionChart.update('none');
-      
+      distributionChart.data.datasets = [];
+      distributionChart.update();
       interEventChart.data.labels = [];
-      interEventChart.data.datasets[0].data = [];
-      interEventChart.update('none');
+      interEventChart.data.datasets = [];
+      interEventChart.update();
 
       document.getElementById('expectedValue').textContent = '0.00';
       document.getElementById('observedMean').textContent = '0.00';
       document.getElementById('observedVar').textContent = '0.00';
       document.getElementById('totalEvents').textContent = '0';
+      
+      const analysisDiv = document.getElementById('dynamicAnalysis');
+      analysisDiv.style.display = 'none';
+      analysisDiv.innerHTML = '';
     }
 
     window.addEventListener('load', () => {
       createCharts();
       document.getElementById('simulateBtn').addEventListener('click', simulate);
       document.getElementById('resetBtn').addEventListener('click', reset);
+      // Run once on load
       simulate();
     });
   </script>

@@ -4,12 +4,68 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homework 2</title>
+    
     <link rel="stylesheet" href="../include/css/style.css">
     <link rel="stylesheet" href="../include/css/content.css">
     <link rel="stylesheet" href="../include/css/code_block.css">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="../include/js/crypto-viz.js" defer></script>
 
+    <style>
+        /* Responsive Table Wrapper */
+        .table-responsive {
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        /* Interactive Tool Styling */
+        .interactive-tool {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-left: 5px solid #4a90e2; /* Accent color */
+            padding: 20px;
+            border-radius: 8px;
+            margin: 2rem 0;
+            font-family: sans-serif;
+        }
+        
+        .interactive-tool h4 { margin-top: 0; color: #2c3e50; }
+        
+        .tool-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+            align-items: center;
+        }
+        
+        .tool-input {
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .result-box {
+            background: #2d2d2d;
+            color: #50fa7b; /* Matrix green */
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        /* MathJax Spacing */
+        mjx-container { margin: 1em 0 !important; }
+    </style>
 </head>
 <body>
     <header>
@@ -36,33 +92,31 @@
             <section class="homework-content">
                 <p class="intro-paragraph">This homework explores the fundamental concepts of datasets and distributions in statistics, demonstrating practical applications through univariate and bivariate analysis on a sample database of people.</p>
 
-                <h3>What is a Dataset</h3>
-                <p>A dataset is a structured collection of related data, typically organized in rows and columns, that represents information about a specific domain or category. In the context of statistics and data analysis, a dataset serves as the foundation for extracting insights, identifying patterns, and making informed decisions.</p>
+                <h3>1. What is a Dataset?</h3>
+                <p>A dataset is a structured collection of related data, typically organized in rows and columns. In our context:</p>
+                <ul>
+                    <li><strong>Rows (Observations):</strong> Each row represents an individual student.</li>
+                    <li><strong>Columns (Variables):</strong> Attributes such as name, age, grade, and test scores.</li>
+                </ul>
+                <p>Datasets form the backbone of modern statistical analysis and machine learning, requiring clear definitions and consistent formatting for reproducibility.</p>
 
-                <p>Each row in a dataset corresponds to an observation or record, while each column represents a variable or attribute that describes a characteristic of the data. For example, in a dataset containing information about students, each row might represent an individual student, and the columns could include attributes such as name, age, grade, and test scores.</p>
+                <h3>2. Understanding Distributions</h3>
+                <p>A distribution describes how values of a variable are spread. Key properties include:</p>
+                <ul>
+                    <li><strong>Central Tendency:</strong> Where the center lies (Mean \(\mu\), Median).</li>
+                    <li><strong>Dispersion:</strong> How scattered values are (Standard Deviation \(\sigma\)).</li>
+                    <li><strong>Shape:</strong> Skewness and Kurtosis (e.g., Normal, Uniform).</li>
+                </ul>
 
-                <p>Datasets can be classified into several types based on the nature of their variables. Numerical datasets contain quantitative data that can be measured and analyzed using mathematical operations, such as temperature readings or sales figures. Categorical datasets contain qualitative data representing discrete categories or groups, such as gender, city, or occupation. Time series datasets record observations over time to identify trends and patterns, while mixed datasets combine both numerical and categorical variables.</p>
+                <h3>3. The People Dataset</h3>
+                <p>We work with a dataset of 18 individuals containing 7 variables. Below is the SQL definition used to generate the schema:</p>
 
-                <p>The importance of datasets in modern statistics cannot be overstated. They provide the raw material necessary for statistical analysis, enable the training and testing of machine learning models, support data-driven decision making across industries, and facilitate reproducibility and benchmarking in research. Well-structured datasets with clear variable definitions and consistent formatting are essential for accurate analysis and meaningful interpretation of results.</p>
-
-                <h3>Understanding Distributions</h3>
-                <p>A distribution in statistics describes how values of a variable are spread or distributed across different possible outcomes. It provides a comprehensive picture of the data by showing which values occur most frequently, how values cluster around central points, and how widely values vary from the center. Understanding distributions is fundamental to statistical analysis because they reveal underlying patterns in data and inform the selection of appropriate analytical methods.</p>
-
-                <p>Distributions can be characterized by several key properties. The central tendency indicates where the center of the distribution lies, typically measured by the mean, median, or mode. The dispersion or spread describes how scattered the values are, measured by metrics such as range, variance, and standard deviation. The shape of the distribution indicates whether it is symmetric, skewed to the left or right, or exhibits other patterns such as multiple peaks.</p>
-
-                <p>Common types of distributions include the normal distribution, which is symmetric and bell-shaped with most values clustering around the mean; the uniform distribution, where all values have equal probability; the binomial distribution, which models the number of successes in a fixed number of trials; and the exponential distribution, often used to model time between events.</p>
-
-                <p>Distributions can be analyzed at different levels depending on the number of variables considered simultaneously. Univariate distributions examine a single variable in isolation, describing its central tendency, spread, and shape. Bivariate distributions examine two variables together, exploring relationships and dependencies between them. Multivariate distributions extend this to three or more variables, revealing complex interdependencies in high-dimensional data.</p>
-
-                <h3>The People Dataset</h3>
-<p>For this analysis, we work with a dataset containing information about eighteen individuals. The dataset includes seven variables: a unique identifier (id), first name, last name, age, gender, city of residence, and email address. This dataset was created using the following SQL table definition:</p>
-
-<div class="code-block">
-    <div class="code-header">
-        <span class="code-language">SQL</span>
-        <span class="code-title">Table Creation</span>
-    </div>
-    <pre><code class="language-sql">CREATE TABLE people (
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">SQL</span>
+                        <span class="code-title">Table Creation</span>
+                    </div>
+                    <pre><code class="language-sql">CREATE TABLE people (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(50),
     last_name VARCHAR(50),
@@ -71,796 +125,243 @@
     city VARCHAR(50),
     email VARCHAR(100)
 );</code></pre>
-</div>
+                </div>
 
-<p>The dataset contains the following records:</p>
+                <p><strong>Dataset Preview:</strong></p>
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">Age</th>
+                                <th scope="col">Gender</th>
+                                <th scope="col">City</th>
+                                <th scope="col">Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>1</td><td>Giovanni</td><td>Rossi</td><td>28</td><td>Male</td><td>Bologna</td><td>giovanni.rossi@email.com</td></tr>
+                            <tr><td>2</td><td>Alessia</td><td>Bianchi</td><td>22</td><td>Female</td><td>Milano</td><td>alessia.bianchi@email.com</td></tr>
+                            <tr><td>3</td><td>Daniele</td><td>Verdi</td><td>35</td><td>Male</td><td>Roma</td><td>daniele.verdi@email.com</td></tr>
+                            <tr><td>4</td><td>Lucia</td><td>Ferrari</td><td>29</td><td>Female</td><td>Milano</td><td>lucia.ferrari@email.com</td></tr>
+                            <tr><td>5</td><td>Marco</td><td>Neri</td><td>42</td><td>Male</td><td>Bologna</td><td>marco.neri@email.com</td></tr>
+                            <tr><td>6</td><td>Elena</td><td>Russo</td><td>24</td><td>Female</td><td>Roma</td><td>elena.russo@email.com</td></tr>
+                            <tr><td>7</td><td>Sara</td><td>Conti</td><td>31</td><td>Female</td><td>Torino</td><td>sara.conti@email.com</td></tr>
+                            <tr><td>8</td><td>Luca</td><td>Mariani</td><td>38</td><td>Male</td><td>Milano</td><td>luca.mariani@email.com</td></tr>
+                            <tr><td>9</td><td>Chiara</td><td>Gallo</td><td>26</td><td>Female</td><td>Bologna</td><td>chiara.gallo@email.com</td></tr>
+                            <tr><td>10</td><td>Edoardo</td><td>Greco</td><td>33</td><td>Male</td><td>Roma</td><td>edoardo.greco@email.com</td></tr>
+                            <tr><td>11</td><td>Francesca</td><td>Romano</td><td>27</td><td>Female</td><td>Milano</td><td>francesca.romano@email.com</td></tr>
+                            <tr><td>12</td><td>Andrea</td><td>Ricci</td><td>45</td><td>Male</td><td>Torino</td><td>andrea.ricci@email.com</td></tr>
+                            <tr><td>13</td><td>Martina</td><td>Colombo</td><td>23</td><td>Female</td><td>Napoli</td><td>martina.colombo@email.com</td></tr>
+                            <tr><td>14</td><td>Alessandro</td><td>Esposito</td><td>36</td><td>Male</td><td>Roma</td><td>alessandro.esposito@email.com</td></tr>
+                            <tr><td>15</td><td>Giulia</td><td>De Luca</td><td>25</td><td>Female</td><td>Milano</td><td>giulia.deluca@email.com</td></tr>
+                            <tr><td>16</td><td>Matteo</td><td>Bruno</td><td>40</td><td>Male</td><td>Bologna</td><td>matteo.bruno@email.com</td></tr>
+                            <tr><td>17</td><td>Valentina</td><td>Moretti</td><td>30</td><td>Female</td><td>Torino</td><td>valentina.moretti@email.com</td></tr>
+                            <tr><td>18</td><td>Simone</td><td>Barbieri</td><td>34</td><td>Male</td><td>Napoli</td><td>simone.barbieri@email.com</td></tr>
+                        </tbody>
+                    </table>
+                </div>
 
-<div class="table-container">
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Age</th>
-                <th>Gender</th>
-                <th>City</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>Giovanni</td>
-                <td>Rossi</td>
-                <td>28</td>
-                <td>Male</td>
-                <td>Bologna</td>
-                <td>giovanni.rossi@email.com</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>Alessia</td>
-                <td>Bianchi</td>
-                <td>22</td>
-                <td>Female</td>
-                <td>Milano</td>
-                <td>alessia.bianchi@email.com</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Daniele</td>
-                <td>Verdi</td>
-                <td>35</td>
-                <td>Male</td>
-                <td>Roma</td>
-                <td>daniele.verdi@email.com</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>Lucia</td>
-                <td>Ferrari</td>
-                <td>29</td>
-                <td>Female</td>
-                <td>Milano</td>
-                <td>lucia.ferrari@email.com</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>Marco</td>
-                <td>Neri</td>
-                <td>42</td>
-                <td>Male</td>
-                <td>Bologna</td>
-                <td>marco.neri@email.com</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td>Elena</td>
-                <td>Russo</td>
-                <td>24</td>
-                <td>Female</td>
-                <td>Roma</td>
-                <td>elena.russo@email.com</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>Sara</td>
-                <td>Conti</td>
-                <td>31</td>
-                <td>Female</td>
-                <td>Torino</td>
-                <td>sara.conti@email.com</td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td>Luca</td>
-                <td>Mariani</td>
-                <td>38</td>
-                <td>Male</td>
-                <td>Milano</td>
-                <td>luca.mariani@email.com</td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td>Chiara</td>
-                <td>Gallo</td>
-                <td>26</td>
-                <td>Female</td>
-                <td>Bologna</td>
-                <td>chiara.gallo@email.com</td>
-            </tr>
-            <tr>
-                <td>10</td>
-                <td>Edoardo</td>
-                <td>Greco</td>
-                <td>33</td>
-                <td>Male</td>
-                <td>Roma</td>
-                <td>edoardo.greco@email.com</td>
-            </tr>
-            <tr>
-                <td>11</td>
-                <td>Francesca</td>
-                <td>Romano</td>
-                <td>27</td>
-                <td>Female</td>
-                <td>Milano</td>
-                <td>francesca.romano@email.com</td>
-            </tr>
-            <tr>
-                <td>12</td>
-                <td>Andrea</td>
-                <td>Ricci</td>
-                <td>45</td>
-                <td>Male</td>
-                <td>Torino</td>
-                <td>andrea.ricci@email.com</td>
-            </tr>
-            <tr>
-                <td>13</td>
-                <td>Martina</td>
-                <td>Colombo</td>
-                <td>23</td>
-                <td>Female</td>
-                <td>Napoli</td>
-                <td>martina.colombo@email.com</td>
-            </tr>
-            <tr>
-                <td>14</td>
-                <td>Alessandro</td>
-                <td>Esposito</td>
-                <td>36</td>
-                <td>Male</td>
-                <td>Roma</td>
-                <td>alessandro.esposito@email.com</td>
-            </tr>
-            <tr>
-                <td>15</td>
-                <td>Giulia</td>
-                <td>De Luca</td>
-                <td>25</td>
-                <td>Female</td>
-                <td>Milano</td>
-                <td>giulia.deluca@email.com</td>
-            </tr>
-            <tr>
-                <td>16</td>
-                <td>Matteo</td>
-                <td>Bruno</td>
-                <td>40</td>
-                <td>Male</td>
-                <td>Bologna</td>
-                <td>matteo.bruno@email.com</td>
-            </tr>
-            <tr>
-                <td>17</td>
-                <td>Valentina</td>
-                <td>Moretti</td>
-                <td>30</td>
-                <td>Female</td>
-                <td>Torino</td>
-                <td>valentina.moretti@email.com</td>
-            </tr>
-            <tr>
-                <td>18</td>
-                <td>Simone</td>
-                <td>Barbieri</td>
-                <td>34</td>
-                <td>Male</td>
-                <td>Napoli</td>
-                <td>simone.barbieri@email.com</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                <h3>4. Univariate Distribution Analysis</h3>
+                
+                <h4>Analysis 1: Age Distribution</h4>
+                <p>We analyze the numerical continuous variable <em>Age</em>. The mean age \(\bar{x}\) and standard deviation \(\sigma\) are calculated as follows:</p>
 
-
-                <h3>Univariate Distribution Analysis</h3>
-<p>Univariate analysis examines a single variable at a time, focusing on describing its distribution without considering relationships with other variables. This type of analysis is fundamental for understanding the basic characteristics of each variable in the dataset, including measures of central tendency, dispersion, and the overall shape of the distribution.</p>
-
-<h4>Analysis 1: Age Distribution</h4>
-<p>The age variable is a numerical continuous variable that represents the age of each person in years. We can analyze its distribution using descriptive statistics and visualization techniques. The following SQL query retrieves basic statistical measures for the age variable:</p>
-
-<div class="code-block">
-    <div class="code-header">
-        <span class="code-language">SQL</span>
-        <span class="code-title">Age Statistics</span>
-    </div>
-    <pre><code class="language-sql">SELECT 
+                <div class="code-block">
+                    <div class="code-header">
+                        <span class="code-language">SQL</span>
+                        <span class="code-title">Age Statistics</span>
+                    </div>
+                    <pre><code class="language-sql">SELECT 
     COUNT(age) AS count,
     AVG(age) AS mean_age,
     MIN(age) AS min_age,
     MAX(age) AS max_age,
     STDDEV(age) AS std_deviation
 FROM people;</code></pre>
-</div>
+                </div>
 
-<p>The query produces the following results:</p>
+                <div class="table-responsive">
+                    <table class="data-table result-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Count</th>
+                                <th scope="col">Mean Age (\(\mu\))</th>
+                                <th scope="col">Min</th>
+                                <th scope="col">Max</th>
+                                <th scope="col">Std Dev (\(\sigma\))</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>18</td>
+                                <td>31.56</td>
+                                <td>22</td>
+                                <td>45</td>
+                                <td>6.58</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-<div class="table-container">
-    <table class="data-table result-table">
-        <thead>
-            <tr>
-                <th>count</th>
-                <th>mean_age</th>
-                <th>min_age</th>
-                <th>max_age</th>
-                <th>std_deviation</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>18</td>
-                <td>31.56</td>
-                <td>22</td>
-                <td>45</td>
-                <td>6.58</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                <div class="visualization-container">
+                    <h5>Age Distribution Visualization</h5>
+                    <div class="chart-placeholder">
+                        <canvas id="ageDistributionChart"></canvas>
+                    </div>
+                </div>
 
-<p>This result shows that the dataset contains 18 records with a mean age of 31.56 years, a minimum age of 22 years, and a maximum age of 45 years. The standard deviation of approximately 6.58 years indicates a wider age range compared to a more homogeneous sample, suggesting diverse age representation within this dataset.</p>
+                <h4>Analysis 2: Gender Distribution</h4>
+                <p>For the categorical variable <em>Gender</em>, we calculate the percentage frequency:</p>
+                <div class="code-block">
+                    <div class="code-header"><span class="code-language">SQL</span></div>
+                    <pre><code class="language-sql">SELECT gender, COUNT(*) as frequency 
+FROM people GROUP BY gender;</code></pre>
+                </div>
+                
+                <p>The dataset is perfectly balanced with <strong>50% Male</strong> and <strong>50% Female</strong>.</p>
+                <div class="visualization-container">
+                    <h5>Gender Distribution Visualization</h5>
+                    <div class="chart-placeholder"><canvas id="genderDistributionChart"></canvas></div>
+                </div>
 
-<div class="visualization-container">
-    <h5>Age Distribution Visualization</h5>
-    <div class="chart-placeholder">
-        <canvas id="ageDistributionChart"></canvas>
-    </div>
-</div>
+                <h4>Analysis 3: City Distribution</h4>
+                <p>This analysis reveals the geographical concentration of the subjects.</p>
+                <div class="visualization-container">
+                    <h5>City Distribution Visualization</h5>
+                    <div class="chart-placeholder"><canvas id="cityDistributionChart"></canvas></div>
+                </div>
 
-<h4>Analysis 2: Gender Distribution</h4>
-<p>The gender variable is a categorical variable with two distinct values: Male and Female. Analyzing the distribution of a categorical variable involves counting the frequency of each category and calculating the proportion each category represents in the dataset.</p>
+                <h3>5. Bivariate Distribution Analysis</h3>
+                <p>We examine the relationship between Age and Gender. The data indicates a significant difference in mean ages:</p>
+                
+                <div class="table-responsive">
+                    <table class="data-table result-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Count</th>
+                                <th scope="col">Mean Age</th>
+                                <th scope="col">Std Deviation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Female</td><td>9</td><td>26.33</td><td>2.98</td></tr>
+                            <tr><td>Male</td><td>9</td><td>36.78</td><td>4.83</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p><em>Note the significant gap of ~10 years between the average ages of the two groups.</em></p>
 
-<div class="code-block">
-    <div class="code-header">
-        <span class="code-language">SQL</span>
-        <span class="code-title">Gender Distribution</span>
-    </div>
-    <pre><code class="language-sql">SELECT 
-    gender,
-    COUNT(*) AS frequency,
-    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM people), 2) AS percentage
-FROM people
-GROUP BY gender
-ORDER BY frequency DESC;</code></pre>
-</div>
+                <div class="visualization-container">
+                    <h5>Mean Age by Gender</h5>
+                    <div class="chart-placeholder"><canvas id="ageGenderChart"></canvas></div>
+                </div>
 
-<p>The query produces the following results:</p>
+                <h3>6. The Caesar Cipher & Cryptanalysis</h3>
+                <p>The Caesar cipher is a substitution cipher where letters are shifted by a fixed number \(k\). Mathematically, the encryption function \(E(x)\) is:</p>
+                <p>$$ E_n(x) = (x + n) \mod 26 $$</p>
 
-<div class="table-container">
-    <table class="data-table result-table">
-        <thead>
-            <tr>
-                <th>gender</th>
-                <th>frequency</th>
-                <th>percentage</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Male</td>
-                <td>9</td>
-                <td>50.00</td>
-            </tr>
-            <tr>
-                <td>Female</td>
-                <td>9</td>
-                <td>50.00</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                <div class="interactive-tool">
+                    <h4>🔓 Interactive Caesar Cipher Decoder</h4>
+                    <p>Before looking at the code, try understanding the mechanism yourself. Enter text below to see how the shift affects the output.</p>
+                    
+                    <div class="tool-controls">
+                        <div>
+                            <label for="cipherInput"><strong>Plaintext:</strong></label><br>
+                            <input type="text" id="cipherInput" class="tool-input" placeholder="DANTE ALIGHIERI" style="width: 250px;">
+                        </div>
+                        <div>
+                            <label for="shiftAmount"><strong>Shift (\(n\)):</strong></label><br>
+                            <input type="number" id="shiftAmount" class="tool-input" value="7" min="1" max="25" style="width: 60px;">
+                        </div>
+                    </div>
+                    
+                    <div class="result-box">
+                        <span id="cipherOutput">KHUA L KPNo...</span>
+                    </div>
+                </div>
 
-<p>This result reveals that the dataset contains 9 males (50%) and 9 females (50%), indicating a perfectly balanced gender distribution. Such balance is important in statistical analysis as it prevents gender bias in any conclusions drawn from the data.</p>
-
-<div class="visualization-container">
-    <h5>Gender Distribution Visualization</h5>
-    <div class="chart-placeholder">
-        <canvas id="genderDistributionChart"></canvas>
-    </div>
-</div>
-
-<h4>Analysis 3: City Distribution</h4>
-<p>The city variable is another categorical variable that indicates the city of residence for each person. Understanding the geographical distribution of the sample can provide insights into the diversity and representativeness of the dataset.</p>
-
-<div class="code-block">
-    <div class="code-header">
-        <span class="code-language">SQL</span>
-        <span class="code-title">City Distribution</span>
-    </div>
-    <pre><code class="language-sql">SELECT 
-    city,
-    COUNT(*) AS frequency,
-    ROUND(COUNT(*) * 100.0 / (SELECT COUNT(*) FROM people), 2) AS percentage
-FROM people
-GROUP BY city
-ORDER BY frequency DESC;</code></pre>
-</div>
-
-<p>The query produces the following results:</p>
-
-<div class="table-container">
-    <table class="data-table result-table">
-        <thead>
-            <tr>
-                <th>city</th>
-                <th>frequency</th>
-                <th>percentage</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Milano</td>
-                <td>5</td>
-                <td>27.78</td>
-            </tr>
-            <tr>
-                <td>Bologna</td>
-                <td>4</td>
-                <td>22.22</td>
-            </tr>
-            <tr>
-                <td>Roma</td>
-                <td>4</td>
-                <td>22.22</td>
-            </tr>
-            <tr>
-                <td>Torino</td>
-                <td>3</td>
-                <td>16.67</td>
-            </tr>
-            <tr>
-                <td>Napoli</td>
-                <td>2</td>
-                <td>11.11</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<p>The results show a non-uniform geographical distribution with Milano being the most represented city (5 people, 27.78%), followed by Bologna and Roma (4 people each, 22.22%), Torino (3 people, 16.67%), and Napoli (2 people, 11.11%). This pattern reveals a concentration in major northern and central Italian cities, with Milano as the dominant location in the sample.</p>
-
-<div class="visualization-container">
-    <h5>City Distribution Visualization</h5>
-    <div class="chart-placeholder">
-        <canvas id="cityDistributionChart"></canvas>
-    </div>
-</div>
-
-<h3>Bivariate Distribution Analysis</h3>
-<p>Bivariate analysis examines the relationship between two variables simultaneously. This type of analysis is crucial for understanding how variables interact with each other, identifying correlations, and discovering patterns that would not be apparent when examining variables in isolation. Bivariate analysis can involve two numerical variables, two categorical variables, or one of each type.</p>
-
-<h4>Age and Gender Relationship</h4>
-<p>Analyzing the relationship between age and gender allows us to determine whether there are systematic differences in age distribution between males and females in our dataset. This type of analysis combines a numerical variable (age) with a categorical variable (gender).</p>
-
-<div class="code-block">
-    <div class="code-header">
-        <span class="code-language">SQL</span>
-        <span class="code-title">Age by Gender Analysis</span>
-    </div>
-    <pre><code class="language-sql">SELECT 
-    gender,
-    COUNT(*) AS count,
-    ROUND(AVG(age), 2) AS mean_age,
-    MIN(age) AS min_age,
-    MAX(age) AS max_age,
-    ROUND(STDDEV(age), 2) AS std_deviation
-FROM people
-GROUP BY gender
-ORDER BY gender;</code></pre>
-</div>
-
-<p>The query produces the following results:</p>
-
-<div class="table-container">
-    <table class="data-table result-table">
-        <thead>
-            <tr>
-                <th>gender</th>
-                <th>count</th>
-                <th>mean_age</th>
-                <th>min_age</th>
-                <th>max_age</th>
-                <th>std_deviation</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Female</td>
-                <td>9</td>
-                <td>26.33</td>
-                <td>22</td>
-                <td>31</td>
-                <td>2.98</td>
-            </tr>
-            <tr>
-                <td>Male</td>
-                <td>9</td>
-                <td>36.78</td>
-                <td>28</td>
-                <td>45</td>
-                <td>4.83</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<p>This result reveals a striking difference between genders: females have a mean age of 26.33 years (ranging from 22 to 31), while males have a mean age of 36.78 years (ranging from 28 to 45). This represents a difference of over 10 years in average age, with males being significantly older. Males also show greater age variability with a standard deviation of 4.83 years compared to 2.98 years for females, indicating a more diverse age range among men in this sample.</p>
-
-<div class="visualization-container">
-    <h5>Mean Age by Gender Visualization</h5>
-    <div class="chart-placeholder">
-        <canvas id="ageGenderChart"></canvas>
-    </div>
-</div>
-
-<p>We can also examine the distribution more granularly by creating age groups and analyzing their composition by gender:</p>
-
-<div class="code-block">
-    <div class="code-header">
-        <span class="code-language">SQL</span>
-        <span class="code-title">Age Groups by Gender</span>
-    </div>
-    <pre><code class="language-sql">SELECT 
-    CASE 
-        WHEN age BETWEEN 22 AND 25 THEN '22-25'
-        WHEN age BETWEEN 26 AND 30 THEN '26-30'
-        WHEN age BETWEEN 31 AND 35 THEN '31-35'
-        WHEN age BETWEEN 36 AND 40 THEN '36-40'
-        ELSE '41+'
-    END AS age_group,
-    gender,
-    COUNT(*) AS frequency
-FROM people
-GROUP BY age_group, gender
-ORDER BY age_group, gender;</code></pre>
-</div>
-
-
-<p>The query produces the following results:</p>
-
-<div class="table-container">
-    <table class="data-table result-table">
-        <thead>
-            <tr>
-                <th>age_group</th>
-                <th>gender</th>
-                <th>frequency</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>22-25</td>
-                <td>Female</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>26-30</td>
-                <td>Female</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>26-30</td>
-                <td>Male</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>31-35</td>
-                <td>Female</td>
-                <td>1</td>
-            </tr>
-            <tr>
-                <td>31-35</td>
-                <td>Male</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>36-40</td>
-                <td>Male</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>41+</td>
-                <td>Male</td>
-                <td>2</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-
-<p>This analysis provides clear insights into the age-gender distribution. The youngest groups (22-25 and 26-30) are dominated by females (8 out of 9 total), with only one male in the 26-30 range. The middle age group (31-35) shows mixed representation with 3 males and 1 female. The older groups (36-40 and 41+) contain exclusively males (5 total). This demonstrates a clear age stratification by gender, with younger individuals being predominantly female and older individuals being exclusively male in this sample.</p>
-
-<div class="visualization-container">
-    <h5>Age Groups by Gender Visualization</h5>
-    <div class="chart-placeholder">
-        <canvas id="ageGroupsGenderChart"></canvas>
-    </div>
-</div>
-
-                <h3>The Caesar Cipher</h3>
-                <p>The Caesar cipher is one of the oldest and simplest encryption techniques, named after Julius Caesar who used it to protect military communications. It is a type of substitution cipher where each letter in the plaintext is shifted a fixed number of positions down the alphabet. For example, with a shift of 3, A becomes D, B becomes E, and so on. While extremely simple, the Caesar cipher provides an excellent introduction to cryptographic concepts and vulnerabilities.</p>
-
-                <h4>Step 1: Text Extraction and Preparation</h4>
-                <p>The first step is to extract the text from Dante's Inferno Canto I and prepare it for analysis. We remove numbers, punctuation, and normalize the text to contain only alphabetic characters. This preprocessing is essential for accurate frequency analysis.</p>
-
+                <h4>Step 1: Text Extraction (Python)</h4>
                 <div class="code-block">
                     <div class="code-header">
                         <span class="code-language">Python</span>
-                        <span class="code-title">Text Extraction Script</span>
+                        <span class="code-title">Text Preparation</span>
                     </div>
                     <pre><code class="language-python">import re
 from collections import Counter
 
-# Original text from Dante's Inferno Canto I
-dante_text = """
-Nel mezzo del cammin di nostra vita
-mi ritrovai per una selva oscura,
-ché la diritta via era smarrita.
-[... full text ...]
-"""
-
 def prepare_text(text):
-    """
-    Prepare text for analysis by removing non-alphabetic 
-    characters and converting to uppercase.
-    """
-    # Remove all non-alphabetic characters except spaces
-    text = re.sub(r'[^a-zA-ZàèéìòùÀÈÉÌÒÙ\s]', '', text)
-    # Convert to uppercase
-    text = text.upper()
-    # Remove extra whitespace
-    text = ' '.join(text.split())
-    return text
-
-def calculate_frequency(text):
-    """
-    Calculate the frequency distribution of letters in the text.
-    """
-    # Remove spaces for letter counting
-    letters_only = text.replace(' ', '')
-    total_letters = len(letters_only)
-    
-    # Count frequency of each letter
-    freq = Counter(letters_only)
-    
-    # Convert to percentages
-    freq_percent = {
-        letter: (count / total_letters) * 100 
-        for letter, count in freq.items()
-    }
-    
-    # Sort by frequency (descending)
-    sorted_freq = dict(
-        sorted(freq_percent.items(), 
-               key=lambda x: x[1], 
-               reverse=True)
-    )
-    
-    return sorted_freq, total_letters
-
-# Prepare the text
-clean_text = prepare_text(dante_text)
-original_freq, total = calculate_frequency(clean_text)
-
-print(f"Total letters analyzed: {total}")
-print("\nTop 10 most frequent letters:")
-for i, (letter, freq) in enumerate(list(original_freq.items())[:10], 1):
-    print(f"{i}. {letter}: {freq:.2f}%")</code></pre>
+    # Remove non-alphabetic chars and uppercase
+    text = re.sub(r'[^a-zA-Z\s]', '', text).upper()
+    return ' '.join(text.split())</code></pre>
                 </div>
 
-                <h4>Step 2: Applying the Caesar Cipher</h4>
-                <p>Next, we encrypt the prepared text using the Caesar cipher with a shift of 7 positions. This shift value was chosen arbitrarily and will be our "secret key" that we'll later attempt to recover through cryptanalysis.</p>
+                <h4>Step 2: Frequency Analysis Attack</h4>
+                <p>To break the cipher, we use the Chi-Squared statistic (\(\chi^2\)) to compare the observed frequency (\(O_i\)) of the ciphertext with the expected frequency (\(E_i\)) of the Italian language:</p>
+                
+                <p>$$ \chi^2 = \sum \frac{(O_i - E_i)^2}{E_i} $$</p>
 
                 <div class="code-block">
                     <div class="code-header">
                         <span class="code-language">Python</span>
-                        <span class="code-title">Caesar Cipher Encryption</span>
+                        <span class="code-title">Chi-Squared Attack</span>
                     </div>
-                    <pre><code class="language-python">def caesar_encrypt(text, shift):
-    """
-    Encrypt text using Caesar cipher with given shift.
-    Preserves spaces, shifts only letters A-Z.
-    """
-    result = []
-    
-    for char in text:
-        if char == ' ':
-            result.append(char)
-        elif 'A' <= char <= 'Z':
-            # Shift character
-            shifted = ord(char) - ord('A')
-            shifted = (shifted + shift) % 26
-            result.append(chr(shifted + ord('A')))
-        else:
-            # Keep accented characters as-is for simplicity
-            result.append(char)
-    
-    return ''.join(result)
-
-# Apply Caesar cipher with shift of 7
-SHIFT_KEY = 7
-encrypted_text = caesar_encrypt(clean_text, SHIFT_KEY)
-
-print(f"Shift used: {SHIFT_KEY}")
-print(f"\nOriginal (first 100 chars):")
-print(clean_text[:100])
-print(f"\nEncrypted (first 100 chars):")
-print(encrypted_text[:100])
-
-# Calculate frequency of encrypted text
-encrypted_freq, _ = calculate_frequency(encrypted_text)
-
-print("\nTop 10 most frequent letters in ciphertext:")
-for i, (letter, freq) in enumerate(list(encrypted_freq.items())[:10], 1):
-    print(f"{i}. {letter}: {freq:.2f}%")</code></pre>
-                </div>
-
-                <h4>Step 3: Frequency Analysis - Italian Language</h4>
-                <p>To break the Caesar cipher, we use frequency analysis based on the known letter frequencies in the Italian language. Italian has a characteristic frequency distribution where E, A, and I are the most common letters. By comparing the frequency distribution of the ciphertext with expected Italian frequencies, we can deduce the shift value.</p>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-language">Python</span>
-                        <span class="code-title">Frequency Analysis Attack - Italian Standard</span>
-                    </div>
-                    <pre><code class="language-python"># Standard Italian letter frequencies
-italian_freq = {
-    'E': 11.49, 'A': 10.85, 'I': 10.18, 'O': 9.97,
-    'N': 7.02, 'T': 6.97, 'R': 6.19, 'L': 5.70,
-    'S': 5.48, 'C': 4.30, 'D': 3.39, 'U': 3.16,
-    'P': 2.96, 'M': 2.87, 'V': 1.75, 'G': 1.65,
-    'H': 1.43, 'B': 1.05, 'F': 1.01, 'Z': 0.85,
-    'Q': 0.45
-}
-
-def calculate_chi_squared(observed, expected):
-    """
-    Calculate chi-squared statistic to measure how well
-    the observed frequency matches the expected frequency.
-    """
+                    <pre><code class="language-python">def calculate_chi_squared(observed, expected):
     chi2 = 0
     for letter in expected:
         if letter in observed:
             obs = observed[letter]
             exp = expected[letter]
             chi2 += ((obs - exp) ** 2) / exp
-    return chi2
-
-def break_caesar_standard_freq(ciphertext):
-    """
-    Attempt to break Caesar cipher using standard
-    Italian frequency distribution.
-    """
-    best_shift = 0
-    min_chi2 = float('inf')
-    results = []
-    
-    # Try all possible shifts (0-25)
-    for shift in range(26):
-        # Decrypt with current shift
-        decrypted = caesar_encrypt(ciphertext, -shift)
-        
-        # Calculate frequency
-        freq, _ = calculate_frequency(decrypted)
-        
-        # Calculate chi-squared
-        chi2 = calculate_chi_squared(freq, italian_freq)
-        
-        results.append({
-            'shift': shift,
-            'chi2': chi2,
-            'decrypted': decrypted[:80]
-        })
-        
-        if chi2 < min_chi2:
-            min_chi2 = chi2
-            best_shift = shift
-    
-    return best_shift, results
-
-# Perform frequency attack using standard Italian frequencies
-best_shift_std, all_results_std = break_caesar_standard_freq(encrypted_text)
-
-print(f"Best shift found: {best_shift_std}")
-print(f"Original shift was: {SHIFT_KEY}")
-print(f"Match: {best_shift_std == SHIFT_KEY}")
-
-print("\nTop 5 candidate shifts:")
-sorted_results = sorted(all_results_std, key=lambda x: x['chi2'])
-for i, result in enumerate(sorted_results[:5], 1):
-    print(f"\n{i}. Shift {result['shift']} (χ² = {result['chi2']:.2f})")
-    print(f"   Preview: {result['decrypted']}")</code></pre>
+    return chi2</code></pre>
                 </div>
-
-                <h4>Step 4: Frequency Analysis - Text-Specific Distribution</h4>
-                <p>A more sophisticated approach uses the actual frequency distribution from the ciphertext itself. Since the Caesar cipher preserves the relative frequency of letters, we can compare the ciphertext frequency with the original Italian text frequency to determine the shift more accurately.</p>
-
-                <div class="code-block">
-                    <div class="code-header">
-                        <span class="code-language">Python</span>
-                        <span class="code-title">Frequency Analysis Attack - Ciphertext Distribution</span>
-                    </div>
-                    <pre><code class="language-python">def break_caesar_with_ciphertext_freq(ciphertext, original_freq):
-    """
-    Break Caesar cipher by comparing ciphertext frequency
-    with the known frequency distribution of similar texts.
-    """
-    # Get most common letter in ciphertext
-    cipher_freq, _ = calculate_frequency(ciphertext)
-    most_common_cipher = list(cipher_freq.keys())[0]
-    
-    # Get most common letter in original Italian
-    most_common_original = list(original_freq.keys())[0]
-    
-    # Calculate shift
-    shift = (ord(most_common_cipher) - ord(most_common_original)) % 26
-    
-    # Decrypt
-    decrypted = caesar_encrypt(ciphertext, -shift)
-    
-    return shift, decrypted, most_common_cipher, most_common_original
-
-# Perform attack using ciphertext frequency distribution
-shift_found, decrypted_text, cipher_common, orig_common = \
-    break_caesar_with_ciphertext_freq(encrypted_text, original_freq)
-
-print(f"Most common letter in ciphertext: {cipher_common}")
-print(f"Most common letter in Italian: {orig_common}")
-print(f"\nCalculated shift: {shift_found}")
-print(f"Original shift was: {SHIFT_KEY}")
-print(f"Match: {shift_found == SHIFT_KEY}")
-
-print(f"\nDecrypted text (first 200 chars):")
-print(decrypted_text[:200])
-
-print(f"\nOriginal text (first 200 chars):")
-print(clean_text[:200])
-
-print(f"\nDecryption successful: {decrypted_text == clean_text}")</code></pre>
-                </div>
-
-                <h4>Step 5: Visualization and Comparison</h4>
-                <p>To better understand the effectiveness of frequency analysis, we create interactive visualizations comparing the frequency distributions. The charts below show the original text distribution, the encrypted text distribution, and the standard Italian frequency distribution. Notice how the encrypted distribution is simply a shifted version of the original.</p>
 
                 <div class="visualization-container">
-                    <h5>Letter Frequency Comparison</h5>
+                    <h5>Frequency Distribution Comparison</h5>
                     <div id="frequencyChart" class="chart-placeholder">
                         <canvas id="freqCanvas"></canvas>
                     </div>
-                    
-                    <h5>Frequency Distribution Comparison</h5>
-                    <div id="distributionChart" class="chart-placeholder">
-                        <canvas id="distCanvas"></canvas>
-                    </div>
                 </div>
 
-                <h4>Results and Analysis</h4>
-                <p>The frequency analysis attacks successfully recovered the original shift value of 7. Both approaches—using standard Italian letter frequencies and using the ciphertext's own frequency distribution—were able to decrypt the text. This demonstrates a fundamental weakness of the Caesar cipher: it preserves the statistical properties of the plaintext, making it vulnerable to frequency analysis.</p>
-
-                <p>The chi-squared test provided a quantitative measure of how well each potential shift matched the expected Italian frequency distribution. The shift that produced the lowest chi-squared value corresponded to the correct decryption. This mathematical approach to cryptanalysis illustrates how statistical methods are essential tools in modern cybersecurity and cryptography.</p>
-
-                <p>Key observations from our analysis:</p>
-
-                <ul>
-                    <li>The Caesar cipher maintains the relative frequency of letters, only shifting their positions in the alphabet</li>
-                    <li>Frequency analysis exploits the non-uniform distribution of letters in natural language</li>
-                    <li>The chi-squared statistic provides an objective measure for comparing frequency distributions</li>
-                    <li>Even with a small sample size (one canto), the frequency distribution is sufficient for successful cryptanalysis</li>
-                    <li>Modern encryption algorithms must not preserve statistical properties of the plaintext to resist frequency analysis attacks</li>
-                </ul>
-
-                <p>This analysis demonstrates why the Caesar cipher, despite its historical significance, is completely insecure by modern standards. Any substitution cipher that preserves frequency information is vulnerable to statistical attacks, highlighting the importance of designing cryptographic systems that thoroughly obscure plaintext patterns.</p>
+                <h4>Results</h4>
+                <p>The analysis successfully recovered the shift key of <strong>7</strong>. The visualizations above confirm that the encrypted distribution is simply a shifted version of the original Italian distribution.</p>
 
             </section>
-
         </article>
     </main>
 
     <script src="../include/js/main.js"></script>
     <script src="../include/js/distribution-viz.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const input = document.getElementById('cipherInput');
+            const shift = document.getElementById('shiftAmount');
+            const output = document.getElementById('cipherOutput');
+            
+            function caesar(str, shift) {
+                return str.toUpperCase().replace(/[A-Z]/g, c => String.fromCharCode((c.charCodeAt(0) - 65 + shift) % 26 + 65));
+            }
+            
+            function update() { 
+                const s = parseInt(shift.value) || 0;
+                output.innerText = caesar(input.value, s); 
+            }
+
+            if(input && shift) {
+                input.value = "NEL MEZZO DEL CAMMIN";
+                update();
+                input.addEventListener('input', update);
+                shift.addEventListener('input', update);
+            }
+        });
+    </script>
 </body>
 </html>

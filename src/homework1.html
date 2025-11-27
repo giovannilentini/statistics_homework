@@ -6,6 +6,41 @@
     <title>Homework 1</title>
     <link rel="stylesheet" href="../include/css/style.css">
     <link rel="stylesheet" href="../include/css/content.css">
+    
+    <script>
+        window.MathJax = {
+          tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+          svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <style>
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95em;
+        }
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .comparison-table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+        .math-block {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-left: 4px solid #333;
+            margin: 15px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -30,53 +65,97 @@
             </div>
 
             <section class="homework-content">
-                <p class="intro-paragraph">Statistics is a branch of applied mathematics that involves the collection, description, analysis, and interpretation of data drawn from a sample of a larger population. This mathematical discipline relies on calculus, linear algebra, and probability theory to generate insights from data, enabling evidence-based decision-making across virtually all scientific disciplines. The fundamental principle underlying statistics is that patterns and characteristics of large populations can be understood by examining smaller, representative samples.</p>
+                <p class="intro-paragraph">Statistics is a branch of applied mathematics that involves the collection, description, analysis, and interpretation of data drawn from a sample of a larger population. This mathematical discipline relies on calculus, linear algebra, and probability theory to generate insights from data, enabling evidence-based decision-making. In the context of cybersecurity, statistics transforms raw network logs into actionable intelligence.</p>
 
-                <h3>What is Statistics</h3>
-                <p>Statistics is a branch of mathematics focused on gathering, organizing, analyzing, interpreting, and presenting data. Its main goal is to provide tools that help people understand how data behaves and make informed decisions based on that understanding. Researchers, scientists, and decision-makers use statistics to extract meaningful insights from numerical data.</p>
+                <h3>1. What is Statistics?</h3>
+                <p>Statistics is focused on gathering, organizing, analyzing, interpreting, and presenting data. Its main goal is to provide tools that help people understand how data behaves and make informed decisions based on that understanding. There are two primary types of statistics, both of which have direct applications in network security:</p>
 
-                <p>There are two primary types of statistics: descriptive and inferential.</p>
+                <h4>Descriptive Statistics</h4>
+                <p>Descriptive statistics summarize and describe the key features of a dataset. In cybersecurity, this is used to establish a "baseline" of normal activity.</p>
+                <ul>
+                    <li><strong>Example:</strong> Calculating the <em>mean</em> packet size of incoming traffic or the <em>mode</em> (most frequent) port accessed during business hours.</li>
+                </ul>
 
-                <p>Descriptive statistics summarize and describe the key features of a dataset using measures such as mean, median, mode, and standard deviation, along with visual tools like histograms or box plots. These techniques simplify complex data and help reveal patterns or trends.</p>
+                <h4>Inferential Statistics</h4>
+                <p>Inferential statistics allow predictions or conclusions about a larger population based on a sample. This is crucial because security tools cannot always analyze every single bit of data in real-time without causing latency.</p>
+                <ul>
+                    <li><strong>Example:</strong> Inspecting a random sample of 1,000 packets to infer the probability that the entire network stream (the population) contains malware.</li>
+                </ul>
 
-                <p>Inferential statistics, on the other hand, allow predictions or conclusions about a larger population based on a sample. This field relies on probability theory to estimate parameters, test hypotheses, and measure confidence in results. Common methods include confidence intervals, regression analysis, and hypothesis testing.</p>
+                <hr>
 
-                <p>Statistics plays a crucial role in diverse fields—economics, medicine, engineering, psychology, and the social sciences. It underpins evidence-based reasoning, advances scientific research, and informs policy decisions. Moreover, it forms the backbone of data science and machine learning, both of which are transforming industries through the power of data and computation.</p>
+                <h3>2. The Statistical Core of Cyber Defense: Hypothesis Testing</h3>
+                <p>One of the most valuable statistical concepts in cybersecurity is <strong>Hypothesis Testing</strong>. In an Intrusion Detection System (IDS), the "Null Hypothesis" (\(H_0\)) is usually that the network traffic is normal/benign. The challenge lies in minimizing errors when rejecting this hypothesis.</p>
 
-                <h3>Why statistics is useful for cybersecurity</h3>
-                <p>Statistics has become indispensable in cybersecurity due to the massive volumes of data generated by modern networks and the evolving sophistication of cyber threats.</p>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Statistical Term</th>
+                            <th>Cybersecurity Term</th>
+                            <th>Explanation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Type I Error</strong></td>
+                            <td><strong>False Positive</strong></td>
+                            <td>Rejection of a true null hypothesis. The system flags benign traffic as malicious. This leads to "alert fatigue" for security analysts.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Type II Error</strong></td>
+                            <td><strong>False Negative</strong></td>
+                            <td>Failure to reject a false null hypothesis. The system allows malicious traffic to pass through. This is a security breach.</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                <h4>Measuring and Quantifying Cyber Risk</h4>
-                <p>Traditional qualitative cybersecurity risk assessment methods using high-medium-low scales often produce inconsistent forecasting with margins exceeding 20 percent. Statistical analysis provides measurable improvements over such approaches by enabling precise probability assignments. Methods like Bayesian statistics allow organizations to calculate event probability based on prior knowledge and update risk assessments as new information becomes available, improving accuracy over time. Monte Carlo simulations use repeated random sampling to model complex systems with uncertain variables, helping organizations understand risk distributions and potential outcomes under various scenarios.</p>
+                <hr>
 
-                <h4>Threat Detection and Intrusion Prevention</h4>
-                <p>Statistical methods form the foundation of modern intrusion detection systems (IDS), which protect networks by identifying deviations from normal behavior. Statistical anomaly detection relies on analyzing historical data to establish baselines of normal network behavior, then flagging significant deviations as potential threats. For example, if an e-commerce platform typically experiences 50 to 100 customer logins per minute but suddenly encounters 1,000 logins, statistical methods measuring standard deviation would identify this surge as an anomaly requiring investigation.</p>
+                <h3>3. Why Statistics is Useful for Cybersecurity</h3>
 
-                <p>Research has demonstrated that robust statistical methods, such as outlier detection and robust regression, effectively identify unusual patterns in network traffic and system behavior, enabling recognition of previously unseen malware. Feature engineering techniques using statistical methods like chi-squared statistics and ANOVA are crucial for extracting the most informative features from datasets, enabling faster and more accurate detection of malicious patterns.</p>
+                <h4>Threat Detection and Intrusion Prevention (The Z-Score)</h4>
+                <p>Statistical methods form the foundation of modern intrusion detection systems (IDS). By analyzing historical data, we can identify deviations from normal behavior. A key tool here is the <strong>Z-Score (Standard Score)</strong>, which measures how many standard deviations a data point is from the mean.</p>
+
+                <div class="math-block">
+                    <strong>Mathematical Application:</strong><br>
+                    Imagine an e-commerce platform where the mean login rate is \(\mu = 75\) logins/minute with a standard deviation of \(\sigma = 10\).<br><br>
+                    If the system suddenly detects 1,000 logins in a minute (\(x\)), we calculate the Z-score using the formula:
+                    
+                    \[ Z = \frac{x - \mu}{\sigma} \]
+                    
+                    Substituting our values:
+                    
+                    \[ Z = \frac{1000 - 75}{10} = 92.5 \]
+                    
+                    In a standard normal distribution, a Z-score greater than 3 is rare. A score of <strong>92.5</strong> is statistically impossible under normal conditions, confirming a brute-force attack.
+                </div>
 
                 <h4>Predictive Analytics for Proactive Defense</h4>
-                <p>Statistics powers predictive analytics in cybersecurity, which uses data analysis, machine learning, and statistical models to anticipate and deflect attacks before they cause harm. Statistical models function as mathematical tools that use probability and statistics to predict future events based on historical data patterns. These models can help determine the likelihood of an attack and its potential impact, allowing organizations to prioritize their defenses accordingly.</p>
+                <p>Statistics powers predictive analytics, which uses data analysis and machine learning to deflect attacks before they cause harm. Key applications include:</p>
+                <ul>
+                    <li><strong>Threat Detection:</strong> Analyzing patterns and anomalies to identify zero-day threats before they manifest.</li>
+                    <li><strong>Incident Response:</strong> Prioritizing incidents based on the statistical likelihood of severe impact.</li>
+                    <li><strong>Fraud Detection:</strong> Using regression analysis on transaction patterns to spot irregularities.</li>
+                    <li><strong>DDoS Prevention:</strong> Identifying potential distributed denial of service attacks through traffic pattern analysis.</li>
+                </ul>
 
-                <p>Predictive analytics applications include threat detection by analyzing patterns and anomalies to identify potential threats before they manifest, incident response by prioritizing incidents based on likelihood and potential impact, fraud detection through transaction pattern analysis, and network security by identifying potential distributed denial of service attacks through traffic pattern analysis.</p>
-
-                <p>Advanced methods like statistical averaging (StatAvg) address data heterogeneity challenges in federated learning for IDS by allowing clients to share local data statistics including mean and variance of feature vectors, which are then aggregated to produce global statistics used for universal data normalization.</p>
+                <h4>Measuring and Quantifying Cyber Risk</h4>
+                <p>Traditional qualitative risk assessments (High/Medium/Low) are often subjective. Statistical analysis allows for precise probability assignments. <strong>Monte Carlo simulations</strong> use repeated random sampling to model complex systems with uncertain variables, helping organizations understand risk distributions and potential outcomes under various attack scenarios.</p>
 
                 <h4>Statistical Applications in Cryptography</h4>
-                <p>Statistics plays a vital role in cryptography by enhancing the analysis, design, and validation of secure communication systems. In cryptanalysis, statistical methods help identify non-random patterns in ciphertexts that may reveal weaknesses in encryption algorithms. For instance, frequency analysis—one of the earliest forms of statistical cryptanalysis—examines the occurrence rate of symbols to detect substitution ciphers. Modern statistical techniques extend this concept by using probability distributions, hypothesis testing, and entropy measurement to evaluate the randomness and strength of cryptographic keys and algorithms.</p>
+                <p>Statistics plays a vital role in cryptography. In cryptanalysis, statistical methods help identify non-random patterns in ciphertexts that may reveal weaknesses.
+                Statistical randomness tests, such as <strong>Chi-squared tests</strong> (\(\chi^2\)) and <strong>Kolmogorov–Smirnov tests</strong>, assess whether cryptographic outputs meet required randomness standards to resist brute-force attacks.</p>
 
-                <p>Statistical randomness tests, such as chi-squared tests and Kolmogorov–Smirnov tests, assess whether cryptographic outputs meet required randomness standards. In addition, Bayesian inference can be applied to estimate the likelihood of key recovery under certain attack models, while Monte Carlo methods simulate potential attack scenarios to evaluate encryption resilience. These statistical analyses are crucial for ensuring that encryption schemes are resistant to brute-force and side-channel attacks, maintaining the confidentiality and integrity of sensitive information.</p>
+                <hr>
 
-                <h4>Advantages of Statistical Approaches</h4>
-                <p>Statistical methods in cybersecurity offer several advantages over traditional signature-based approaches. While traditional malware detection techniques rely on fixed signatures and are vulnerable to new variants, robust statistical methods can detect previously unseen threats by identifying deviations from established behavioral baselines. Techniques like kernel density estimation help establish baseline behavior, facilitating identification of deviations indicative of malicious activity, while Bayesian approaches allow for dynamic model updates, providing real-time adaptability to new data.</p>
+                <h3>4. Critical Analysis: The Base Rate Fallacy</h3>
+                <p>A sophisticated understanding of statistics also helps cybersecurity professionals avoid the <strong>Base Rate Fallacy</strong>. This occurs when the probability of a False Positive is ignored because the observer focuses only on the accuracy of the test.</p>
+                <blockquote>
+                    "Even if an AI malware detector is 99% accurate, if the actual prevalence of malware in the network is extremely low (e.g., 0.1%), the vast majority of alarms triggered by the system will essentially be False Positives. Understanding Bayesian statistics helps analysts tune these systems to reflect real-world probabilities."
+                </blockquote>
 
-                <p>Statistical anomaly detection has proven particularly effective against sophisticated attacks and zero-day exploits, with research showing that AI-driven statistical techniques surpass existing methods in addressing threat detection and mitigation in wireless networks. Organizations implementing robust statistical methods significantly improve the reliability of their detection systems.</p>
-
-                <h4>Practical Applications</h4>
-                <p>Statistical methods are applied throughout cybersecurity operations. Rule-based and outlier-detection-based solutions constitute statistical approaches for tracking zero-day and multi-step attacks. In software-defined networking environments, statistical analysis of OpenFlow flow statistics enables intrusion detection, with machine learning algorithms achieving 98–99 percent precision in binary classification of network traffic.</p>
-
-                <p>Statistical methods also enable behavioral anomaly detection and event sequence tracking, supporting both online intrusion detection and offline security investigation. The integration of statistical techniques with machine learning algorithms enhances detection accuracy and resilience, particularly when multiple diverse datasets representing different network traffic types and attack scenarios are incorporated.</p>
-
-                <p>Statistics has transformed cybersecurity from a reactive discipline to a proactive one, enabling organizations to shift from merely responding to threats to preventing them through data-driven insights. As cyber threats continue to evolve in sophistication, statistical methods remain essential for establishing baselines, detecting anomalies, quantifying risks, and predicting future attacks with measurable precision.</p>
+                <h3>Conclusion</h3>
+                <p>Statistics has transformed cybersecurity from a reactive discipline to a proactive one. Whether it is calculating Z-scores to detect anomalies, balancing Type I and Type II errors to tune firewalls, or using Monte Carlo simulations for risk management, statistical methods remain essential for establishing baselines and quantifying the "unknown" in a digital environment.</p>
             </section>
         </article>
     </main>

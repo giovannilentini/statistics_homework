@@ -7,12 +7,17 @@
 
   <link rel="stylesheet" href="../include/css/style.css">
   <link rel="stylesheet" href="../include/css/content.css">
-  <link rel="stylesheet" href="../include/css/code.css">
+  <link rel="stylesheet" href="../include/css/code_block.css">
+  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
   <style>
     body { background-color: #fefefe; color: #2c3e50; }
 
-        .comparison-table {
+    /* Table Styling */
+    .comparison-table {
       width: 100%;
       border-collapse: collapse;
       margin: 1.5rem 0;
@@ -39,6 +44,7 @@
       background: #f8f9fa;
     }
 
+    /* Highlight Box */
     .highlight-box {
       background: linear-gradient(135deg, #e8f4fd 0%, #fdfdff 100%);
       border-left: 4px solid #3498db;
@@ -46,6 +52,53 @@
       border-radius: 8px;
       margin: 1rem 0;
       font-size: 0.95rem;
+    }
+
+    /* Code Block Styling (Matches Homework 2) */
+    .code-block {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin: 1.5rem 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .code-header {
+        background: #1d1f21; /* Dark header */
+        color: #c5c8c6;
+        padding: 8px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #333;
+        font-size: 0.85rem;
+    }
+    .code-language {
+        font-weight: bold;
+        color: #f0c674; /* Accent color */
+        text-transform: uppercase;
+    }
+    .code-title {
+        opacity: 0.7;
+    }
+    /* Override Prism default margin */
+    pre[class*="language-"] {
+        margin: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    /* Visualization Containers */
+    .visualization-container {
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        margin: 2rem 0;
+        text-align: center;
+    }
+    .chart-placeholder {
+        position: relative;
+        height: 400px;
+        width: 100%;
     }
   </style>
 
@@ -88,50 +141,36 @@
           stem from the same probabilistic foundation: a sequence of independent trials, each
           resulting in either success or failure. Yet, they emphasize distinct perspectives of the same
           mathematical world — one focused on <em>stability</em> and long-term averages, the other on
-          <em>fluctuation</em>, dispersion, and cumulative behavior. Understanding their connection
-          reveals how probability, algebra, and combinatorics are intimately interwoven.
+          <em>fluctuation</em>, dispersion, and cumulative behavior.
         </p>
 
         <h3>From Simple Experiments to Profound Laws</h3>
         <p>
-          The Bernoulli process can be seen as the most elementary model of randomness:
-          each trial yields 1 (success) or 0 (failure) with probabilities \( p \) and \( 1-p \).
-          When repeated, these trials form the building blocks of nearly every probabilistic
-          phenomenon — from coin tosses to genetic mutations, from network packets to quantum states.
+          The Bernoulli process is the elementary model of randomness: trials yielding 1 or 0.
+          In the <strong>Law of Large Numbers (LLN)</strong>, the interest lies in the long-run average:
+          \[ \overline{X_n} = \frac{1}{n}\sum_{i=1}^n X_i \]
+          As \( n \to \infty \), this average tends to \( p \). Randomness becomes regularity.
         </p>
 
         <p>
-          In the <strong>Law of Large Numbers (LLN)</strong>, the interest lies in the long-run average
-          of these outcomes:
-          \[
-            \overline{X_n} = \frac{1}{n}\sum_{i=1}^n X_i
-          \]
-          As \( n \to \infty \), this average tends to \( p \), the expected value of a single trial.
-          Randomness, when aggregated, becomes regularity. The message is philosophical:
-          uncertainty at the micro level gives rise to predictability at the macro level.
+          Conversely, the <strong>Random Walk</strong> looks at the cumulative deviation:
+          \[ S_n = \sum_{i=1}^n Y_i, \quad Y_i \in \{+1, -1\} \]
+          Here, we study <strong>diffusion</strong>. Just as a drop of ink spreads in water, the probability mass of the random walker spreads out.
+          The "width" (standard deviation) grows with \( \sqrt{n} \).
         </p>
 
-        <p>
-          Conversely, the <strong>Random Walk</strong> derived from the same Bernoulli sequence looks not at the average but at
-          the cumulative deviation from equilibrium:
-          \[
-            S_n = \sum_{i=1}^n Y_i, \quad \text{where } Y_i = 
-            \begin{cases}
-              +1 & \text{if success,} \\
-              -1 & \text{if failure.}
-            \end{cases}
-          \]
-          The resulting path fluctuates above and below zero, embodying the essence of chance.
-          Here, we study not convergence but <em>diffusion</em>: how the sum disperses as \( n \) grows.
-        </p>
-
-        <div class="highlight-box">
-          The LLN studies how averages stabilize; the random walk studies how sums wander.
-          They are two perspectives of the same process — one compressing variability, the other unfolding it.
+        <div class="visualization-container">
+            <h5>Visualizing Diffusion: 10 Random Walks</h5>
+            <div class="chart-placeholder">
+                <canvas id="randomWalkChart"></canvas>
+            </div>
+            <p style="font-size: 0.9em; color: #666; margin-top: 10px;">
+                Note how the paths diverge further from zero as time (steps) increases.
+            </p>
         </div>
 
         <h3>Comparison of the Two Perspectives</h3>
-      <table class="comparison-table">
+        <table class="comparison-table">
           <thead>
             <tr>
               <th>Aspect</th>
@@ -151,146 +190,159 @@
               <td>Fluctuations and variance growth</td>
             </tr>
             <tr>
-              <td>Limit behavior</td>
-              <td>\( \overline{X_n} \to p \)</td>
-              <td>\( S_n/\sqrt{n} \) approaches Normal</td>
-            </tr>
-            <tr>
-              <td>Variance</td>
+              <td>Variance behavior</td>
               <td>Decreases as \( 1/n \)</td>
               <td>Increases linearly with \( n \)</td>
-            </tr>
-            <tr>
-              <td>Interpretation</td>
-              <td>Order emerging from randomness</td>
-              <td>Randomness accumulating over time</td>
             </tr>
           </tbody>
         </table>
 
-        <h3>The Binomial Core and Pascal’s Triangle</h3>
-        <p>
-          Both phenomena arise from the <strong>Binomial distribution</strong>:
-          \[
-            P(S_n = k) = \binom{n}{k} p^k (1-p)^{n-k}
-          \]
-          Each coefficient \( \binom{n}{k} \) counts the number of distinct sequences with exactly \( k \) successes.
-          Arranging these coefficients into rows gives <strong>Pascal’s Triangle</strong>, one of the most elegant combinatorial structures ever discovered.
-        </p>
-
-        <p>
-          Pascal’s Triangle provides a visual interpretation of the binomial law:
-          each entry is the sum of the two above it, exactly mirroring how probabilities
-          in a random process propagate through branching outcomes. This recursive structure explains
-          how the same fundamental pattern — addition of neighbors — underlies both the arithmetic of combinations
-          and the dynamic of random walks.
-        </p>
-
-        <div class="highlight-box">
-          Every line of Pascal’s triangle represents the probability space for a different number of trials.
-          The symmetry of the triangle (left-right reflection) corresponds to the fairness of a coin,
-          and its diagonals encode cumulative combinatorial sequences, such as the Fibonacci numbers.
-        </div>
-
-        <h3>Binomial Expansion and the Architecture of Probability</h3>
-        <p>
-          The binomial expansion,
-          \[
-            (a+b)^n = \sum_{k=0}^n \binom{n}{k} a^k b^{n-k},
-          \]
-          provides an algebraic lens on the same phenomenon.  
-          In the context of probability, setting \( a=p \) and \( b=1-p \)
-          expresses the total probability of all possible outcomes in \( n \) trials.
-          Each term \( \binom{n}{k}p^k(1-p)^{n-k} \) corresponds to one “column” of Pascal’s triangle.
-        </p>
-
-        <p>
-          This expansion reveals an elegant balance: even though the process is random,
-          the overall distribution follows a precise polynomial structure.
-          For instance, in a fair coin toss (\( p = 0.5 \)),
-          the coefficients of \( (p + (1-p))^n = 1^n = 1 \) show that the sum of all probabilities
-          must always equal one — a self-consistent universe of chance.
-        </p>
-
-        <h3>Fibonacci Sequences and Restricted Combinatorics</h3>
-        <p>
-          While the Fibonacci sequence might seem distant from Bernoulli or binomial phenomena,
-          it reappears when we impose restrictions on outcomes.
-          Suppose we count the number of binary sequences of length \( n \)
-          that contain no two consecutive successes.  
-          Denoting this count by \( F_n \), we find the recurrence:
-          \[
-            F_n = F_{n-1} + F_{n-2},
-          \]
-          which is precisely the Fibonacci relation.
-        </p>
-
-        <p>
-          Thus, even in random or probabilistic systems, the same recursive
-          architecture of Pascal’s triangle echoes in the Fibonacci structure.
-          The link is conceptual: both count *paths* under different sets of rules,
-          and both reveal that simple recurrence laws can generate infinite complexity.
-        </p>
-
-        <div class="highlight-box">
-          Fibonacci and Pascal are siblings in the family of combinatorial structures:
-          both born from recursive addition, both shaping the foundations of probability and growth.
-        </div>
-
-        <h3>Geometry of Probability: The Random Walk as a Path in Pascal’s Triangle</h3>
+        <h3>Geometry of Probability: The Galton Board</h3>
         <p>
           Imagine a random walk as a journey through Pascal’s triangle.
-          Each step to the right corresponds to success (+1), and each step to the left to failure (−1).
-          After \( n \) steps, the position of the walker corresponds to the difference
-          between the number of successes and failures:
-          \[
-            k = \text{successes} - \text{failures}.
-          \]
-          The number of distinct paths reaching a given \( k \) equals
-          \( \binom{n}{(n+k)/2} \), a binomial coefficient.
-          This shows that probability has a geometric skeleton, and that randomness can be viewed
-          as movement through a discrete combinatorial space.
+          Over many steps, the discrete triangle smooths into the famous <strong>bell curve</strong>. 
+          The physical demonstration of this is the <strong>Galton Board</strong> (or Quincunx).
+          Balls dropped through a grid of pegs bounce left or right (Bernoulli trials) at each level, accumulating at the bottom in a predictable Normal distribution.
+        </p>
+        
+        
+
+[Image of Galton Board device]
+
+
+        <div class="visualization-container">
+            <h5>Simulation: The Galton Board Distribution (n=20)</h5>
+            <div class="chart-placeholder">
+                <canvas id="galtonChart"></canvas>
+            </div>
+            <p style="font-size: 0.9em; color: #666; margin-top: 10px;">
+                This histogram represents the final positions of balls dropped through 20 layers of pegs.
+            </p>
+        </div>
+
+        <h3>A Computational Perspective</h3>
+        <p>
+          We can visualize this relationship algorithmically. The recursive generation of Pascal's Triangle
+          directly mirrors the logic of a Random Walk step.
         </p>
 
-        <p>
-          Over many steps, the discrete triangle smooths into the famous <strong>bell curve</strong>:
-          the Binomial distribution approaches a Gaussian. Thus, the gentle slope of Pascal’s triangle
-          becomes the continuous curve of the <em>Central Limit Theorem</em>,
-          bridging discrete counting with continuous approximation.
-        </p>
+        <div class="code-block">
+            <div class="code-header">
+                <span class="code-language">C</span>
+                <span class="code-title">Recursive Logic</span>
+            </div>
+            <pre><code class="language-csharp">public static int BinomialCoeff(int n, int k) {
+    // Base cases: Edges of the triangle are always 1
+    if (k == 0 || k == n) return 1;
 
-        <h3>Philosophical Reflection</h3>
-        <p>
-          At first glance, a coin toss seems trivial — yet its repetitions generate
-          some of the deepest theorems of mathematics.  
-          The Bernoulli process, by repeating simplicity, produces complexity.  
-          The random walk, by accumulating independence, creates structure.
-          Together, they form a kind of dialectic: order through chaos, pattern through chance.
-        </p>
-
-        <p>
-          The interplay of these models illustrates that randomness is not the opposite of order,
-          but its hidden generator. The same binomial logic that builds Pascal’s triangle also
-          explains population genetics, noise in electronic signals, and diffusion of molecules.
-          Nature, in essence, computes with binomial coefficients.
-        </p>
+    // Recursive step: Entry is sum of the two above it
+    // This mirrors the walker coming from either left (-1) or right (+1)
+    return BinomialCoeff(n - 1, k - 1) + BinomialCoeff(n - 1, k);
+}</code></pre>
+        </div>
 
         <h3>Conclusion</h3>
         <p>
-          The study of Bernoulli trials and random walks reveals a unified mathematical world:
-          probabilities are not arbitrary, but combinatorial laws expressed through algebraic forms.
           The Law of Large Numbers shows how averages stabilize, while the Random Walk
-          exposes the architecture of fluctuation and the geometry of probability.
-          Both converge in the same deeper truth: that randomness obeys structure.
+          exposes the architecture of fluctuation. Both converge in the same deeper truth: that randomness obeys structure.
         </p>
 
-        <div class="highlight-box">
-          From binary outcomes arise triangles, curves, and universal laws.
-          From the simplicity of \( 0 \) and \( 1 \) emerge Pascal, Fibonacci, and Gauss.
-          Mathematics, at its heart, is the art of finding symmetry within chance.
-        </div>
       </section>
     </article>
   </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        
+        // --- 1. Random Walk Chart ---
+        const rwCtx = document.getElementById('randomWalkChart').getContext('2d');
+        
+        const steps = 50;
+        const labels = Array.from({length: steps}, (_, i) => i);
+        const walks = [];
+        
+        // Generate 10 random walks
+        for(let w=0; w<10; w++) {
+            let path = [0];
+            let current = 0;
+            for(let i=1; i<steps; i++) {
+                // Random step +1 or -1
+                current += Math.random() < 0.5 ? -1 : 1;
+                path.push(current);
+            }
+            walks.push({
+                label: `Walker ${w+1}`,
+                data: path,
+                borderColor: `hsl(${w * 36}, 70%, 50%)`, // Different color for each
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+                tension: 0.1
+            });
+        }
+
+        new Chart(rwCtx, {
+            type: 'line',
+            data: { labels: labels, datasets: walks },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Random Walk Diffusion over Time' }
+                },
+                scales: {
+                    x: { title: { display: true, text: 'Steps (Time)' } },
+                    y: { title: { display: true, text: 'Position (Cumulative Sum)' } }
+                }
+            }
+        });
+
+        // --- 2. Galton Board (Binomial) Chart ---
+        const galtonCtx = document.getElementById('galtonChart').getContext('2d');
+        
+        // Calculate Binomial Distribution for n=20, p=0.5
+        // Pascal's Triangle Row 20
+        function getBinomialData(n) {
+            let row = [1];
+            for (let k = 0; k < n; k++) {
+                row = row.map((val, i) => (i === 0 ? 0 : row[i - 1]) + val).concat([1]);
+            }
+            return row;
+        }
+
+        const n_trials = 20;
+        const binomialData = getBinomialData(n_trials);
+        const binLabels = Array.from({length: n_trials+1}, (_, i) => i - n_trials/2); // Center 0
+
+        new Chart(galtonCtx, {
+            type: 'bar',
+            data: {
+                labels: binLabels,
+                datasets: [{
+                    label: 'Ball Count (Probability)',
+                    data: binomialData,
+                    backgroundColor: '#3498db',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: true }
+                },
+                scales: {
+                    y: { display: false },
+                    x: { title: { display: true, text: 'Displacement from Center' } }
+                }
+            }
+        });
+    });
+  </script>
 </body>
 </html>

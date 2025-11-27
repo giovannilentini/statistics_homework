@@ -4,23 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homework 3</title>
+    
     <link rel="stylesheet" href="../include/css/style.css">
     <link rel="stylesheet" href="../include/css/content.css">
     <link rel="stylesheet" href="../include/css/code_block.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <script>
+        window.MathJax = {
+          tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+          svg: { fontCache: 'global' }
+        };
+    </script>
+    <script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
     <style>
         .subtitle { opacity: .9 }
         .code-block { margin: 1rem 0; }
         .big-visual { display:flex; gap:1rem; flex-wrap:wrap }
-        .chart-card{ flex:1 1 320px; padding:1rem; background:var(--card-bg, #fff); border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.06)}
-        .download-btn{ display:inline-block; margin-top:.5rem }
+        
+        .chart-wrapper {
+            position: relative;
+            height: 300px; 
+            width: 100%;
+        }
+
+        .chart-card { 
+            flex:1 1 320px; 
+            padding:1rem; 
+            background:var(--card-bg, #fff); 
+            border-radius:12px; 
+            box-shadow:0 6px 18px rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .download-btn { 
+            display:inline-block; 
+            margin-top:.5rem; 
+            cursor: pointer; 
+            background: #007bff; 
+            color: white; 
+            border: none; 
+            padding: 0.5rem 1rem; 
+            border-radius: 4px; 
+            font-size: 1rem; 
+        }
+        .download-btn:hover { background: #0056b3; }
+        
+        .correct-char { color: #155724; background-color: #d4edda; font-weight: bold; }
+        .wrong-char { color: #721c24; background-color: #f8d7da; font-weight: bold; }
+        .stat-highlight { font-weight: bold; color: #2c3e50; }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
             <h1>Statistics Homework Blog</h1>
-            <p class="subtitle">RSA and frequency-based attack demonstration</p>
+            <p class="subtitle">RSA and Frequency-Based Statistical Attack</p>
             <p class="student-info">Giovanni Lentini - 1987799</p>
         </div>
     </header>
@@ -32,22 +76,39 @@
 
         <article class="homework-detail">
             <div class="homework-header">
-                <h2>Homework 3: RSA applied to a short literary text and a frequency-based attack</h2>
+                <h2>Homework 3: RSA applied to text & Statistical Cryptanalysis</h2>
                 <div class="meta-info">
                     <span class="date">Due: October 29, 2025</span>
                 </div>
             </div>
 
             <section class="homework-content">
-                <p class="intro-paragraph">This page demonstrates how to encrypt a text (excerpt from <a href="https://it.wikisource.org/wiki/Il_treno_ha_fischiato" target="_blank" rel="noopener">Il treno ha fischiato</a> by Luigi Pirandello) using a per-letter RSA implementation and how one can recover a good portion of the text using a frequency-based attack. The goal is to illustrate why encrypting single characters with RSA is insecure and how statistical properties can reveal information about the plaintext.</p>
+                <p class="intro-paragraph">
+                    This experiment demonstrates encrypting an excerpt from <a href="https://it.wikisource.org/wiki/Il_treno_ha_fischiato" target="_blank">Il treno ha fischiato</a> using a "naive" per-symbol RSA implementation. We then attempt to recover the plaintext using a <strong>Frequency Analysis Attack</strong> based on standard Italian letter distribution.
+                </p>
 
-                <h3>1) The text (excerpt)</h3>
-                <p>The text used here is taken from Wikisource (public domain). For simplicity, we use a normalized version (only uppercase letters and spaces).</p>
+                <h3>1) The Mathematical Model</h3>
+                <p>
+                    We map the alphabet \( \{A, B, \dots, Z\} \) to integers \( \{0, 1, \dots, 25\} \).
+                    The encryption process applies the RSA function to each character \( m \) individually:
+                </p>
+                
+                \[ c \equiv m^e \pmod n \]
 
+                <p>
+                    Where \( (n, e) \) is the public key. To decrypt, we would normally use the private key \( d \):
+                </p>
+                \[ m \equiv c^d \pmod n \]
+
+                <p>
+                    <strong>The Statistical Flaw:</strong> Since this is a deterministic Monoalphabetic Substitution, the probability distribution of the plaintext \( P(M) \) is preserved in the ciphertext \( P(C) \). If the letter 'A' is the most frequent in the plain text, its encrypted value \( c_A \) will be the most frequent in the ciphertext.
+                </p>
+
+                <h3>2) The Data Source</h3>
                 <div class="code-block">
                     <div class="code-header">
-                        <span class="code-language">Source text</span>
-                        <span class="code-title">Il treno ha fischiato (excerpt)</span>
+                        <span class="code-language">Plaintext</span>
+                        <span class="code-title">Il treno ha fischiato (Excerpt)</span>
                     </div>
                     <pre><code id="text-sample">Il treno ha fischiato! Aveva inteso bene?
 Sì. Fischiato! E allora?
@@ -60,106 +121,70 @@ E si mise a gridare, a ridere, a piangere.
 Fischiato! Fischiato! Il treno! Il treno!</code></pre>
                 </div>
 
-                <h3>2) Encryption method</h3>
-                <p>Method: normalize the text (uppercase, letters A–Z, keep spaces) and encode each letter into a number 0–25 (A=0, B=1, ...). Then apply RSA to each symbol individually: <code>c = m^e mod n</code>. This method is insecure because it is deterministic and preserves statistical structure.</p>
-
-                <h4>Interactive JavaScript demo</h4>
-                <p>The page below performs RSA encryption, frequency analysis, and a basic frequency-rank attack directly in the browser.</p>
+                <h3>3) Interactive Analysis</h3>
+                <p>
+                    Click <strong>"Run Analysis"</strong> below. The script will:
+                    <ol>
+                        <li>Encrypt the text using RSA.</li>
+                        <li>Calculate ciphertext frequencies.</li>
+                        <li>Attempt to reconstruct the text by mapping the most frequent ciphertext symbols to the <span style="text-decoration: underline;">Standard Italian</span> frequency list (E, A, I, O...).</li>
+                    </ol>
+                </p>
 
                 <div class="big-visual" style="margin-bottom:1rem">
                     <div class="chart-card">
-                        <h5>RSA Controls</h5>
-                        <label>Modulus (n) <input id="n-input" value="3233" /></label><br>
-                        <label>Public exponent (e) <input id="e-input" value="17" /></label><br>
-                        <label>Private exponent (d) <input id="d-input" value="413" /></label><br>
-                        <button id="run-btn" class="download-btn">Run encryption & attack</button>
-                        <p style="font-size:.9rem;margin-top:.5rem">Default values are small and used only for demonstration: n=3233, e=17, d=413 form a simple RSA key pair.</p>
+                        <h5>RSA Parameters</h5>
+                        <label>Modulus \( n \): <input id="n-input" value="3233" style="width:60px" /></label><br>
+                        <label>Public \( e \): <input id="e-input" value="17" style="width:60px" /></label><br>
+                        <label>Private \( d \): <input id="d-input" value="413" style="width:60px" /></label><br>
+                        <button id="run-btn" class="download-btn">Run Analysis</button>
+                        <p style="font-size:.85rem;margin-top:.5rem; color:#666">
+                            Using \( p=53, q=61 \). <br>
+                            \( n = p \cdot q = 3233 \).
+                        </p>
                     </div>
 
                     <div class="chart-card">
-                        <h5>Statistics</h5>
-                        <div id="stats"></div>
+                        <h5>Attack Statistics</h5>
+                        <div id="stats" style="line-height: 1.6;">
+                            Click Run to see results...
+                        </div>
                     </div>
                 </div>
 
                 <div class="big-visual">
                     <div class="chart-card">
-                        <h5>Letter distribution (original text)</h5>
-                        <canvas id="origFreqChart"></canvas>
+                        <h5>Ciphertext Distribution</h5>
+                        <div class="chart-wrapper">
+                            <canvas id="cipherFreqChart"></canvas>
+                        </div>
                     </div>
 
-                    <div class="chart-card">
-                        <h5>Symbol distribution (ciphertext)</h5>
-                        <canvas id="cipherFreqChart"></canvas>
-                    </div>
-
-                    <div class="chart-card">
-                        <h5>Recovered text (approximation)</h5>
-                        <pre id="recovered" style="white-space:pre-wrap; background:#fafafa; padding:1rem; border-radius:8px; max-height:320px; overflow:auto;">—</pre>
+                    <div class="chart-card" style="flex: 2 1 400px;">
+                        <h5>Recovered Text & Error Analysis</h5>
+                        <div style="font-size: 0.85rem; margin-bottom: 0.5rem; color: #666;">
+                            <span class="correct-char">Green</span> = Correctly decrypted. <span class="wrong-char">Red</span> = Incorrect (Statistical deviation).
+                        </div>
+                        <div id="recovered" style="white-space:pre-wrap; background:#f4f4f4; padding:1rem; border-radius:8px; max-height:320px; overflow-y:auto; font-family: monospace; font-size: 1.1rem; line-height: 1.5; border: 1px solid #ddd;">—</div>
                     </div>
                 </div>
 
-  <h3>3) The Python Code (downloadable)</h3>
-                <p>Below is a complete Python script that runs the same experiment locally (downloadable via the button above). It's the same algorithm used by the JS demo: per-symbol RSA encryption and a statistical attack that aligns frequency rankings.</p>
+                <h3>4) Discussion of Results</h3>
+                <p>
+                    The attack relies on the <strong>Law of Large Numbers</strong>. In a very long text, the frequency of letters converges to the standard language distribution. 
+                </p>
+                <p>
+                    However, in this short excerpt, we observe <strong>Sample Variance</strong>. For example, if the letter 'Z' appears unusually often in this specific poem, our attack might mistake it for a common letter like 'I' or 'A'. This explains the red errors in the recovered text above. The accuracy score quantifies how close the specific text's distribution is to the general population distribution.
+                </p>
 
-                <div class="code-block">
-                    <div class="code-header"><span class="code-language">Python</span><span class="code-title">rsa_freq_attack.py</span></div>
-                    <pre><code id="python-code">import re
-from collections import Counter
-
-# --- utility
-ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-def normalize(text):
-    text = text.upper()
-    text = re.sub(r'[^A-Z ]', '', text)
-    return text
-
-# --- RSA per-symbol
-def rsa_encrypt_symbol(m, e, n):
-    return pow(m, e, n)
-
-def rsa_decrypt_symbol(c, d, n):
-    return pow(c, d, n)
-
-# --- mapping helpers
-def text_to_nums(text):
-    return [ALPHABET.index(ch) if ch in ALPHABET else 26 for ch in text]
-
-def nums_to_text(nums):
-    out = []
-    for num in nums:
-        if num == 26:
-            out.append(' ')
-        else:
-            out.append(ALPHABET[num])
-    return ''.join(out)
-
-def frequency_rank_mapping(cipher_nums, plain_freq_order):
-    # cipher_nums: list of integers (cipher symbols) — we will treat each distinct ciphertext value as a token
-    tokens = Counter(cipher_nums)
-    cipher_by_freq = [t for t,_ in tokens.most_common()]
-
-    # plain_freq_order: list of letters ordered by frequency (most common first)
-    # build map token -> guessed plaintext numeric
-    mapping = {}
-    for i, token in enumerate(cipher_by_freq):
-        if i < len(plain_freq_order):
-            mapping[token] = ALPHABET.index(plain_freq_order[i])
-        else:
-            mapping[token] = 0
-    return mapping
-</code></pre>
-                </div>
-
-                <h3>4) Explanation of the Attack</h3>
-                <p>Why does this attack work (in this demonstration)? Because encrypting single symbols deterministically creates a permutation or a fixed mapping between plaintext symbols and ciphertext symbols. The relative frequency of the symbols remains—broadly speaking—unchanged (it is merely reassigned). By sorting the ciphertext symbols by frequency and assigning them the most frequent letters in English (or in the specific text), we can obtain a good approximation of the original text.</p>
             </section>
         </article>
     </main>
 
     <script>
     const ALPH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    const STD_ITALIAN_FREQ = ['E','A','I','O','N','L','R','T','S','C','D','P','U','M','V','G','H','F','B','Q','Z','J','K','W','X','Y'];
 
     function normalize(text){
         text = text.toUpperCase();
@@ -168,10 +193,6 @@ def frequency_rank_mapping(cipher_nums, plain_freq_order):
 
     function textToNums(text){
         return Array.from(text).map(ch => ch === ' ' ? 26 : ALPH.indexOf(ch));
-    }
-
-    function numsToText(nums){
-        return nums.map(n => n===26 ? ' ' : ALPH[n]).join('');
     }
 
     function modPow(base, exp, mod){
@@ -199,75 +220,106 @@ def frequency_rank_mapping(cipher_nums, plain_freq_order):
     }
 
     function sortFreqKeys(counts){
-        return Object.keys(counts).sort((a,b)=>counts[b]-counts[a]);
+        return Object.keys(counts).sort((a,b) => counts[b] - counts[a]);
     }
 
-    let origChart=null, cipherChart=null;
+    let cipherChart = null;
 
     function makeBar(ctx, labels, data, label){
         return new Chart(ctx, {
-            type:'bar',
-            data:{ labels, datasets:[{ label, data }] },
-            options:{ responsive:true, plugins:{legend:{display:false}} }
+            type: 'bar',
+            data: { labels, datasets:[{ label, data, backgroundColor: 'rgba(54, 162, 235, 0.6)' }] },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                plugins: { legend: {display:false} } 
+            }
         });
     }
 
-    document.getElementById('run-btn').addEventListener('click', ()=>{
+    // --- Main Logic ---
+    document.getElementById('run-btn').addEventListener('click', () => {
         const n = Number(document.getElementById('n-input').value);
         const e = Number(document.getElementById('e-input').value);
-        const d = Number(document.getElementById('d-input').value);
 
         const raw = document.getElementById('text-sample').textContent;
         const clean = normalize(raw);
-        const nums = textToNums(clean);
+        const originalNums = textToNums(clean); 
 
-        const cipherNums = rsaEncryptNums(nums, e, n);
+        const cipherNums = rsaEncryptNums(originalNums, e, n);
 
-        const origCounts = freqCounts(nums);
         const cipherCounts = freqCounts(cipherNums);
+        const cipherKeysSorted = sortFreqKeys(cipherCounts);
 
-        const origLabels = ALPH.split('');
-        origLabels.push(' ');
-        const origData = origLabels.map((l,idx)=> origCounts[idx]||0 );
-
-        const cipherKeys = Object.keys(cipherCounts);
-        const cipherLabels = cipherKeys.slice(0,40);
-        const cipherData = cipherLabels.map(k=>cipherCounts[k]);
-
-        const octx = document.getElementById('origFreqChart').getContext('2d');
-        if (origChart) origChart.destroy();
-        origChart = makeBar(octx, origLabels, origData, 'Original frequency');
-
+        const displayLabels = cipherKeysSorted.slice(0, 15);
+        const displayData = displayLabels.map(k => cipherCounts[k]);
+        
         const cctx = document.getElementById('cipherFreqChart').getContext('2d');
         if (cipherChart) cipherChart.destroy();
-        cipherChart = makeBar(cctx, cipherLabels, cipherData, 'Ciphertext frequency');
+        cipherChart = makeBar(cctx, displayLabels, displayData, 'Ciphertext Counts');
 
-        // improved reconstruction logic: match relative frequency ranks, keeping spaces fixed
-        const cipherByFreq = sortFreqKeys(cipherCounts);
-        const plainByFreq = Object.keys(origCounts).sort((a,b)=>origCounts[b]-origCounts[a]);
+        const decryptionMap = {};
 
-        const map = {};
-        for (let i=0;i<cipherByFreq.length;i++){
-            const token = Number(cipherByFreq[i]);
-            const guessIdx = Number(plainByFreq[i % plainByFreq.length]);
-            map[token] = guessIdx;
+        const spaceSymbol = Number(cipherKeysSorted[0]); 
+        decryptionMap[spaceSymbol] = 26; 
+
+        let italianIdx = 0;
+        for (let i = 1; i < cipherKeysSorted.length; i++) {
+            const cipherSym = Number(cipherKeysSorted[i]);
+            if (italianIdx < STD_ITALIAN_FREQ.length) {
+                const guessedChar = STD_ITALIAN_FREQ[italianIdx];
+                decryptionMap[cipherSym] = ALPH.indexOf(guessedChar);
+                italianIdx++;
+            } else {
+                decryptionMap[cipherSym] = -1; 
+            }
         }
 
-        const recovered = cipherNums.map(c => map[c]===26 ? ' ' : ALPH[map[c]] || '?').join('');
+        let correctCount = 0;
+        let totalLetters = 0; 
+        let recoveredHTML = "";
 
-        document.getElementById('recovered').textContent = recovered;
+        for (let i = 0; i < cipherNums.length; i++) {
+            const cVal = cipherNums[i];
+            const originalVal = originalNums[i];
+            
+            let guessedVal = decryptionMap[cVal];
+            let guessedChar = (guessedVal === 26) ? ' ' : (guessedVal >= 0 ? ALPH[guessedVal] : '?');
+            
+            const isCorrect = (guessedVal === originalVal);
+            if (isCorrect) correctCount++;
+            
+            if (guessedChar === ' ') {
+                recoveredHTML += ' ';
+            } else {
+                if (isCorrect) {
+                    recoveredHTML += `<span class="correct-char">${guessedChar}</span>`;
+                } else {
+                    recoveredHTML += `<span class="wrong-char">${guessedChar}</span>`;
+                }
+            }
+            totalLetters++;
+        }
 
-        const stats = document.getElementById('stats');
-        stats.innerHTML = `<strong>n</strong>=${n}, <strong>e</strong>=${e}, <strong>d</strong>=${d} — text length: ${nums.length}, distinct ciphertext symbols: ${Object.keys(cipherCounts).length}`;
+        document.getElementById('recovered').innerHTML = recoveredHTML;
+
+        const accuracy = ((correctCount / totalLetters) * 100).toFixed(2);
+        const distinctSym = Object.keys(cipherCounts).length;
+        
+        document.getElementById('stats').innerHTML = `
+            <span class="stat-highlight">Total Characters:</span> ${totalLetters}<br>
+            <span class="stat-highlight">Distinct Symbols:</span> ${distinctSym}<br>
+            <span class="stat-highlight">Accuracy:</span> ${accuracy}%<br>
+            <span style="font-size:0.85rem">
+            (Accuracy is based on standard Italian distribution. Errors demonstrate sample variance.)
+            </span>
+        `;
     });
 
     window.addEventListener('load', ()=>{
-        const ctx1 = document.getElementById('origFreqChart').getContext('2d');
-        origChart = makeBar(ctx1, ALPH.split('').concat([' ']), Array(27).fill(0), 'Original frequency');
-        const ctx2 = document.getElementById('cipherFreqChart').getContext('2d');
-        cipherChart = makeBar(ctx2, ['—'], [0], 'Ciphertext frequency');
+        const ctx = document.getElementById('cipherFreqChart').getContext('2d');
+        cipherChart = makeBar(ctx, ['Run Attack first'], [0], 'Ciphertext frequency');
     });
     </script>
-
 </body>
 </html>

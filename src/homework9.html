@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Homework 9</title>
 
-  <!-- Shared site styles -->
   <link rel="stylesheet" href="../include/css/style.css">
   <link rel="stylesheet" href="../include/css/content.css">
   <link rel="stylesheet" href="../include/css/code.css">
 
-  <!-- MathJax for formulas -->
   <script>
     window.MathJax = {
       tex: { 
@@ -73,6 +71,17 @@
       margin-top: 0;
     }
 
+    /* New style for the SVG Diagram */
+    .diagram-container {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
+      padding: 1rem;
+      background-color: #fafafa;
+      border-radius: 8px;
+      border: 1px solid #eee;
+    }
+    
     .comparison-table {
       width: 100%;
       border-collapse: collapse;
@@ -184,8 +193,7 @@
         </p>
         <p>
           <strong>Limitation:</strong> This definition only applies to repeatable experiments and cannot assign 
-          probabilities to unique events (e.g., "the probability that it will rain tomorrow" or "the probability 
-          that a particular historical hypothesis is correct"). Additionally, infinite repetitions are a theoretical 
+          probabilities to unique events (e.g., "the probability that it will rain tomorrow"). Additionally, infinite repetitions are a theoretical 
           idealization, not a practical reality.
         </p>
 
@@ -201,7 +209,7 @@
         </p>
         <p>
           <strong>Limitation:</strong> Probabilities may vary between individuals depending on their prior beliefs. 
-          While Bayesian methods are powerful and widely used, critics argue that subjective probabilities lack 
+          While Bayesian methods are powerful, critics argue that subjective probabilities lack 
           the objectivity of frequentist approaches.
         </p>
 
@@ -216,9 +224,11 @@
           hitting a particular region is the ratio of that region's area to the total area.
         </p>
         <p>
-          <strong>Limitation:</strong> Defining "uniform randomness" on infinite spaces requires careful 
-          mathematical treatment. Paradoxes like Bertrand's paradox reveal that geometric probabilities 
-          can depend on how randomness is specified.
+          <strong>Limitation & Bertrand's Paradox:</strong> Defining "uniform randomness" on infinite spaces requires careful 
+          mathematical treatment. This is best illustrated by <strong>Bertrand's Paradox</strong>: if you draw a "random" chord on a circle, 
+          what is the probability it is longer than the side of an inscribed equilateral triangle? 
+          Depending on whether you randomize the endpoints, the radius, or the midpoint, the answer can be \(1/2\), \(1/3\), or \(1/4\).
+          This reveals that geometric probabilities are ill-defined without Measure Theory.
         </p>
 
         <div class="highlight-box">
@@ -233,11 +243,6 @@
           In 1933, Andrey Kolmogorov provided a definitive resolution to the conceptual inconsistencies 
           among these interpretations by establishing probability as a branch of <strong>measure theory</strong>. 
           Rather than debating what probability "means," Kolmogorov asked: <em>What properties must probability satisfy?</em>
-        </p>
-
-        <p>
-          The result was an elegant axiomatic system that defines probability abstractly, independent of 
-          any particular interpretation.
         </p>
 
         <div class="axiom-box">
@@ -256,187 +261,88 @@
           </ol>
         </div>
 
-        <p>
-          These axioms are remarkably simple, yet they resolve the conceptual tensions among interpretations:
-        </p>
-        <ul>
-          <li>The <strong>classical</strong> interpretation is captured when the sample space is finite and outcomes 
-          are assigned equal probabilities.</li>
-          <li>The <strong>frequentist</strong> view is supported by the law of large numbers, which emerges as a 
-          theorem within this framework.</li>
-          <li>The <strong>Bayesian</strong> approach fits naturally—prior and posterior distributions are simply 
-          different probability measures on the same space.</li>
-          <li>The <strong>geometric</strong> interpretation is formalized through Lebesgue measure on continuous spaces.</li>
-        </ul>
-
-        <div class="highlight-box">
-          The axiomatic approach does not dictate <em>how</em> to interpret probability—it merely ensures that 
-          all interpretations obey the same logical rules. This separation of <strong>meaning</strong> from 
-          <strong>structure</strong> is what makes probability theory mathematically rigorous and universally applicable.
-        </div>
-
         <h3>Probability Theory and Measure Theory</h3>
         
         <p>
-          At its core, probability theory is a specialized form of <strong>measure theory</strong>. Understanding 
-          this connection provides deep insight into the mathematical machinery underlying randomness.
-        </p>
-
-        <h4>Sigma-Algebras</h4>
-        <p>
-          A <strong>\( \sigma \)-algebra</strong> (or \( \sigma \)-field) \( \mathcal{F} \) on a set \( \Omega \) 
-          is a collection of subsets of \( \Omega \) that satisfies:
-        </p>
-        <ol style="margin-left: 1.5rem;">
-          <li>\( \Omega \in \mathcal{F} \) (the whole space is measurable).</li>
-          <li>If \( A \in \mathcal{F} \), then \( A^c \in \mathcal{F} \) (closed under complementation).</li>
-          <li>If \( A_1, A_2, \ldots \in \mathcal{F} \), then \( \bigcup_{i=1}^\infty A_i \in \mathcal{F} \) 
-          (closed under countable unions).</li>
-        </ol>
-        <p>
-          The \( \sigma \)-algebra defines which subsets of \( \Omega \) are <strong>events</strong>—sets to which 
-          we can meaningfully assign a probability. Not all subsets need to be measurable; this restriction avoids 
-          paradoxes in probability theory.
-        </p>
-
-        <h4>Probability Measures</h4>
-        <p>
-          A <strong>probability measure</strong> is a function \( P : \mathcal{F} \to [0,1] \) that satisfies 
-          Kolmogorov's axioms. It assigns a numerical value to each event, representing the "likelihood" of that 
-          event occurring.
-        </p>
-        <p>
-          The triple \( (\Omega, \mathcal{F}, P) \) is called a <strong>probability space</strong> and forms the 
-          foundation of all probabilistic modeling.
-        </p>
-
-        <h4>Measurable Functions and Random Variables</h4>
-        <p>
-          A <strong>random variable</strong> is a measurable function \( X : \Omega \to \mathbb{R} \) such that 
-          for every Borel set \( B \subseteq \mathbb{R} \), the preimage \( X^{-1}(B) \in \mathcal{F} \).
-        </p>
-        <p>
-          In simple terms, a random variable maps outcomes from the abstract sample space \( \Omega \) to real 
-          numbers in a way that respects the measurable structure. This allows us to compute probabilities like 
-          \( P(X \leq x) \) and define distributions.
+          At its core, probability theory is a specialized form of <strong>measure theory</strong>. To understand this, 
+          it helps to use a physical analogy: <strong>Probability behaves like Mass.</strong>
         </p>
 
         <div class="highlight-box">
-          <strong>Deep Connection:</strong> Random variables are not "variables" in the traditional sense—they 
-          are <em>functions</em> that bridge abstract probability spaces with the real line. This abstraction 
-          allows probability theory to apply to any conceivable random phenomenon.
+          <h4>The "Mass" Analogy</h4>
+          <ul style="margin-bottom: 0;">
+            <li><strong>Sample Space (\( \Omega \)):</strong> Imagine a block of clay representing all possibilities.</li>
+            <li><strong>Probability Measure (\( P \)):</strong> A scale that weighs pieces of the clay. The total weight of the block is exactly 1 kg (Normalization).</li>
+            <li><strong>Event (\( A \)):</strong> A specific chunk of clay cut from the block.</li>
+            <li><strong>Sigma-Algebra (\( \mathcal{F} \)):</strong> The "rulebook" of shapes we are allowed to cut.</li>
+          </ul>
         </div>
+
+        <h4>Sigma-Algebras: Why do we need them?</h4>
+        <p>
+          A <strong>\( \sigma \)-algebra</strong> (or \( \sigma \)-field) \( \mathcal{F} \) defines which subsets of \( \Omega \) are <strong>events</strong>—sets to which 
+          we can meaningfully assign a probability.
+        </p>
+        <p>
+          Why not just assign a probability to <em>every</em> subset? It turns out that without strict rules, we encounter logical disasters like the <strong>Banach-Tarski Paradox</strong>, where a sphere can be theoretically cut into pieces and reassembled into <em>two</em> identical spheres of the same volume. The \( \sigma \)-algebra prevents this "magic" by restricting us to a safe collection of "measurable" sets.
+        </p>
+
+        <h4>Probability Measures and Random Variables</h4>
+        <p>
+          A <strong>random variable</strong> is a measurable function \( X : \Omega \to \mathbb{R} \) such that 
+          the preimage of any interval is in \( \mathcal{F} \). In simple terms, it maps the abstract "clay" (\( \Omega \)) 
+          to real numbers in a way that allows us to weigh them.
+        </p>
 
         <h3>Deriving Properties from the Axioms</h3>
         
         <p>
-          The power of Kolmogorov's axioms lies in their generative capacity: from these three simple rules, 
-          the entire edifice of probability theory can be constructed. Let us derive two fundamental properties: 
-          <strong>subadditivity</strong> and the <strong>inclusion–exclusion principle</strong>.
+          Let us derive two fundamental properties: <strong>subadditivity</strong> and the <strong>inclusion–exclusion principle</strong>.
         </p>
-
-        <div class="proof-box">
-          <h4>Theorem: Subadditivity</h4>
-          <p>
-            For any events \( A_1, A_2, \ldots, A_n \in \mathcal{F} \) (not necessarily disjoint),
-            \[
-              P\left(\bigcup_{i=1}^n A_i\right) \leq \sum_{i=1}^n P(A_i)
-            \]
-          </p>
-          <p><strong>Proof:</strong></p>
-          <p>
-            Define disjoint sets:
-            \[
-              B_1 = A_1, \quad B_2 = A_2 \setminus A_1, \quad B_3 = A_3 \setminus (A_1 \cup A_2), \quad \ldots
-            \]
-            These sets are pairwise disjoint and satisfy \( \bigcup_{i=1}^n B_i = \bigcup_{i=1}^n A_i \). 
-            Moreover, \( B_i \subseteq A_i \) for all \( i \).
-          </p>
-          <p>
-            By countable additivity (Axiom 3):
-            \[
-              P\left(\bigcup_{i=1}^n A_i\right) = P\left(\bigcup_{i=1}^n B_i\right) = \sum_{i=1}^n P(B_i)
-            \]
-          </p>
-          <p>
-            Since \( B_i \subseteq A_i \), we have \( P(B_i) \leq P(A_i) \) (by monotonicity of probability). Therefore:
-            \[
-              P\left(\bigcup_{i=1}^n A_i\right) = \sum_{i=1}^n P(B_i) \leq \sum_{i=1}^n P(A_i)
-            \]
-          </p>
-          <p style="text-align: right; margin-top: 1rem;">∎</p>
-        </div>
 
         <div class="proof-box">
           <h4>Theorem: Inclusion–Exclusion Principle</h4>
           <p>
             For any events \( A_1, A_2, \ldots, A_n \in \mathcal{F} \),
             \[
-              P\left(\bigcup_{i=1}^n A_i\right) = \sum_{i=1}^n P(A_i) - \sum_{i < j} P(A_i \cap A_j) + \sum_{i < j < k} P(A_i \cap A_j \cap A_k) - \cdots + (-1)^{n+1} P(A_1 \cap \cdots \cap A_n)
+              P\left(\bigcup_{i=1}^n A_i\right) = \sum P(A_i) - \sum P(A_i \cap A_j) + \cdots + (-1)^{n+1} P(A_1 \cap \cdots \cap A_n)
             \]
           </p>
+
           <p><strong>Proof by Induction:</strong></p>
           <p>
-            <strong>Base case (\( n = 1 \)):</strong> \( P(A_1) = P(A_1) \). ✓
-          </p>
-          <p>
             <strong>Base case (\( n = 2 \)):</strong> We need to show \( P(A_1 \cup A_2) = P(A_1) + P(A_2) - P(A_1 \cap A_2) \).
+            <br>
+            Using disjoint sets, we write \( A_1 \cup A_2 = A_1 \cup (A_2 \setminus A_1) \). By Axiom 3:
+            \[ P(A_1 \cup A_2) = P(A_1) + P(A_2 \setminus A_1) \]
+            Since \( A_2 = (A_2 \setminus A_1) \cup (A_1 \cap A_2) \), we have \( P(A_2) = P(A_2 \setminus A_1) + P(A_1 \cap A_2) \). 
+            Substituting back gives the result.
           </p>
           <p>
-            Note that \( A_1 \cup A_2 \) can be written as a union of disjoint sets:
-            \[
-              A_1 \cup A_2 = A_1 \cup (A_2 \setminus A_1)
-            \]
-            By countable additivity:
-            \[
-              P(A_1 \cup A_2) = P(A_1) + P(A_2 \setminus A_1)
-            \]
-            Also, \( A_2 = (A_2 \setminus A_1) \cup (A_1 \cap A_2) \), so:
-            \[
-              P(A_2) = P(A_2 \setminus A_1) + P(A_1 \cap A_2)
-            \]
-            Therefore:
-            \[
-              P(A_2 \setminus A_1) = P(A_2) - P(A_1 \cap A_2)
-            \]
-            Substituting:
-            \[
-              P(A_1 \cup A_2) = P(A_1) + P(A_2) - P(A_1 \cap A_2)
-            \]
-          </p>
-          <p>
-            <strong>Inductive step:</strong> Assume the formula holds for \( n-1 \) events. Consider \( n \) events. Let 
-            \( B = \bigcup_{i=1}^{n-1} A_i \). Then:
+            <strong>Inductive step:</strong> Assume the formula holds for any union of \( n-1 \) events. 
+            Consider \( n \) events and let \( B = \bigcup_{i=1}^{n-1} A_i \). Then:
             \[
               P\left(\bigcup_{i=1}^n A_i\right) = P(B \cup A_n) = P(B) + P(A_n) - P(B \cap A_n)
             \]
-            By the inductive hypothesis and properties of intersections, the formula extends to \( n \) events.
+            Here, \( P(B) \) is known by the hypothesis. The term \( B \cap A_n \) can be rewritten using the distributive law:
+            \[
+              B \cap A_n = \left(\bigcup_{i=1}^{n-1} A_i\right) \cap A_n = \bigcup_{i=1}^{n-1} (A_i \cap A_n)
+            \]
+            Since this is a union of \( n-1 \) events (specifically, the intersections of \( A_n \) with previous sets), we can apply the inductive hypothesis again to expand \( P(B \cap A_n) \). This correctly generates all the alternating intersection terms for \( n \) events.
           </p>
           <p style="text-align: right; margin-top: 1rem;">∎</p>
         </div>
 
         <div class="highlight-box">
-          <strong>Philosophical Note:</strong> These proofs illustrate how the axioms of probability, though simple, 
-          encode powerful logical structure. Subadditivity formalizes the intuition that overlapping events should 
+          <strong>Philosophical Note:</strong> Subadditivity formalizes the intuition that overlapping events should 
           not be "double-counted," while inclusion–exclusion provides the exact correction for all overlaps.
         </div>
 
         <h3>The Unity of Probability: From Interpretation to Axiom</h3>
         
         <p>
-          The relationship between interpretation and axiomatization can be understood as follows:
-        </p>
-        <ul>
-          <li><strong>Interpretations</strong> provide <em>intuitive meaning</em> and guide how we apply probability 
-          to real-world problems.</li>
-          <li><strong>Axioms</strong> provide <em>logical consistency</em> and ensure that our reasoning about 
-          probabilities is mathematically sound.</li>
-        </ul>
-        <p>
           Kolmogorov's framework does not declare one interpretation "correct" and others "wrong." Instead, it unifies 
-          them by showing that all valid interpretations must obey the same structural rules. This is analogous to 
-          how different geometric models (Euclidean, spherical, hyperbolic) all satisfy the same axioms of incidence 
-          and betweenness, but differ in their interpretation of "parallel lines."
+          them by showing that all valid interpretations must obey the same structural rules.
         </p>
 
         <table class="comparison-table">
@@ -451,7 +357,7 @@
             <tr>
               <td><strong>Classical</strong></td>
               <td>Equally likely outcomes</td>
-              <td>Uniform probability measure on finite \( \Omega \)</td>
+              <td>Uniform measure on finite \( \Omega \)</td>
             </tr>
             <tr>
               <td><strong>Frequentist</strong></td>
@@ -460,8 +366,8 @@
             </tr>
             <tr>
               <td><strong>Bayesian</strong></td>
-              <td>Degree of belief, updated with evidence</td>
-              <td>Prior and posterior as probability measures</td>
+              <td>Degree of belief</td>
+              <td>Prior/Posterior probability measures</td>
             </tr>
             <tr>
               <td><strong>Geometric</strong></td>
@@ -474,20 +380,8 @@
         <h3>Conclusion: The Architecture of Uncertainty</h3>
         
         <p>
-          Probability theory is the mathematics of uncertainty, and its history reflects humanity's struggle to 
-          formalize intuition. The classical, frequentist, Bayesian, and geometric interpretations each capture 
-          an essential aspect of randomness, yet none alone suffices for all situations.
-        </p>
-
-        <p>
-          Kolmogorov's axiomatic approach resolved this plurality by abstracting probability into a measure-theoretic 
-          framework. This abstraction liberates probability from any single interpretation while ensuring that all 
-          interpretations remain logically consistent. The axioms—non-negativity, normalization, and countable 
-          additivity—encode the fundamental logic of uncertainty, from which all properties of probability can be derived.
-        </p>
-
-        <p>
-          Through the lens of measure theory, we see that random variables are measurable functions, events are 
+          Probability theory is the mathematics of uncertainty. Kolmogorov's axiomatic approach resolved the centuries-old debate on meaning by abstracting probability into a measure-theoretic framework.
+          Through this lens, we see that random variables are measurable functions, events are 
           elements of a \( \sigma \)-algebra, and probabilities are values of a normalized measure. This unification 
           connects probability to the broader landscape of modern mathematics, revealing it as a profound and beautiful 
           structure built on simple, elegant foundations.
@@ -497,8 +391,7 @@
           <strong>Final Reflection:</strong> The genius of Kolmogorov's axioms lies not in what they define, but in 
           what they <em>allow</em>. By establishing a common language for uncertainty, they enable classical, frequentist, 
           Bayesian, and geometric perspectives to coexist harmoniously—each illuminating a different facet of the same 
-          mathematical reality. In the end, probability is not just about chance—it is about <em>structured reasoning 
-          in the face of the unknown</em>.
+          mathematical reality.
         </div>
 
       </section>
