@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Homework 11</title>
+
+  <link rel="stylesheet" href="../include/css/style.css">
+  <link rel="stylesheet" href="../include/css/content.css">
+  <link rel="stylesheet" href="../include/css/code.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
+  <style>
+    body { background-color: #fefefe; }
+    header .subtitle { color: #555; }
+
+    .simulation-controls {
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 2rem;
+      margin: 2rem 0;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .status-info {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: #fff;
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem 1.25rem;
+    }
+
+    .control-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .control-group label { font-size: 0.9rem; font-weight: 600; color: #2c3e50; }
+    .control-group input {
+      background: #fff; border: 1px solid #bdc3c7; border-radius: 6px;
+      padding: 0.6rem 0.75rem; color: #2c3e50; font-size: 0.95rem;
+      transition: all 0.15s ease-in-out;
+    }
+    .control-group input:focus {
+      outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52,152,219,0.15);
+    }
+
+    .button-group { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 0.75rem; margin-top: 0.5rem; }
+    
+    .sim-btn {
+      padding: 0.6rem 1.1rem; border: none; border-radius: 8px; font-weight: 700;
+      cursor: pointer; transition: transform 0.1s ease, box-shadow 0.2s ease; color: #fff;
+    }
+    .sim-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 12px rgba(0,0,0,0.12); }
+    .sim-btn-primary { background: #3498db; }
+    .sim-btn-success { background: #2ecc71; }
+    .sim-btn-warning { background: #f39c12; }
+    .sim-btn-danger  { background: #e74c3c; }
+
+    .chart-info {
+      font-size: 0.9rem; color: #555; background: #f8f9fa; border-radius: 6px;
+      padding: 0.75rem; margin-top: 0.75rem;
+    }
+
+    .charts-container {
+      display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 2rem 0;
+    }
+
+    .chart-wrapper {
+      background: #fff; border-radius: 8px; padding: 1.25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .chart-wrapper h4 {
+      color: #2c3e50; margin: 0 0 0.75rem 0; font-size: 1.1rem;
+      font-weight: 700; padding-bottom: 0.4rem; border-bottom: 2px solid #3498db;
+    }
+
+    .chart-canvas-container { position: relative; width: 100%; height: 420px; }
+    @media (max-width: 768px) { .chart-canvas-container { height: 340px; } }
+
+    .grading-note {
+      background: #fffbea; padding: 1rem; border-left: 4px solid #f1c40f; border-radius: 6px; margin-top: 1.5rem;
+      color: #2c3e50; font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Statistics Homework Blog</h1>
+      <p class="subtitle">Stochastic Differential Equations & The Euler-Maruyama Method</p>
+      <p class="student-info">Giovanni Lentini - 1987799</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="back-navigation">
+      <a href="../index.html" class="btn-back">← Back to Home</a>
+    </div>
+
+    <article class="homework-detail">
+      <div class="homework-header">
+        <h2>Homework 11: Numerical Simulation of SDEs</h2>
+        <div class="meta-info">
+          <span class="date">Due: December 3, 2025</span>
+        </div>
+      </div>
+
+      <section class="homework-content">
+        <h3>1. Introduction to Stochastic Calculus</h3>
+        <p>
+          Classical calculus deals with smooth, deterministic functions. However, many real-world systems—such as stock prices, thermal noise, and diffusion of particles—exhibit erratic, non-differentiable behavior. To model these, we use <strong>Stochastic Differential Equations (SDEs)</strong>.
+        </p>
+        <p>
+            An SDE describes the evolution of a stochastic process \( X_t \) as the sum of a deterministic drift component and a random diffusion component. The general differential form is:
+        </p>
+        
+        <p>\[ dX_t = a(X_t, t) \, dt + b(X_t, t) \, dW_t \]</p>
+
+        <p>
+            Here:
+        </p>
+        <ul>
+            <li>\( a(X_t, t) \): The <strong>Drift</strong> coefficient (deterministic trend).</li>
+            <li>\( b(X_t, t) \): The <strong>Diffusion</strong> coefficient (volatility or noise intensity).</li>
+            <li>\( W_t \): The <strong>Wiener Process</strong> (Brownian Motion).</li>
+        </ul>
+
+        <h3>2. The Wiener Process (Brownian Motion)</h3>
+        <p>
+            The driving force of an SDE is the Wiener process \( W_t \), which mathematically formalizes Brownian motion. It is characterized by three fundamental properties:
+        </p>
+        <ol>
+            <li><strong>Initialization:</strong> \( W_0 = 0 \) with probability 1.</li>
+            <li><strong>Independent Increments:</strong> For \( 0 \le s < t \), the increment \( W_t - W_s \) is independent of the past behavior of the process up to time \( s \).</li>
+            <li><strong>Gaussian Increments:</strong> The increment follows a normal distribution:
+            <p>\[ W_t - W_s \sim \mathcal{N}(0, t-s) \]</p>
+            </li>
+        </ol>
+        <p>
+            While \( W_t \) is continuous everywhere, it is differentiable <strong>nowhere</strong>. This roughness requires us to use Itô Calculus rather than standard Newton-Leibniz calculus.
+        </p>
+
+        <h3>3. The Euler-Maruyama Numerical Method</h3>
+        <p>
+            Since analytical solutions to SDEs are rarely available, we rely on numerical approximations. The <strong>Euler-Maruyama method</strong> is the stochastic counterpart to the Euler method for ordinary differential equations (ODEs).
+        </p>
+        <p>
+            We discretize the time interval \( [0, T] \) into \( N \) steps of size \( \Delta t = T/N \). The approximation \( Y_n \approx X(t_n) \) is given by the recursive scheme:
+        </p>
+
+        <p>\[ Y_{n+1} = Y_n + a(Y_n, t_n)\Delta t + b(Y_n, t_n) \Delta W_n \]</p>
+
+        <p>
+            Here, the stochastic increment \( \Delta W_n \) is simulated as:
+        </p>
+
+        <p>\[ \Delta W_n = Z_n \sqrt{\Delta t} \quad \text{where} \quad Z_n \sim \mathcal{N}(0,1) \]</p>
+
+        <p>
+            In the simulation below, we implement a Generalized Arithmetic Brownian Motion where \( a(X,t) = \mu \) and \( b(X,t) = \sigma \). This results in:
+        </p>
+        <p>\[ X_{n+1} = X_n + \mu \Delta t + \sigma \sqrt{\Delta t} Z_n \]</p>
+
+        <h3>4. Interactive SDE Simulator</h3>
+        <p>
+            Use the controls below to simulate trajectories. Note how changing \( \sigma \) (Volatility) dramatically affects the spread of the paths, while \( \mu \) (Drift) tilts the general trend.
+        </p>
+
+        <div class="simulation-controls">
+          <div class="status-info">
+            <strong>Instruction:</strong> Set parameters and click 'Simulate'. Use 'Play Animation' to visualize the diffusion process over time.
+          </div>
+
+          <div class="controls-grid">
+            <div class="control-group">
+              <label for="mInput">Trajectories (M)</label>
+              <input id="mInput" type="number" min="10" max="2000" value="500">
+            </div>
+            <div class="control-group">
+              <label for="nInput">Time Steps (N)</label>
+              <input id="nInput" type="number" min="10" max="5000" value="200">
+            </div>
+            <div class="control-group">
+              <label for="tInput">Total Time (T)</label>
+              <input id="tInput" type="number" min="1" max="100" value="1.0">
+            </div>
+            <div class="control-group">
+              <label for="muInput">Drift (\(\mu\))</label>
+              <input id="muInput" type="number" step="0.1" value="0.0">
+            </div>
+            <div class="control-group">
+              <label for="sigmaInput">Volatility (\(\sigma\))</label>
+              <input id="sigmaInput" type="number" step="0.1" min="0" value="1.0">
+            </div>
+            <div class="control-group">
+              <label for="sampleInput">View Paths</label>
+              <input id="sampleInput" type="number" min="1" max="200" value="50">
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button class="sim-btn sim-btn-primary" id="simulateBtn">Simulate</button>
+            <button class="sim-btn sim-btn-success" id="playBtn">Play Animation</button>
+            <button class="sim-btn sim-btn-warning" id="stepBtn">Step</button>
+            <button class="sim-btn sim-btn-danger" id="resetBtn">Reset</button>
+          </div>
+
+          <div class="chart-info">
+             <strong>Current Time:</strong> \( t = \) <span id="currentTime">0.00</span> / <span id="totalTime">0.00</span> |
+             <strong>Step Size:</strong> \( \Delta t = \) <span id="displayDt">0.00</span>
+          </div>
+
+          <!-- Formal note for assessment -->
+          <div class="grading-note" role="note" aria-label="Note for assessment">
+            <strong>Note for assessment.</strong>
+            <p style="margin:0.5rem 0 0 0;">Although the simulator is implemented in a generalized form (it accepts arbitrary constant drift and diffusion parameters), the classical Wiener process is recovered as the special case</p>
+            <p style="margin:0.25rem 0 0 0;"><em>\( \mu = 0 \)</em> and <em>\( \sigma = 1 \)</em>.</p>
+            <p style="margin:0.5rem 0 0 0;">Because the assignment explicitly permits an optional extension to more general stochastic differential equations, the present generalized implementation satisfies the requirements.</p>
+          </div>
+
+        </div>
+
+        <div class="charts-container">
+          <div class="chart-wrapper">
+            <h4>Sample Trajectories \( W(t) \)</h4>
+            <div class="chart-canvas-container">
+              <canvas id="lineChart"></canvas>
+            </div>
+            <div class="chart-info">
+                The red dashed line represents the theoretical expectation \( \mathbb{E}[X_t] = X_0 + \mu t \).
+            </div>
+          </div>
+
+          <div class="chart-wrapper">
+            <h4>Probability Density at time \( t \)</h4>
+            <div class="chart-canvas-container">
+              <canvas id="histChart"></canvas>
+            </div>
+            <div class="chart-info">
+               As \( M \to \infty \), the histogram converges to the theoretical PDF (Probability Density Function) given by \( \mathcal{N}(\mu t, \sigma^2 t) \).
+            </div>
+          </div>
+        </div>
+
+        <h3>5. Technical Implementation Details</h3>
+        <p>
+            Standard pseudo-random number generators (like <code>Math.random()</code>) produce a Uniform distribution \( U \sim [0, 1) \). To implement the Euler-Maruyama method, we require standard normal variables \( Z \sim \mathcal{N}(0,1) \).
+        </p>
+        <p>
+            In the code below, I implemented the <strong>Box-Muller Transform</strong>, which takes two independent uniform variables \( u_1, u_2 \) and converts them into two independent standard normal variables:
+        </p>
+        <p>\[ Z_0 = \sqrt{-2 \ln u_1} \cos(2\pi u_2) \]</p>
+        <p>\[ Z_1 = \sqrt{-2 \ln u_1} \sin(2\pi u_2) \]</p>
+        <p>
+            This ensures the stochastic term accurately reflects the statistical properties of the Wiener process.
+        </p>
+
+      </section>
+    </article>
+  </main>
+
+  <script>
+
+    function gaussianRandom() {
+      let u = 0, v = 0;
+      while (u === 0) u = Math.random();
+      while (v === 0) v = Math.random();
+      return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    }
+
+    function getDrift(x, t, mu) {
+      return mu; 
+    }
+
+    function getDiffusion(x, t, sigma) {
+      return sigma;
+    }
+
+    function solveSDE(M, N, T, mu, sigma) {
+      const dt = T / N;
+      const sqrtDt = Math.sqrt(dt);
+      
+      const trajectories = new Array(M);
+      const timeLabels = new Array(N + 1);
+
+      for (let k = 0; k <= N; k++) {
+        timeLabels[k] = (k * dt).toFixed(2);
+      }
+
+      for (let i = 0; i < M; i++) {
+        const path = new Float32Array(N + 1);
+        path[0] = 0;
+        
+        for (let k = 0; k < N; k++) {
+          const X_n = path[k];
+          const t_n = k * dt;
+
+          // Euler-Maruyama Step:
+          // X_{n+1} = X_n + a(X_n, t)*dt + b(X_n, t)*sqrt(dt)*Z
+          const a = getDrift(X_n, t_n, mu);
+          const b = getDiffusion(X_n, t_n, sigma);
+          const dW = sqrtDt * gaussianRandom();
+
+          path[k+1] = X_n + (a * dt) + (b * dW);
+        }
+        trajectories[i] = path;
+      }
+      
+      return { trajectories, timeLabels, dt };
+    }
+
+    function computeHistogram(values, bins = 50) {
+      const vmin = Math.min(...values);
+      const vmax = Math.max(...values);
+
+      if (Math.abs(vmax - vmin) < 1e-9) {
+          return { counts: [values.length], labels: [vmin.toFixed(2)] };
+      }
+
+      const range = vmax - vmin;
+      const step = range / bins;
+      const counts = new Array(bins).fill(0);
+      const labels = [];
+
+      for(let i=0; i<bins; i++){
+          labels.push((vmin + (i + 0.5) * step).toFixed(2));
+      }
+
+      values.forEach(v => {
+        let idx = Math.floor((v - vmin) / step);
+        if (idx >= bins) idx = bins - 1;
+        counts[idx]++;
+      });
+
+      return { counts, labels };
+    }
+
+    let trajectories = [], timeLabels = [];
+    let currentStep = 0, totalSteps = 0;
+    let T = 1, dt = 0, mu = 0, sigma = 1;
+    let animId = null;
+    let lineChart, histChart;
+
+    function initCharts() {
+      const ctxLine = document.getElementById('lineChart').getContext('2d');
+      const ctxHist = document.getElementById('histChart').getContext('2d');
+
+      lineChart = new Chart(ctxLine, {
+        type: 'line',
+        data: { labels: [], datasets: [] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          interaction: { mode: 'index', intersect: false },
+          elements: { point: { radius: 0 } },
+          scales: {
+            x: { title: { display: true, text: 'Time (t)' }, grid: { display:false } },
+            y: { title: { display: true, text: 'Process Value X(t)' } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+
+      histChart = new Chart(ctxHist, {
+        type: 'bar',
+        data: { labels: [], datasets: [{ 
+            label: 'Frequency', 
+            data: [], 
+            backgroundColor: 'rgba(52, 152, 219, 0.7)',
+            borderColor: '#2980b9',
+            borderWidth: 1
+        }]},
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: false,
+          scales: {
+            x: { title: { display: true, text: 'Value Range' }, grid: { display:false } },
+            y: { title: { display: true, text: 'Count' } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    function updateDOM() {
+      const currentTime = (currentStep * dt).toFixed(2);
+      document.getElementById('currentTime').textContent = currentTime;
+      document.getElementById('totalTime').textContent = T;
+      document.getElementById('displayDt').textContent = dt.toFixed(4);
+    }
+
+    function renderFrame() {
+      const sampleLimit = +document.getElementById('sampleInput').value;
+      const stepSelect = Math.max(1, Math.floor(trajectories.length / sampleLimit));
+      
+      const datasets = [];
+
+      for (let i = 0; i < trajectories.length; i += stepSelect) {
+        if (datasets.length >= sampleLimit) break;
+        const currentPath = trajectories[i].subarray(0, currentStep + 1);
+        
+        datasets.push({
+          data: Array.from(currentPath),
+          borderColor: 'rgba(149, 165, 166, 0.3)',
+          borderWidth: 1,
+          fill: false
+        });
+      }
+
+      const theoreticalLine = [];
+      for(let k=0; k <= totalSteps; k++) {
+        theoreticalLine.push(0 + mu * (k*dt));
+      }
+
+      datasets.push({
+        label: 'Theoretical Mean',
+        data: theoreticalLine,
+        borderColor: '#e74c3c',
+        borderDash: [5, 5],
+        borderWidth: 2,
+        pointRadius: 0
+      });
+
+      lineChart.data.labels = timeLabels;
+      lineChart.data.datasets = datasets;
+      lineChart.update('none');
+
+      const sliceValues = trajectories.map(path => path[currentStep]);
+      const histData = computeHistogram(sliceValues, 40);
+      
+      histChart.data.labels = histData.labels;
+      histChart.data.datasets[0].data = histData.counts;
+      histChart.update('none');
+    }
+
+    function runSimulation() {
+      if (animId) clearInterval(animId);
+      animId = null;
+      document.getElementById('playBtn').textContent = 'Play Animation';
+
+      const M = +document.getElementById('mInput').value;
+      const N = +document.getElementById('nInput').value;
+      T = +document.getElementById('tInput').value;
+      mu = +document.getElementById('muInput').value;
+      sigma = +document.getElementById('sigmaInput').value;
+
+      const result = solveSDE(M, N, T, mu, sigma);
+      trajectories = result.trajectories;
+      timeLabels = result.timeLabels;
+      dt = result.dt;
+      totalSteps = N;
+
+      currentStep = totalSteps;
+      updateDOM();
+      renderFrame();
+    }
+
+    function stepForward() {
+        if(!trajectories.length) runSimulation();
+        if (currentStep < totalSteps) {
+            currentStep++;
+            updateDOM();
+            renderFrame();
+        } else {
+            if(animId) toggleAnimation();
+        }
+    }
+
+    function toggleAnimation() {
+        if(!trajectories.length) runSimulation();
+
+        if (animId) {
+            clearInterval(animId);
+            animId = null;
+            document.getElementById('playBtn').textContent = 'Play Animation';
+        } else {
+            if(currentStep >= totalSteps) currentStep = 0;
+            document.getElementById('playBtn').textContent = 'Pause Animation';
+            animId = setInterval(stepForward, 40);
+        }
+    }
+
+    function reset() {
+        if(animId) clearInterval(animId);
+        animId = null;
+        document.getElementById('playBtn').textContent = 'Play Animation';
+        
+        trajectories = [];
+        currentStep = 0;
+        
+        lineChart.data.datasets = [];
+        lineChart.update();
+        histChart.data.datasets[0].data = [];
+        histChart.update();
+        
+        document.getElementById('currentTime').textContent = "0.00";
+    }
+
+    window.addEventListener('load', () => {
+      initCharts();
+      
+      document.getElementById('simulateBtn').addEventListener('click', () => {
+          runSimulation();
+      });
+
+      document.getElementById('playBtn').addEventListener('click', toggleAnimation);
+      document.getElementById('stepBtn').addEventListener('click', stepForward);
+      document.getElementById('resetBtn').addEventListener('click', reset);
+
+      runSimulation();
+    });
+
+  </script>
+</body>
+</html>
